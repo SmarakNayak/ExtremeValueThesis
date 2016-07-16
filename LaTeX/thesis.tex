@@ -1,0 +1,62 @@
+\RequirePackage[l2tabu, orthodox]{nag}
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsfonts} 
+\usepackage[a4paper]{geometry}
+\usepackage{microtype}
+
+
+\title{Thesis}
+\author{Smarak Nayak - z3415339 }
+\date{July 2016}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\pdif}[1]{\frac{\partial}{\partial#1}}
+\newcommand{\pdiff}[2]{\frac{\partial#1}{\partial#2}}
+
+
+\begin{document}
+
+\maketitle
+\section*{Distribution of duration}
+Let F be the cdf of a gev random variable (write this properly). Let $a$ be the threshold level, then define $T_a$ as the duration between jumps that have been thresholded(?) at the $a$-level. From (insert reference here) we know that (explain proof here?)
+\[
+    T_a \sim (-\log F(a))^{\frac{-1}{\beta}}X^{\frac{1}{\beta}}D(1).
+\]
+Where $D(1)$ is a random variable of the stable distribution with stability parameter $\beta$ and skewness parameter 1 and where $X$ is a standard exponential random variable.
+After taking the logarithms of both sides we arrive at
+\[
+    \log T_a \sim \frac{1}{\beta}\log X + \log D(1) -\frac{1}{\beta}\log(-\log F(a)).
+\]
+In order to find the distribution for $\log T_a$ we will first need to find the distributions of $\frac{1}{\beta}\log X$ and $\log D$. We have that 
+\begin{align*}
+    f_{\frac{1}{\beta}\log X}(x) &= \frac{d}{dx}\Prob\left(\frac{1}{\beta}\log X\leq x\right)\\
+                                 &= \frac{d}{dx}\Prob(X\leq e^{x\beta})\\
+                                 &= f_X(e^{x\beta})\beta e^{x\beta}.\qquad\qquad\qquad (a)
+\end{align*}
+Similarly we have
+\begin{align*}
+    f_{\log D}(x)&= \frac{d}{dx}\Prob(\log D\leq x)\\
+                 &= \frac{d}{dx}\Prob(D\leq e^x)\\
+                 &= f_D(e^x)e^x. \qquad\qquad\qquad\qquad (b)
+\end{align*}
+Using convolution we know that
+\[
+    f_{\frac{1}{\beta}\log X+\log D}(x)= \int^\infty_{-\infty} f_{\frac{1}{\beta}\log X}(x-y)f_{\log D}(y)dy
+\]
+and thus 
+\begin{equation}
+    f_{\log T_a}(x)=\int^\infty_{-\infty} f_{\frac{1}{\beta}\log X}\left(x-y+\frac{1}{\beta}\log(-\log F(a))\right)f_{\log D}(y)dy
+\end{equation}
+as $\frac{1}{\beta}\log(-F(a))$ is a constant with respect to $x$. Substituting (a) and (b) into (1) we get
+\begin{align*}
+    f_{\log T_a}(x)&=\int^\infty_{-\infty} f_X(e^{ \beta(x-y+\frac{1}{\beta}\log(-\log F(a)))})
+    \beta e^{ \beta(x-y+\frac{1}{\beta}\log(-\log F(a)))}f_D(e^y)e^y dy
+\end{align*}
+which simplifies to
+\[
+    f_{\log T_a}(x)=\int^\infty_{-\infty} - \log F(a) f_X(-\log F(a)e^{\beta(x-y)})\beta e^{\beta(x-y)} f_D(e^y)e^y dy.
+\]
+\end{document}
