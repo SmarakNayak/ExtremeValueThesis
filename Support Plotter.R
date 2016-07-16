@@ -22,7 +22,7 @@ for (b in seq(0.1,0.9,0.1)) {
   f1=function(x,y,beta) {-log(Fa)*dexp(-log(Fa)*exp((x-y)*beta),1)*beta*exp((x-y)*beta)*dstable(exp(y),beta,1,pm=1)*exp(y)}
   f2=function(x,y) {f1(x,y,beta = beta)}
   
-  x1=c(-20:80)
+  x1=c(-30:100)
   y1=seq(-20,40,2)
   z<-outer(x1,y1,f2)
   
