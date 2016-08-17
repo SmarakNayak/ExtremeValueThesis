@@ -1,0 +1,174 @@
+\documentclass[12pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm}
+%\usepackage{amsfonts,dsfont,mathrsfs}
+%\usepackage[mathscr]{eucal}
+\usepackage{graphicx}
+\usepackage{color}
+\pagestyle{plain}
+\usepackage[margin=30mm]{geometry}
+
+\usepackage{lineno} %for line numbers
+%\usepackage{showkeys}
+\usepackage{color}
+
+\usepackage{enumerate}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{breakurl}
+\definecolor{darkblue}{rgb}{0,0,.75}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\hypersetup{colorlinks=true, breaklinks=true, linkcolor=blue, citecolor=darkblue, menucolor=darkblue, urlcolor=darkblue}
+%pdftex=true,
+
+%\usepackage[round]{natbib}
+\usepackage{doi}
+
+
+% \usepackage{helvet}
+% \usepackage{sfmath}
+% \usepackage{sansmathfonts}
+
+% \renewcommand\familydefault{\sfdefault}
+
+%\usepackage{arev}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{cor}[theorem]{Corollary}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{defi}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\numberwithin{equation}{section}
+
+\newcommand{\ex}{\mathbf {E}}
+\newcommand{\pr}{\mathbf {P}}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Rd}{\mathbb R^d}
+\newcommand{\Rp}{\mathbb R^+}
+\newcommand{\spctim}{\mathbb R^{d+1}}
+\newcommand{\del}{\partial }
+\newcommand{\1}{\mathbf 1}
+\newcommand{\eps}{\varepsilon}
+
+\author{ }
+\address{}
+\email{}
+\address{Peter Straka, School of Mathematics and Statistics,
+UNSW Australia,
+Sydney, NSW 2052, Australia}
+\email{p.straka@unsw.edu.au}
+
+%\linespread{1.5}
+
+
+\begin{document}
+
+
+
+%\linenumbers
+
+\title{CTRM Statistics}
+%\subtitle{Limit Theorems and Governing Equations}
+
+
+%\titlerunning{Short form of title}   % if too long for running head
+
+%\authorrunning{Short form of author list} % if too long for running head
+
+
+%\date{Received: date / Accepted: date}
+% The correct dates will be entered by the editor
+
+
+
+
+\begin{abstract}
+We fit a max-renewal process, (aka 'CTRM', Continuous Time Random Maxima)
+to data. 
+%\textbf{Keywords:} anomalous diffusion;
+%fractional kinetics;
+%fractional derivative;
+%subordination;
+%coupled random walks
+%\\
+%\keywords{anomalous diffusion
+%\and functional limit theorem
+%\and fractional derivative
+%\and subordination
+%\and coupled random walks
+%\and fractional kinetics}
+%% \PACS{PACS code1 \and PACS code2 \and more}
+%\textbf{2010 MSC:} 60F17; 60G22%;60B10 \and 60G50}
+\end{abstract}
+\maketitle
+
+%60F17  	Functional limit theorems; invariance principles
+%60B10  	Convergence of probability measures
+%60G22  	Fractional processes, including fractional Brownian motion
+%60G50  	Sums of independent random variables; random walks
+
+
+
+\section{Introduction}
+
+
+\section{The Model}
+
+The stochastic model $X(t)$ below has been studied under the various names
+``Shock process''
+\cite{Esary1973,Sumita1983,Sumita1984,Sumita1985,Anderson1987,Gut1999}, 
+``max-renewal process'', 
+\cite{Silvestrov2002a,ST04,Basrak2014a}
+and ``CTRM (continuous time random maxima)
+\cite{Benson2007,Meerschaert2007a,Hees14,Hees2015}: 
+Assume i.i.d. pairs of random variables $(W_k, J_k)$, $k = 1, 2, \ldots$
+where $W_k > 0$ represents an inter-arrival time of certain events and 
+$J_k \in \R$ the corresponding event magnitude.  
+Write $N(t) = \max\{n \in \mathbb N: W_1 + \ldots + W_n \le t\}$ for the renewal process
+associated with the $W_k$ (where the maximum of the empty set is set to $0$), 
+and define
+\begin{align*}
+X(t) = \bigvee_{k=1}^{N(t)} J_k
+= \max\{J_k: k = 1, \ldots, N(t)\}.
+\end{align*}
+If $W_k$ is interpreted as the time leading up to the event with magnitude
+$J_k$, then $X(t)$ is the largest magnitude up to time $t$.
+The alternative case where $W_k$ is the inter-arrival time \textit{following} $J_k$ 
+is termed ``second type'' (in the shock model literature) or OCTRM
+(overshooting CTRM), and the largest magnitude up to time $t$ is then
+given by
+\begin{align*}
+Y(t) = \bigvee_{k=1}^{N(t)+1} J_k.
+\end{align*}
+Finally, the model is called coupled when $W_k$ and $J_k$ are not independent;
+in this article we focus on the uncoupled case.  For this case, $X(t)$ and
+$Y(t)$ have the same limiting behaviour for large times and magnitudes
+\cite{Hees2015} and hence we focus on the CTRM $X(t)$. 
+
+
+
+Any probability distribution with cumulative distribution
+function (CDF) $F$ on $\R$ lies in the max-domain of attraction
+of a generalized extreme value (GEV) distribution with CDF $\Lambda$.
+That is, there exist
+sequences $a_n \in \Rp$ and $b_n \in \R$ such that
+\begin{align*}
+F(a_n x + b_n) \to \Lambda(x), \quad x \in (x_{min}, x_{max}). 
+\end{align*}
+
+
+
+\bibliographystyle{alpha}
+
+\bibliography{/Users/poyda/Articles/ctrm.bib}
+
+\end{document}
