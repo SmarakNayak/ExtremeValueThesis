@@ -1,20 +1,21 @@
-\begin{thebibliography}{BSM07}
+\begin{thebibliography}{KKBK12}
 
 \bibitem[And87]{Anderson1987}
-KK~Anderson.
+KK~K Anderson.
 \newblock {Limit Theorems for General Shock Models with Infinite Mean
   Intershock Times}.
 \newblock {\em J. Appl. Probab.}, 24(2):449--456, 1987.
 
-\bibitem[B{\v{S}}14]{Basrak2014a}
+\bibitem[B{\v{S}}14]{Basrak2014}
 Bojan Basrak and Drago {\v{S}}poljari{\'{c}}.
 \newblock {Extremal behaviour of random variables observed in renewal times}.
-\newblock 2014.
+\newblock jun 2014.
 
 \bibitem[BSM07]{Benson2007}
-David~a. Benson, Rina Schumer, and Mark~M. Meerschaert.
+David a. D.A.~A Benson, Rina Schumer, and Mark~M Meerschaert.
 \newblock {Recurrence of extreme events with power-law interarrival times}.
-\newblock {\em Geophys. Res. Lett.}, 34(16):1--5, aug 2007.
+\newblock {\em Geophys. Res. Lett.}, 34(l16404):DOI:10.1029/2007GL030767, aug
+  2007.
 
 \bibitem[EM73]{Esary1973}
 J.~D. Esary and A.~W. Marshall.
@@ -25,22 +26,38 @@ Allan Gut.
 \newblock {Extreme Shock Models}.
 \newblock {\em Extremes}, (1983):295--307, 1999.
 
-\bibitem[Hee14]{Hees14}
-Katharina Hees.
-\newblock {\em {Gemeinsame Konvergenz von Summe und Maximum und
-  Extremwertverhalten von gekoppelten Continuous Time Random Walks}}.
-\newblock PhD thesis, Universit{\"{a}}t Siegen, 2014.
-
 \bibitem[HS15]{Hees2015}
-Katharina Hees and Hans-peter Scheffler.
+Katharina Hees and H.P. Scheffler.
 \newblock {Coupled continuous time random maxima}.
 \newblock pages 1--24, 2015.
 
-\bibitem[MS09]{Meerschaert2007a}
-MM~Meerschaert and SA~Stoev.
-\newblock {Extremal Limit Theorems for observations separated by random waiting
-  times}.
-\newblock {\em J. Stat. Plan. Inference}, 139(7):2175--2188, 2009.
+\bibitem[KKBK12]{Karsai2012}
+M{\'{a}}rton Karsai, Kimmo Kaski, Albert~L{\'{a}}szl{\'{o}} Barab{\'{a}}si, and
+  J{\'{a}}nos Kert{\'{e}}sz.
+\newblock {Universal features of correlated bursty behaviour}.
+\newblock {\em Sci. Rep.}, 2, 2012.
+
+\bibitem[Lam64]{Lamperti1964}
+J~Lamperti.
+\newblock {On extreme order statistics}.
+\newblock {\em Ann. Math. Stat.}, 35(4):1726--1737, 1964.
+
+\bibitem[LLR12]{leadbetter2012extremes}
+Malcolm~R Leadbetter, Georg Lindgren, and Holger Rootz{\'{e}}n.
+\newblock {\em {Extremes and related properties of random sequences and
+  processes}}.
+\newblock Springer Science \& Business Media, 2012.
+
+\bibitem[MS09]{Meerschaert2009}
+Mark~M. Meerschaert and Stilian~A. Stoev.
+\newblock {Extremal limit theorems for observations separated by random power
+  law waiting times}.
+\newblock {\em J. Stat. Plan. Inference}, 139(7):2175--2188, jul 2009.
+
+\bibitem[Res13]{resnick2013extreme}
+Sidney~I Resnick.
+\newblock {\em {Extreme values, regular variation and point processes}}.
+\newblock Springer, 2013.
 
 \bibitem[Sil04]{Silvestrov2002a}
 Dmitrii~S Silvestrov.
@@ -48,12 +65,12 @@ Dmitrii~S Silvestrov.
 \newblock Springer (Berlin, Heidelberg), 2004.
 
 \bibitem[SS83]{Sumita1983}
-JG~Shanthikumar and U~Sumita.
+JG~G Shanthikumar and U~Sumita.
 \newblock {General shock models associated with correlated renewal sequences}.
 \newblock {\em J. Appl. Probab.}, 20(3):600--614, 1983.
 
 \bibitem[SS84]{Sumita1984}
-JG~Shanthikumar and Ushio Sumita.
+JG~G Shanthikumar and Ushio Sumita.
 \newblock {Distribution Properties of the System Failure Time in a General
   Shock Model}.
 \newblock {\em Adv. Appl. Probab.}, 16(2):363--377, 1984.

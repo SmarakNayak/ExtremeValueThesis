@@ -120,55 +120,102 @@ to data.
 
 \section{Introduction}
 
-
-\section{The Model}
-
-The stochastic model $X(t)$ below has been studied under the various names
+%% CTRMs; the process
+The stochastic model $M(t)$ below has been studied under the various names
 ``Shock process''
 \cite{Esary1973,Sumita1983,Sumita1984,Sumita1985,Anderson1987,Gut1999}, 
 ``max-renewal process'', 
-\cite{Silvestrov2002a,ST04,Basrak2014a}
+\cite{Silvestrov2002a,ST04,Basrak2014}
 and ``CTRM (continuous time random maxima)
-\cite{Benson2007,Meerschaert2007a,Hees14,Hees2015}: 
+\cite{Benson2007,Meerschaert2009,Hees16,Hees2015}: 
 Assume i.i.d. pairs of random variables $(W_k, J_k)$, $k = 1, 2, \ldots$
 where $W_k > 0$ represents an inter-arrival time of certain events and 
 $J_k \in \R$ the corresponding event magnitude.  
 Write $N(t) = \max\{n \in \mathbb N: W_1 + \ldots + W_n \le t\}$ for the renewal process
 associated with the $W_k$ (where the maximum of the empty set is set to $0$), 
 and define
-\begin{align*}
-X(t) = \bigvee_{k=1}^{N(t)} J_k
+\begin{align}
+M(t) = \bigvee_{k=1}^{N(t)} J_k
 = \max\{J_k: k = 1, \ldots, N(t)\}.
-\end{align*}
+\end{align}
 If $W_k$ is interpreted as the time leading up to the event with magnitude
-$J_k$, then $X(t)$ is the largest magnitude up to time $t$.
+$J_k$, then $M(t)$ is the largest magnitude up to time $t$.
 The alternative case where $W_k$ is the inter-arrival time \textit{following} $J_k$ 
 is termed ``second type'' (in the shock model literature) or OCTRM
 (overshooting CTRM), and the largest magnitude up to time $t$ is then
 given by
-\begin{align*}
-Y(t) = \bigvee_{k=1}^{N(t)+1} J_k.
-\end{align*}
+\begin{align}
+\tilde M(t) = \bigvee_{k=1}^{N(t)+1} J_k.
+\end{align}
 Finally, the model is called coupled when $W_k$ and $J_k$ are not independent;
-in this article we focus on the uncoupled case.  For this case, $X(t)$ and
-$Y(t)$ have the same limiting behaviour for large times and magnitudes
-\cite{Hees2015} and hence we focus on the CTRM $X(t)$. 
+in this article we focus on the uncoupled case.  For this case, $M(t)$ and
+$\tilde M(t)$ have the same limiting behaviour for large times and magnitudes
+\cite{Hees2015} and hence we focus on the CTRM $M(t)$. 
+
+%% Standard case
+If $J_k$ is constant or light-tailed (e.g.\ exponentially distributed), 
+then, by the strong law of large numbers,
+on large time scales the number $N(t)$ of events by time $t$ is well
+approximated by $t/\ex[W_k]$. Magnitudes in excess of a given (large)
+threshold $\ell$ then arrive at a constant rate (which depends on $\ell$), 
+and the inter-arrival times are exponentially distributed. 
+The dynamics of the record process are well known.
+
+%% Heavy tailed case, temporal evolution. Self-similarity, fractal, bursts
+In this article, we are concerned with heavy-tailed inter-arrival times $W_k$: 
+We assume that $\pr[W_k > t] \sim C t^{-\beta}$ as $t \to \infty$, 
+for some $\beta \in (0,1)$ and some constant $C$. 
+Then $N(t)$ has temporal scaling exponent $\beta$, i.e.\
+$C n^{-\beta} N(nt) \to E(t)$, where 
+$E(t)$ is the inverse of a stable subordinator
+(increasing L\'evy process) $D(t)$, in the sense of 
+\begin{align}
+E(t) = \inf\{u: D(u) > t\}.
+\end{align}
+The process $E(t)$ is self-similar, and its points of increase model `bursts',
+meaning that $E(t)$ is starkly increasing in some short time intervals and
+constant in others \cite{Karsai2012}.
+
+
+%% Limit theorem for M(t)
+\cite{Meerschaert2009} have shown that for large times $t$, 
+the process $M(t)$ converges to a (rescaled) time-changed 
+extreme-value process $A(E(t))$. 
+Here, $A(t)$ is an extreme-value process in the sense of \cite{Lamperti1964}
+and \cite{resnick2013extreme}, and 
+
+
+%% GOAL
+The goal of our statistical method is to make inferences about the dynamics
+of $M(t)$, given data $(W_k, J_k)$. 
+Since the waiting times $J_k$ are not assumed exponential, $M(t)$ is not Markov,
+and the same applies to $A(E(t))$.  
+
+
+
+
+
 
 
 
 Any probability distribution with cumulative distribution
 function (CDF) $F$ on $\R$ lies in the max-domain of attraction
-of a generalized extreme value (GEV) distribution with CDF $\Lambda$.
+of a generalized extreme value (GEV) distribution with CDF $\Lambda$
+\cite{leadbetter2012extremes}.
 That is, there exist
-sequences $a_n \in \Rp$ and $b_n \in \R$ such that
-\begin{align*}
-F(a_n x + b_n) \to \Lambda(x), \quad x \in (x_{min}, x_{max}). 
-\end{align*}
+functions $a: \Rp \to \Rp$ and $d: \Rp \to \Rp$ such that
+\begin{align}
+F(a(n) x + b(n))^n \to \Lambda(x), \quad n \to \infty, \quad x \in (x_L, x_R),
+\end{align}
+where $x_L$ and $x_R$ denote the left and right endpoint of the GEV distribution.
+
+
+
 
 
 
 \bibliographystyle{alpha}
 
-\bibliography{/Users/poyda/Articles/ctrm.bib}
+\bibliography{../../../library.bib}
 
 \end{document}
