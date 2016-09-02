@@ -27,46 +27,25 @@ lnTa=log(Ta)
 ## Estimate tail index of inter-arrival times, where data are thinned
 ## out at different cutoffs
 
-ec=0.57721566490153286
+EULER.C = 0.57721566490153286;
 
-# #Generate strechable Mittag-Leffler (GML (a,b, lam))
-# dat=( rexp(n, rate=lam)^(1/a)  )*stbl(a,n) #MITTAG-LEFFLER data
-# dat2= dat^(a/g) #strechable MITTAG-LEFFLER data
+# T = data, 1-a= 1- alpha =confidence level/coefficient
+ml.par.est = function (T, a) {
+  log.T = log(T)
+  m = mean(log.T)
+  s.2 = var(log.T)
+  nu = pi/sqrt(3*(s.2 + pi^2/6))
+  mu = exp(-nu*(m + EULER.C))
+  n=length(T)
+  se.nu=sqrt( (nu^2)*(32-20*nu^2-nu^4)/(40*n)  )
+  zcv=qnorm(1-a/2,0,1)  
+  l.nu= nu -zcv*se.nu
+  u.nu =  nu + zcv*se.nu
+  
+  se.mu = sqrt( ((mu^2)/(120*(pi^2)*n) )*( 20*(pi^4)*(2-nu^2)-3*(pi^2)*(nu^4+20*nu^2-32)*(log(mu))^2 - 720*(nu^3)*log(mu)*1.20206 )  ) #MU
+  l.mu= mu -zcv*se.mu
+  u.mu =  mu + zcv*se.mu
+  return(list(nu = nu, mu = mu, CInu=c(l.nu, u.nu), CImu=c(l.mu, u.mu)) )      
+}
 
-####################
-#Estimation part
- 
-mu1=mean(lnTa)  
-mu2=var(lnTa)  
-mu3=mean( ( lnTa-mu1 )^3 )   
-c= ( (mu3^2)^(1/3) )/mu2
-
-require(VGAM)
-ah=sqrt( (c*pi^2)/( 3*( (2*zeta(3))^(2/3) + (c*pi^2)/6 ) ) ) #nu  estimate
-ah #stability parameter
-gh=sqrt(  ( (ah^2)/mu2 )*(pi^2)*( 1 /(3*ah^2) -1/6 )  ) #gamma estimate
-gh # gamma shape parameter
-lamh= exp( -(mu1*gh  + ec*ah) )  #intensity lambda
-lamh #exponential parameter/gamma scale parameter
-
-#or
-
-betaEst=sqrt(2*trigamma(1)/(mu2+trigamma(1)))
-betaEst
-# f1=function(x,y,beta) {-log(Fa)*dexp(-log(Fa)*exp((x-y)*beta),1)*beta*exp((x-y)*beta)*dstable(exp(y),beta,1,pm=1)*exp(y)}
-# f2=function(x,y) {f1(x,y,beta = beta)}
-# likelihood=vector("numeric",length = m)
-# totalLikelihood=vector("numeric",length = 41)
-# betaVec=seq(0.1,0.9,0.02)
-# 
-# for (j in c(1:41))
-# {
-#   for (i in c(1:m))
-#   {
-#     betaHat=betaVec[j]
-#     likelihood[i]=as.numeric(integrate(f=function(y){f1(lnTa[i],y,betaHat)},lower=-10,upper=10)[1])
-#   }
-#   totalLikelihood[j]=prod(likelihood)
-# }
-# par(mfrow=c(1,1))
-# plot(betaVec,totalLikelihood,main=bquote("MLE estimate for data generated with "*beta == .(beta)),xlab=expression(hat(beta)))
+ml.par.est(Ta,0.05)

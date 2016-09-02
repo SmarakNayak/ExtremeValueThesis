@@ -50,4 +50,3 @@ z<-outer(x1,y1,f2)
 
 par(mfrow=c(1,1))
 persp(x1,y1,z,theta = 30, phi = 30, expand = 0.5, col = "lightblue",ticktype="detailed")
-jj=123549387
