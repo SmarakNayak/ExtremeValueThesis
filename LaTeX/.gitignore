@@ -1,2 +1,7 @@
-CTRMstats.log
-CTRMstats.synctex.gz
+*.log
+*.gz
+*.aux
+*.blg
+*.out
+*.bbl
+*.blg
