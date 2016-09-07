@@ -4,7 +4,7 @@ require(plyr)
 # number of observations
 n = 50000
 # tail parameter of waiting times
-beta = 0.8
+beta = 0.7
 # times of events:
 TT = cumsum(rstable(n,beta, 1, gamma=1, delta=0, pm=1))
 # magnitudes of events (distribution irrelevant)
@@ -39,7 +39,7 @@ names(estimates) <- c("beta","betaL","betaH","mu","muL","muH","topk")
 par(mfrow=c(1,3))
 # plot estimates of tail parameter beta
 plot(estimates$topk,estimates$beta, type="l",ylab= "beta", xlab = "k", 
-     ylim = c(0,1))
+     ylim = c(0,1), main="tail parameter")
 lines(estimates$topk,estimates$betaH, type="l", lty =2)
 lines(estimates$topk,estimates$betaL, type="l", lty =2)
 # plot estimates of scale parameter delta
@@ -47,8 +47,8 @@ estimates$delta <- estimates$mu^{-1/estimates$beta}
 # eps := fraction of magnitudes above threshold
 estimates$eps <- estimates$topk / n
 # plot with known beta:
-plot(estimates$eps, estimates$delta * estimates$eps^(1/beta), type="l", ylim=c(0,10), xlab = "k", ylab = "delta (beta known)")
+plot(estimates$eps, estimates$delta * (-log(1-estimates$eps))^(1/beta), type="l", ylim=c(0,10), xlab = "eps", ylab = "delta (beta known)", main="scale parameter")
 # plot with estimated beta:
-plot(estimates$eps, estimates$delta * estimates$eps^(1/estimates$beta), type="l", ylim=c(0,10), xlab = "k", ylab = "delta (beta unknown)")
+plot(estimates$eps, estimates$delta * (-log(1-estimates$eps))^(1/estimates$beta), type="l", ylim=c(0,10), xlab = "eps", ylab = "delta (beta unknown)", main="scale parameter")
 
 
