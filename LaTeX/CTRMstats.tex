@@ -1,4 +1,4 @@
-\documentclass[12pt]{amsart}
+\documentclass[12pt]{article}
 
 \usepackage{amsmath,amssymb,amsthm}
 %\usepackage{amsfonts,dsfont,mathrsfs}
@@ -15,7 +15,7 @@
 \usepackage{enumerate}
 \usepackage{url}
 \usepackage{hyperref}
-\usepackage{breakurl}
+% \usepackage{breakurl}
 \definecolor{darkblue}{rgb}{0,0,.75}
 \definecolor{darkgreen}{rgb}{0,0.5,0}
 \hypersetup{colorlinks=true, breaklinks=true, linkcolor=blue, citecolor=darkblue, menucolor=darkblue, urlcolor=darkblue}
@@ -39,6 +39,7 @@
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{cor}[theorem]{Corollary}
 \newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
 
 \theoremstyle{definition}
 \newtheorem{defi}[theorem]{Definition}
@@ -59,137 +60,318 @@
 \newcommand{\1}{\mathbf 1}
 \newcommand{\eps}{\varepsilon}
 
-\author{ }
-\address{}
-\email{}
-\address{Peter Straka, School of Mathematics and Statistics,
-UNSW Australia,
-Sydney, NSW 2052, Australia}
-\email{p.straka@unsw.edu.au}
-
-%\linespread{1.5}
-
-
 \begin{document}
-
-
 
 %\linenumbers
 
 \title{CTRM Statistics}
-%\subtitle{Limit Theorems and Governing Equations}
-
-
-%\titlerunning{Short form of title}   % if too long for running head
-
-%\authorrunning{Short form of author list} % if too long for running head
-
-
-%\date{Received: date / Accepted: date}
-% The correct dates will be entered by the editor
-
-
-
-
+\maketitle
 \begin{abstract}
 We fit a max-renewal process, (aka 'CTRM', Continuous Time Random Maxima)
 to data. 
-%\textbf{Keywords:} anomalous diffusion;
-%fractional kinetics;
-%fractional derivative;
-%subordination;
-%coupled random walks
-%\\
-%\keywords{anomalous diffusion
-%\and functional limit theorem
-%\and fractional derivative
-%\and subordination
-%\and coupled random walks
-%\and fractional kinetics}
-%% \PACS{PACS code1 \and PACS code2 \and more}
-%\textbf{2010 MSC:} 60F17; 60G22%;60B10 \and 60G50}
+
 \end{abstract}
-\maketitle
 
 %60F17  	Functional limit theorems; invariance principles
 %60B10  	Convergence of probability measures
 %60G22  	Fractional processes, including fractional Brownian motion
 %60G50  	Sums of independent random variables; random walks
 
-
-
 \section{Introduction}
 
-%% CTRMs; the process
-The stochastic model $M(t)$ below has been studied under the various names
-``Shock process''
-\cite{Esary1973,Sumita1983,Sumita1984,Sumita1985,Anderson1987,Gut1999}, 
-``max-renewal process'', 
-\cite{Silvestrov2002a,ST04,Basrak2014}
-and ``CTRM (continuous time random maxima)
-\cite{Benson2007,Meerschaert2009,Hees16,Hees2015}: 
-Assume i.i.d. pairs of random variables $(W_k, J_k)$, $k = 1, 2, \ldots$
-where $W_k > 0$ represents an inter-arrival time of certain events and 
-$J_k \in \R$ the corresponding event magnitude.  
-Write $N(t) = \max\{n \in \mathbb N: W_1 + \ldots + W_n \le t\}$ for the renewal process
-associated with the $W_k$ (where the maximum of the empty set is set to $0$), 
-and define
+Time series displaying inhomogeneous behaviour have received strong interest in 
+the recent statistical physics literature,
+\cite{Barabasi2005,Oliveira2005,Vasquez2006,Vazquez2007,Omi2011,
+Min2010,Karsai2011,Bagrow2013},
+and have been observed in the context of earthquakes, sunspots, neuronal
+activity, human communication etc., see \cite{Karsai2012,Vajna2013} for a 
+list of references.
+Such time series exhibit high activity in some `bursty' intervals, which 
+alternate with other, quiet intervals.  Although several mechanisms are 
+plausible explanations for bursty behaviour
+(most prominently self-exciting point processes \cite{Hawkes1971}),
+there seems to be one salient
+feature which very typically indicates the departure from temporal homogeneity: 
+A heavy-tailed distribution of waiting times
+\cite{Vasquez2006,Karsai2012,Vajna2013}. 
+A simple renewal process with heavy-tailed waiting times captures these
+dynamics. For many systems, the renewal property is appropriate, as can be
+checked by a simple test: the dynamics do not change significantly if the
+waiting times are randomly reshuffled \cite{Karsai2012}.
+
+When a magnitude can be assigned to each event in the renewal process, 
+such as e.g.\
+for earthquakes, sun flares, neuron voltages or the impact of an email,
+two natural and basic questions to ask are: 
+What is the distribution of the largest event up to a given time $t$?
+What is the probability that an event exceeds a given level $\ell$ within the
+next $t$ units of time?
+A probabilistic extreme value model which assumes that the events form a 
+renewal process is available in the literature. 
+This model has been studied under the names
+``Continuous Time Random Maxima process'' (CTRM) 
+\cite{Benson2007,Meerschaert2009,Hees16,Hees2015}, 
+``Max-Renewal process'' \cite{Silvestrov2002a,ST04,Basrak2014}, 
+and ``Shock process'' 
+\cite{Esary1973,Sumita1983,Sumita1984,Sumita1985,Anderson1987,Gut1999}.
+This article aims to develop concrete statistical inference methods for this model, 
+a problem which has seemingly received little attention by the statistical 
+community. 
+
+\section{CTRM processes}
+
+The Continuous Time Random \emph{Walk} (CTRW) has been a highly successful 
+model for anomalous diffusion in the past two decades 
+\cite{Metzler2000,HLS2010b}, likely due to its tractable and flexible scaling
+properties.
+The stochastic process we study in this article is conceptually very close
+to the CTRW, since essentially the jumps $J_k$ are reinterpreted as 
+magnitudes, and instead of the cumulative sum, one tracks the cumulative 
+maximum. Similarly tractable scaling properties apply to the CTRM, see below.
+For the above reasons, we use the name CTRM in this article.
+
+
+\begin{definition}
+Assume i.i.d.\ pairs of random variables $(J_k, W_k)$, $k = 1, 2, \ldots$
+where $W_k > 0$ represents the inter-arrival times of certain events and 
+$J_k \in \R$ the corresponding event magnitudes.  
+Write 
+\begin{align} \label{eq:renewal-process}
+N(t) = \max\{n \in \mathbb N: W_1 + \ldots + W_n \le t\}
+\end{align}
+for the renewal process
+associated with the $W_k$ (where the maximum of the empty set is set to $0$).
+Then the process
 \begin{align}
 M(t) = \bigvee_{k=1}^{N(t)} J_k
-= \max\{J_k: k = 1, \ldots, N(t)\}.
+= \max\{J_k: k = 1, \ldots, N(t)\}, \quad t \ge 0.
 \end{align}
-If $W_k$ is interpreted as the time leading up to the event with magnitude
-$J_k$, then $M(t)$ is the largest magnitude up to time $t$.
-The alternative case where $W_k$ is the inter-arrival time \textit{following} $J_k$ 
+is called a CTRM (Continuous Time Random Maxima process).
+\end{definition}
+
+ 
+
+It is clear that the sample paths of $N(t)$ and $M(t)$ are right-continuous
+with left-hand limits. 
+If $W_k$ is interpreted as the time \emph{leading up} to the event with magnitude
+$J_k$, then $M(t)$ is indeed the largest magnitude up to time $t$.
+The alternative case where $W_k$ represents the inter-arrival time 
+\textit{following} $J_k$ 
 is termed ``second type'' (in the shock model literature) or OCTRM
 (overshooting CTRM), and the largest magnitude up to time $t$ is then
 given by
 \begin{align}
-\tilde M(t) = \bigvee_{k=1}^{N(t)+1} J_k.
+\tilde M(t) = \bigvee_{k=1}^{N(t)+1} J_k, \quad t \ge 0.
 \end{align}
-Finally, the model is called coupled when $W_k$ and $J_k$ are not independent;
-in this article we focus on the uncoupled case.  For this case, $M(t)$ and
-$\tilde M(t)$ have the same limiting behaviour for large times and magnitudes
-\cite{Hees2015} and hence we focus on the CTRM $M(t)$. 
+Finally, the model is called \emph{coupled} when $W_k$ and $J_k$ are not independent.
+In this article we focus on the uncoupled case,  
+for which it can be shown that the processes $M(t)$ and
+$\tilde M(t)$ have the same limiting distributions at large times
+\cite{Hees2015}, and hence we focus on the CTRM $M(t)$. 
 
-%% Standard case
-If $J_k$ is constant or light-tailed (e.g.\ exponentially distributed), 
-then, by the strong law of large numbers,
-on large time scales the number $N(t)$ of events by time $t$ is well
-approximated by $t/\ex[W_k]$. Magnitudes in excess of a given (large)
-threshold $\ell$ then arrive at a constant rate (which depends on $\ell$), 
-and the inter-arrival times are exponentially distributed. 
-The dynamics of the record process are well known.
 
-%% Heavy tailed case, temporal evolution. Self-similarity, fractal, bursts
-In this article, we are concerned with heavy-tailed inter-arrival times $W_k$: 
-We assume that $\pr[W_k > t] \sim C t^{-\beta}$ as $t \to \infty$, 
-for some $\beta \in (0,1)$ and some constant $C$. 
-Then $N(t)$ has temporal scaling exponent $\beta$, i.e.\
-$C n^{-\beta} N(nt) \to E(t)$, where 
-$E(t)$ is the inverse of a stable subordinator
-(increasing L\'evy process) $D(t)$, in the sense of 
+We aim to make inference on the distribution of the following quantities:
+\begin{definition}
+Let $M(t)$ be an uncoupled CTRM whose magnitudes $J_k$ are supported on the interval
+$[x_0, x_F]$.  Then the exceedance time of level $\ell \in [x_0,x_F]$ is
+the random variable
+\begin{align*}
+T_\ell = \inf\{t: M(t) > \ell\}
+\end{align*}
+and the exceedance is 
+\begin{align*}
+X_\ell = M(T_\ell) - \ell.
+\end{align*}
+\end{definition}
+
+\begin{lemma}
+Given a level $\ell \in [x_0,x_F]$, exceedance $X_\ell$ and exceedance time
+$T_\ell$ are independent. Moreover, 
+\begin{align*}
+\pr[X_\ell > x]
+&= \frac{\overline F_J(\ell + x)}{\overline F_J(\ell)}, \quad x > 0,
+\\
+\pr[T_\ell > t]
+&= \overline F_J(\ell) \sum_{n=1}^\infty \int_0^\infty \overline F_W(t-t') \pr[L_{n-1} \le \ell]
+\pr[S_{n-1} \in dt'], \quad t > 0
+\end{align*}
+where $L_n = \bigvee_{k=1}^n J_k$, $L_0 = x_0$, and $S_n = \sum_{k=1}^n W_k$,
+$S_0 = 0$.
+\end{lemma}
+
+\begin{proof}
+Let $\tau_\ell = \min\{k: J_k > x\}$. Then
+\begin{align*}
+T_\ell > t, X_\ell > x 
+&\Longleftrightarrow
+S_{\tau_\ell} > t, L_{\tau_\ell} > \ell + x
+\Longleftrightarrow
+\exists n: L_{n-1} \le \ell, J_n > \ell + x, S_n > t
+\\
+&\Longleftrightarrow
+\exists n: L_{n-1} \le \ell, J_n > \ell + x, W_n > t - S_{n-1}
+\end{align*}
+and such $n$ must be unique, since $x > 0$.
+Thus 
+\begin{align*}
+&\pr[T_\ell > t, X_\ell > x]
+= \sum_{n=1}^\infty \pr[J_n > \ell + x, W_n > t - S_{n-1}, L_{n-1} \le \ell]
+\\
+&= \sum_{n=1}^\infty \int_0^\ell \int_0^\infty \pr[J_n > \ell + x, W_n > t - t' | L_{n-1} = m', 
+S_{n-1} = t'] \pr[L_{n-1} \in dm', S_{n-1} \in dt']
+\\
+&= \sum_{n=1}^\infty \int_0^\infty \overline F_J(\ell + x) \overline F_W(t - t')
+\pr[L_{n-1} \le \ell] \pr[S_{n-1} \in dt']
+\end{align*}
+since the sequences $J_k$ and $W_k$ are i.i.d.\ and independent of each other.
+Letting $t \downarrow 0$, we see
+\begin{align*}
+&\pr[X_\ell > x] 
+= \sum_{n=1}^\infty \overline F_J(\ell+x) \pr[L_{n-1} \le \ell] 
+= \overline F_J(\ell+x) \sum_{n=1}^\infty F_J(\ell)^{n-1}
+\\
+&= \frac{\overline F_J(\ell + x)}{\overline F_J(\ell)},
+\end{align*}
+and letting $x \downarrow 0$, one gets $\pr[T_\ell > t]$. 
+One checks that $\pr[T_\ell > t, X_\ell > x] = \pr[T_\ell > t] \pr[X_\ell > x]$, implying independence.
+\end{proof}
+The distribution of the exceedance is hence, as expected, simply the
+conditional distribution of a magnitude $J_k$ given $J_k > \ell$,
+and may hence be modeled by a generalized Pareto (GP) distribution
+\cite{ColesBook}. The exceedance times, and hence the temporal aspect of the
+dynamics, are independent of the exceedances, and may be looked at separately.
+
+\section{Fractional Time Scale}
+
+%By the stable central limit theorem, it is well known that for a large 
+%number of observation pairs $(J_k,W_k)$, 
+%%the maximum of $J_k$
+%%approaches a max-stable (GEV) distribution \cite{ColesBook}, whereas 
+%the distribution of the sum of $W_k$ approaches 
+%a sum-stable distribution \cite{MeerschaertSikorskii}.  
+As mentioned in the introduction, we assume a heavy-tailed distribution 
+for the waiting times, more precisely that the tail function 
+$\overline F_W := 1 - F_W$ of the CDF of $W$ is regularly varying:
 \begin{align}
-E(t) = \inf\{u: D(u) > t\}.
+t \mapsto \overline F_W(t) \in RV(-\beta), \quad \beta \in (0,1)
 \end{align}
-The process $E(t)$ is self-similar, and its points of increase model `bursts',
-meaning that $E(t)$ is starkly increasing in some short time intervals and
-constant in others \cite{Karsai2012}.
+meaning that \cite{seneta,thebook}
+\begin{align*}
+\lim_{t \to \infty}\frac{\overline F_W(\lambda t)}{\overline F_W(t)}
+= \lambda^{-\beta}.
+\end{align*}
+By \cite[Cor.~8.2.19]{thebook} (also compare \cite[Th.~4.5.1]{Whitt2010}), this is equivalent to $W_1$ being in the 
+(sum-) domain of attraction of a positively skewed stable law $D$ with 
+stability parameter $\beta$, which means the weak convergence
+\begin{align}
+b(n)(W_1 + \ldots + W_n) \Rightarrow D, \quad n \to \infty.
+\end{align}
+The i.i.d.\ nature of the $W_k$ allows for a more general, functional limit
+theorem \cite[Ex.~11.2.18]{thebook}, \cite[Th.~4.5.3]{Whitt2010}:
+\begin{align}
+b(c)(W_1 + \ldots + W_{\lfloor cr \rfloor}) \Rightarrow D(cr), 
+\quad c \to \infty,
+\end{align}
+where $\{D(r)\}_{t \ge 0}$ is a stable subordinator, defined via 
+\begin{align}
+\ex[e^{-\lambda D(r)}] = e^{-r \lambda^\beta},
+\end{align}
+where $\lfloor r \rfloor$ denotes the largest integer not larger than $r$,
+and where convergence holds on the stochastic process level, i.e.\ in the sense
+of weak convergence in Skorokhod space endowed with the $J_1$ topology
+\cite[Sec.~3.3]{Whitt2010}. 
+
+The renewal process paths $N(t)$ result, up to a constant, from
+inverting the non-decreasing sample paths of the sum
+$r \mapsto W_1 + \ldots + W_{\lfloor r \rfloor}$.
+Accordingly, the scaling limit of the renewal process is \cite{limitCTRW} 
+\begin{align}
+N(ct) / \tilde b(c) \Rightarrow E(t), \quad c \to \infty
+\end{align}
+where $E(t)$ denotes the inverse stable subordinator \cite{invSubord}
+\begin{align}
+E(t) = \inf\{r: D(r) > t\}, \quad t \ge 0,
+\end{align}
+and where $\tilde b(c)$ is asymptotically inverse to $1/b(c)$, in the sense
+of \cite[p.20]{seneta}: 
+\begin{align}
+1/b(\tilde b(c)) \sim c \sim \tilde b(1/b(c))
+\end{align}
+where a $\sim$ symbol indicates that the quotient of both sides converges to
+$1$ as $c \to \infty$. 
+Note that $\tilde b(c) \in RV(\beta)$. 
+
+The inverse stable subordinator $E(t)$ governs the temporal dynamics of
+the scaling limit of the CTRM process $M(t)$, see Theorem~\ref{th:AEt}. 
+It is self-similar with exponent $\beta$
+\cite{limitCTRW}, non-decreasing, and the (regenerative, random) set 
+$\mathcal R$ of its points of increase is a fractal with dimension $\beta$ 
+\cite{Bertoin04}.
+$E(t)$ is a model for time series with intermittent, `bursty'
+behaviour, for the following reasons:
+\begin{itemize}
+\item [i)]
+Conditional on $t \ge 0$ being a point of increase, any interval 
+$(t, t+ \epsilon)$ almost surely contains uncountably many other points of 
+$\mathcal R$; 
+\item [ii)]
+$\mathcal R$ has Lebesgue measure $0$, and hence $E(t)$ is
+constant at any ``randomly'' chosen time $t$. 
+\end{itemize}
+Having only two parameters ($\beta \in (0,1)$ and a scale parameter)
+the inverse stable subordinator hence models scaling limits of heavy-tailed 
+waiting times parsimoniously.
+
+\section{Generalized Extreme Value Distributions}
+
+We turn our attention to the exceedances $X_\ell$ of a given high threshold
+$\ell$ `close' to the right end-point $x_F$ of $F_J$. 
+Any non-degenerate distribution on $\R$
+
+\section{CTRM limit}
+
+\paragraph*{The timing of maxima.}
+The distribution of the largest magnitudes is well approximated by a 
+generalized extreme value (GEV) distribution $F$ if the number of events is 
+large \cite{ColesBook}.
+Consider again the light-tailed inter-arrival time case: 
+Exceedances of large levels $\ell$ with small occurrence probability
+$p = 1 - F(\ell)$ occur, on average every $1/p$ observations, and the average
+return period is quickly seen to be $\ex[W_k]/p$.
+This provides an intuitive interpretation of magnitudes, e.g.\ ``a flood
+exceeding level $\ell$ occurs only every 100 years on average.'' 
+Moreover, the lightness of the tails of $W_k$ implies, as mentioned above,
+that events occur in a Poisson process fashion.  The memory of large events
+in the past is negligible for the prediction of large events in the future.
+For heavy-tailed inter-arrival times, however, the Markov property does not
+hold, and time averages of return periods are not defined, since their moments
+are infinite.  
 
 
-%% Limit theorem for M(t)
+\paragraph*{Aims.}
+The goal of our statistical method is to make inferences about the dynamics
+of $M(t)$, given data $(W_k, J_k)$. 
+Since the waiting times $J_k$ are not assumed exponential, $M(t)$ is not Markov,
+and the same applies to $A(E(t))$.  
+
+
+
+As was shown by \cite{Anderson1987} (see also 
+\cite{MeerschaertStoev08}), exceedance times are
+Mittag-Leffler distributed, and thus form a \emph{fractional} Poisson process
+\cite{Laskin2003}. Due to recent progress in the estimation of Mittag-Leffler
+distributions \cite{Cahoy2013,Cahoy2010} we are able to model the recurrence
+periods, and thus to give predictive distributions for future exceedance times,
+using the semi-Markov property of fractional Poisson processes.
+
+
+
 \cite{Meerschaert2009} have shown that for large times $t$, 
 the process $M(t)$ converges to a (rescaled) time-changed 
 extreme-value process $A(E(t))$. 
 Here, $A(t)$ is an extreme-value process in the sense of \cite{Lamperti1964}
 and \cite{resnick2013extreme}, and 
 
-
-%% GOAL
-The goal of our statistical method is to make inferences about the dynamics
-of $M(t)$, given data $(W_k, J_k)$. 
-Since the waiting times $J_k$ are not assumed exponential, $M(t)$ is not Markov,
-and the same applies to $A(E(t))$.  
 
 
 
@@ -211,8 +393,13 @@ where $x_L$ and $x_R$ denote the left and right endpoint of the GEV distribution
 
 
 
+\section{Statistical Method}
 
+\section{Simulated Data}
 
+\section{Real Data}
+
+\section{Conclusion}
 
 \bibliographystyle{alpha}
 
