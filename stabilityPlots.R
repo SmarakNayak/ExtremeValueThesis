@@ -1,68 +1,54 @@
 require(stabledist)
-n = 10000
-beta = 0.7
-sumWaitingTimes = cumsum(rstable(n,beta, 1, pm=1))
 require(fExtremes)
-jumpSizes = rgev(n, xi = 0.3, mu = 0, beta = 1)
+require(plyr)
+# number of observations
+n = 50000
+# tail parameter of waiting times
+beta = 0.8
+# times of events:
+TT = cumsum(rstable(n,beta, 1, gamma=1, delta=0, pm=1))
+# magnitudes of events (distribution irrelevant)
+JJ = rgev(n, xi = 0.3, mu = 0, beta = 1)
 
-# This is what the original data could look like
-par(mfrow=c(1,2))
 
 ## Estimate tail index of inter-arrival times, where data are thinned
 ## out at different cutoffs
-EULER.C = 0.57721566490153286;
+source("MittagLefflerEstimation.R")
 
-# T = data, 1-a= 1- alpha =confidence level/coefficient
-ml.par.est = function (T, a) {
-  log.T = log(T)
-  m = mean(log.T)
-  s.2 = var(log.T)
-  nu = pi/sqrt(3*(s.2 + pi^2/6))
-  mu = exp(-nu*(m + EULER.C))
-  n=length(T)
-  se.nu=sqrt( (nu^2)*(32-20*nu^2-nu^4)/(40*n)  )
-  zcv=qnorm(1-a/2,0,1)  
-  l.nu= nu -zcv*se.nu
-  u.nu =  nu + zcv*se.nu
-  
-  se.mu = sqrt( ((mu^2)/(120*(pi^2)*n) )*( 20*(pi^4)*(2-nu^2)-3*(pi^2)*(nu^4+20*nu^2-32)*(log(mu))^2 - 720*(nu^3)*log(mu)*1.20206 )  ) #MU
-  l.mu= mu -zcv*se.mu
-  u.mu =  mu + zcv*se.mu
-  return(list(nu = nu, mu = mu, CInu=c(l.nu, u.nu), CImu=c(l.mu, u.mu)) )      
+# consider the cutoff at the top epsMax values:
+epsMax <- 0.10
+# this cutoff translates to this many magnitudes:
+m <- ceiling(epsMax * n)
+# indices of the largest jumps:
+idxJ <- order(JJ, decreasing = T)[1:m]
+# extracts (preceding) durations of the m largest exceedances
+Tell <- function(TT,idxJ,m){
+  m=ceiling(m)
+  thinT <- sort(TT[idxJ[1:m]])
+  diff(c(0,thinT))
 }
+# creates a dataframe with point estimates and confidence intervals
+# of the Mittag-Leffler parameters mu and nu:
+estimates <- ldply(.data = seq(50:m), function(k){
+  est <- ml.par.est(Tell(TT,idxJ,k),0.05)
+  return(c(est$nu, est$CInu, est$mu, est$CImu, k))
+})
+# beta = shape; sigma = scale; topk = number of values used in estimate
+names(estimates) <- c("beta","betaL","betaH","mu","muL","muH","topk")
 
-largestThreshold=1000
-# Now threshold the data
-# Take the m largest observations
+par(mfrow=c(1,3))
+# plot estimates of tail parameter beta
+plot(estimates$topk,estimates$beta, type="l",ylab= "beta", xlab = "k", 
+     ylim = c(0,1))
+lines(estimates$topk,estimates$betaH, type="l", lty =2)
+lines(estimates$topk,estimates$betaL, type="l", lty =2)
+# plot estimates of scale parameter delta
+estimates$delta <- estimates$mu^{-1/estimates$beta}
+# eps := fraction of magnitudes above threshold
+estimates$eps <- estimates$topk / n
+# plot with known beta:
+plot(estimates$eps, estimates$delta * estimates$eps^(1/beta), type="l", ylim=c(0,10), xlab = "k", ylab = "delta (beta known)")
+# plot with estimated beta:
+plot(estimates$eps, estimates$delta * estimates$eps^(1/estimates$beta), type="l", ylim=c(0,10), xlab = "k", ylab = "delta (beta unknown)")
 
-estimates=seq(0,0,largestThreshold)
-estimatesL=seq(0,0,largestThreshold)
-estimatesH=seq(0,0,largestThreshold)
 
-deltaStar=seq(0,0,largestThreshold)
-for (m in c(1:largestThreshold))
-{
-  indexesOfLargestJumps = order(jumpSizes, decreasing = T)[1:m]
-
-  a=jumpSizes[indexesOfLargestJumps[m]]
-  
-  ##Cheating here to calculate actual F(a) rather than estimating it
-  #Fa=pgev(a,xi = 0.3, mu = 0, beta = 1)
-  eps=m/n
-  #Calculating actual Ta's
-  cumulativeDurations=c(0,sort(sumWaitingTimes[indexesOfLargestJumps]))
-  Ta=diff(cumulativeDurations)
-  
-  est=ml.par.est(Ta,0.05)
-  estimates[m]=est$nu
-  estimatesL[m]=est$CInu[1]
-  estimatesH[m]=est$CInu[2]
-  
-  #deltaStar[m]=((est$mu)^(-est$nu))/-log(Fa)
-  deltaStar[m]=((est$mu)^(-est$nu))/eps
-}
-plot(estimates, type="l", ylim=c(0,1.5), ylab= "Beta estimate", xlab = "Threshold level")
-lines(estimatesH, type="l", lty =2 ,ylim=c(0,2))
-lines(estimatesL, type="l", lty =2 ,ylim=c(0,2))
-
-plot(deltaStar[200:1000],type="l")
