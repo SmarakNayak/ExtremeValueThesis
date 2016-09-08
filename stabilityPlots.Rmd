@@ -1,11 +1,11 @@
 ---
-output: html_document
+output: pdf_document
 ---
 # Simulating and Estimating CTRM processes
 
 ### Simulation
 
-```{r init, cache=F, include=F}
+```{r init, cache=T, include=F}
 require(stabledist)
 require(fExtremes)
 require(plyr)
@@ -13,10 +13,12 @@ require(plyr)
 n = 2^{16} 
 # tail parameter of waiting times
 beta = 0.8
+# scale parameter of waiting times
+delta = n^(-1/beta)
 # shape parameter of GEV distribution
 xi = 0.7
 # times of events:
-TT = cumsum(rstable(n,beta, 1, gamma=1, delta=0, pm=1)) / n^(1/beta)
+TT = cumsum(rstable(n,beta, 1, gamma=1, delta=0, pm=1)) * delta
 # magnitudes of events (distribution irrelevant)
 JJ = rgev(n, xi = xi, mu = 0, beta = 1) / n^(xi) # don't know scaling!
 # restrict attention to unit interval:
@@ -149,7 +151,18 @@ with $b(n)$.  It was shown by Meerschaert & Stoev (2008) that
 
 $$\xi_a \stackrel{d}{=} (-\log F_A(a))^{-1/\beta} W_\beta$$
 
-where $F_A(\cdot)$ is the CDF of $A:= A(1)$. 
+where $F_A(\cdot)$ is the CDF of $A:= A(1)$. Summing up, the exceedance
+time $T_\ell$ is asymptotically Mittag-Leffler distributed:
+
+\begin{align}
+T_\ell \stackrel{a}{\sim} {\rm ML}\left(\beta, -b(n) [\log F_A(\ell^*)]^{-1/\beta}\right)
+\end{align}
+
+
+
+## Estimation
+
+
 Since 
 
 \begin{align}
@@ -158,12 +171,8 @@ A \le \ell^*,
 \end{align}
 we may estimate $F_A(\ell^*)$ empirically by 
 \begin{align}
-\#\{k: J_k \le \ell\} / n.
+\varepsilon(\ell^*) := 1-F_A(\ell^*) \approx \#\{k: J_k \le \ell\} / n.
 \end{align}
-
-
-
-## Estimation
 
 Assume now a time series of magnitudes, and that interest lies in the
 estimation of the timings of the large magnitudes.
@@ -173,9 +182,12 @@ the resulting sequences of exceedance sizes and exceedance times
 $\{(X_{\ell,i}, T_{\ell,i})\}$. 
 Due to the renewal property, this sequence is i.i.d., and 
 $T_{\ell,1}, T_{\ell,2}, \ldots$ can be modelled by a Mittag-Leffler
-distribution. 
+distribution. We use the method of log-moments estimator, taken from 
+Cahoy (2012), which provides a point-estimate and an asymptotically normal
+confidence interval, at default confidence level 95%. 
 
-```{r tail-plot, cache=F, echo=F, warning=F, fig.cap="Estimate of tail parameter of Mittag Leffler distribution (y-axis), for observations thresholded at the top k observations (x-axis). The dotted line represents the correct value."}
+
+```{r tail-plot, cache=T, echo=F, warning=F, fig.cap="Estimate of tail parameter of Mittag Leffler distribution (y-axis), for observations thresholded at the top k observations (x-axis). The dotted line represents the correct value."}
 source("MittagLefflerEstimation.R")
 # extracts (preceding) durations of the m largest exceedances
 Tell <- function(TT,idxJ,m){
@@ -199,16 +211,25 @@ lines(estimates$topk,estimates$betaL, type="l", lty =2)
 abline(h = beta, lty = 3)
 ```
 
+Since the scale parameter 
+$\delta := -b(n)[\log(1 - \varepsilon(\ell^*))]^{-1/\beta}$
+depends on the threshold $\ell^*$ as well as on the tail parameter $\beta$, 
+we plot the estimate of $b(n)$
+\begin{align}
+b(n) = \delta \times (-\log(1-\varepsilon(\ell^*)))^{1/\beta}
+\end{align}
+with an estimate for $\beta$ plugged in from the previous step. 
 
-```{r scale-plot, cache=F, echo=F, warning=F, fig.cap="Estimate of scale parameter of Mittag Leffler distribution (y-axis), for observations thresholded at the top k observations (x-axis)."}
+```{r scale-plot, cache=T, echo=F, warning=F, fig.cap="Estimate of scale parameter of Mittag Leffler distribution (y-axis), for observations thresholded at the top k observations (x-axis). The dotted line represents the true scaling parameter."}
 # extract scale from parametrization
 estimates$delta <- estimates$mu^{-1/estimates$beta}
 # eps := fraction of magnitudes above threshold
 estimates$eps <- estimates$topk / n
 # plot with known beta:
-plot(estimates$topk, estimates$delta * (-log(1-estimates$eps))^(1/beta), type="l", xlab = "k", ylab = "delta (beta known)", main="scale parameter")
+# plot(estimates$topk, estimates$delta * (-log(1-estimates$eps))^(1/beta), type="l", xlab = "k", ylab = "delta (beta known)", main="scale parameter")
 # plot with estimated beta:
-plot(estimates$topk, estimates$delta * (-log(1-estimates$eps))^(1/estimates$beta), type="l", xlab = "eps", ylab = "delta (beta unknown)", main="scale parameter")
+plot(estimates$topk, estimates$delta * (-log(1-estimates$eps))^(1/estimates$beta), type="l", ylim=c(0,2*delta), xlab = "k", ylab = "delta (beta unknown)", main="scale parameter")
+abline(h = delta, lty = 3)
 ```
 
 
