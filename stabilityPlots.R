@@ -29,7 +29,7 @@ Tell <- function(TT,idxJ,m){
 }
 # creates a dataframe with point estimates and confidence intervals
 # of the Mittag-Leffler parameters mu and nu:
-estimates <- ldply(.data = seq(50:m), function(k){
+estimates <- ldply(.data = seq(50,m), function(k){
   est <- ml.par.est(Tell(TT,idxJ,k),0.05)
   return(c(est$nu, est$CInu, est$mu, est$CImu, k))
 })
