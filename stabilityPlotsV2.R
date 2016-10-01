@@ -3,7 +3,7 @@ require(fExtremes)
 require(plyr)
 require(POT) ##install.packages("POT", repos="http://R-Forge.R-project.org") 
 # number of observations
-n = 50000
+n = 500000
 # tail parameter of waiting times
 beta = 0.7
 #constants to scale waiting times into Stable(1) RV
@@ -22,7 +22,7 @@ source("MittagLefflerEstimation.R")
 source("MittagLefflerDeltaEstimation.R")
 
 # consider the cutoff at the top epsMax values:
-epsMax <- 0.05
+epsMax <- 0.01
 # this cutoff translates to this many magnitudes:
 m <- ceiling(epsMax * n)
 # indices of the largest jumps:
@@ -42,30 +42,39 @@ estimates <- ldply(.data = seq(50,m), function(k){
 # beta = shape; sigma = scale; topk = number of values used in estimate
 names(estimates) <- c("beta","betaL","betaH","delta","deltaL","deltaH","b","bL","bH" ,"topk")
 
-par(mfrow=c(1,3))
+par(mfrow=c(2,3))
 # plot estimates of tail parameter beta
-plot(estimates$topk,estimates$beta, type="l",ylab= "beta", xlab = "k", ylim = c(0,1), main="tail parameter")
+plot(estimates$topk,estimates$beta, type="l",ylab= "beta", xlab = "k", ylim = c(0,1), main="ML tail parameter")
 lines(estimates$topk,estimates$betaH, type="l", lty =2)
 lines(estimates$topk,estimates$betaL, type="l", lty =2)
 abline(h = beta, lty = 3)
 
-#plot estimates of scale parameter delta
-plot(estimates$topk,estimates$delta, type="l",ylab= "delta", xlab = "k", 
-     ylim = c(0,0.0003), main="scale parameter")
-lines(estimates$topk,estimates$deltaH, type="l", lty =2)
-lines(estimates$topk,estimates$deltaL, type="l", lty =2)
-
-
 # eps := fraction of magnitudes above threshold
 estimates$eps <- estimates$topk / n
+estimates$truedelta <- (-log(1-estimates$eps))^-(1/beta)*b.n
+#plot estimates of scale parameter delta
+plot(estimates$topk,estimates$delta, type="l",ylab= "delta", xlab = "k", 
+     ylim = c(0,0.0003), main="ML scale parameter")
+lines(estimates$topk,estimates$deltaH, type="l", lty =2)
+lines(estimates$topk,estimates$deltaL, type="l", lty =2)
+lines(estimates$topk,estimates$truedelta,type="l",lty=3)
+
+
+
 ## plot with known beta:
-plot(estimates$eps, estimates$delta * (-log(1-estimates$eps))^(1/beta), type="l", ylim=c(0,3*b.n), xlab = "eps", ylab = "b(n) (beta known)", main="b(n)")
+estimates$bKnown<-estimates$delta * (-log(1-estimates$eps))^(1/beta)
+estimates$bKnownH<-estimates$bKnown+(estimates$deltaH-estimates$delta)*(-log(1-estimates$eps))^(1/beta)
+estimates$bKnownL<-estimates$bKnown-(estimates$delta-estimates$deltaL)*(-log(1-estimates$eps))^(1/beta)
+
+plot(estimates$eps, estimates$bKnown, type="l", ylim=c(0,5*b.n), xlab = "eps", ylab = "b(n) (beta known)", main="b(n)")
+lines(estimates$eps,estimates$bKnownH, type="l", lty =2)
+lines(estimates$eps,estimates$bKnownL, type="l", lty =2)
 abline(h = b.n, lty = 3)
 
 ## plot with estimated beta:
 #plot(estimates$eps, estimates$delta * (-log(1-estimates$eps))^(1/estimates$beta), type="l", ylim=c(0,10), xlab = "eps", ylab = "b(n) (beta unknown)", main="b(n)")
 
-plot(estimates$eps, estimates$b, type="l", ylim=c(0,3*b.n), xlab = "eps", ylab = "b(n) (beta unknown)", main="b(n)")
+plot(estimates$eps, estimates$b, type="l", ylim=c(0,5*b.n), xlab = "eps", ylab = "b(n) (beta unknown)", main="b(n)")
 lines(estimates$eps,estimates$bH, type="l", lty =2)
 lines(estimates$eps,estimates$bL, type="l", lty =2)
 abline(h = b.n, lty = 3)
@@ -91,13 +100,13 @@ GPestimates <- ldply(.data = seq(50,m), function(k){
 names(GPestimates) <- c("scaleEst","scaleL","scaleH","theoreticalScale","shapeEst","shapeL","shapeH","topk")
 
 plot(GPestimates$topk,GPestimates$scaleEst, type="l",ylab= "sigma", xlab = "k", 
-     ylim = c(0,10), main="scale parameter")
+     ylim = c(0,10), main="GP scale parameter")
 lines(GPestimates$topk,GPestimates$scaleH, type="l", lty =2)
 lines(GPestimates$topk,GPestimates$scaleL, type="l", lty =2)
 lines(GPestimates$topk,GPestimates$theoreticalScale, type="l", lty =3)
 
 plot(GPestimates$topk,GPestimates$shapeEst, type="l",ylab= "xi", xlab = "k", 
-     ylim = c(0,1), main="shape parameter")
+     ylim = c(0,1), main="GP shape parameter")
 lines(GPestimates$topk,GPestimates$shapeH, type="l", lty =2)
 lines(GPestimates$topk,GPestimates$shapeL, type="l", lty =2)
 abline(h = 0.3, lty = 3)
