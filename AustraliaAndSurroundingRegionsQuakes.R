@@ -1,9 +1,10 @@
 ## Visualisation
-
+require(plyr)
 Australia <- read.csv("Data/quakes58.csv")
 n=dim(Australia)[1]-1
 ##Vipaka <- Vipaka[28:dim(Vipaka)[1], ]
 require(parsedate)
+require(POT)
 parse_iso_8601(paste(levels(Australia$UTC.Date)[Australia$UTC.Date],levels(Australia$UTC.Time)[Australia$UTC.Time])) -> Australia$time
 plot(Australia$time, Australia$Magnitude, type='h', ylim=c(0,9))
 
