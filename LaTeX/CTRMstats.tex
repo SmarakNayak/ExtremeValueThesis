@@ -89,11 +89,7 @@ list of references.
 Such time series exhibit high activity in some `bursty' intervals, which 
 alternate with other, quiet intervals.  Although several mechanisms are 
 plausible explanations for bursty behaviour
-<<<<<<< HEAD
 (most prominently self-exciting point processes \cite{hawkes1971point}),
-=======
-(most prominently self-exciting point processes \cite{Hawkes1971}),
->>>>>>> e8a2740f18521244a4c2cbcd63facbc1963c6e15
 there seems to be one salient
 feature which very typically indicates the departure from temporal homogeneity: 
 A heavy-tailed distribution of waiting times
@@ -105,11 +101,7 @@ waiting times are randomly reshuffled \cite{Karsai2012}.
 
 When a magnitude can be assigned to each event in the renewal process, 
 such as e.g.\
-<<<<<<< HEAD
-for earthquakes, sun flares or neuron voltages,
-=======
 for earthquakes, sun flares, neuron voltages or the impact of an email,
->>>>>>> e8a2740f18521244a4c2cbcd63facbc1963c6e15
 two natural and basic questions to ask are: 
 What is the distribution of the largest event up to a given time $t$?
 What is the probability that an event exceeds a given level $\ell$ within the
@@ -118,11 +110,7 @@ A probabilistic extreme value model which assumes that the events form a
 renewal process is available in the literature. 
 This model has been studied under the names
 ``Continuous Time Random Maxima process'' (CTRM) 
-<<<<<<< HEAD
-\cite{Benson2007,MeerschaertStoev08,Hees16,Hees14}, 
-=======
 \cite{Benson2007,Meerschaert2009,Hees16,Hees2015}, 
->>>>>>> e8a2740f18521244a4c2cbcd63facbc1963c6e15
 ``Max-Renewal process'' \cite{Silvestrov2002a,ST04,Basrak2014}, 
 and ``Shock process'' 
 \cite{Esary1973,Sumita1983,Sumita1984,Sumita1985,Anderson1987,Gut1999}.
@@ -179,11 +167,7 @@ Finally, the model is called \emph{coupled} when $W_k$ and $J_k$ are not indepen
 In this article we focus on the uncoupled case,  
 for which it can be shown that the processes $M(t)$ and
 $\tilde M(t)$ have the same limiting distributions at large times
-<<<<<<< HEAD
-\cite{Hees16}, and hence we focus on the CTRM $M(t)$. 
-=======
 \cite{Hees2015}, and hence we focus on the CTRM $M(t)$. 
->>>>>>> e8a2740f18521244a4c2cbcd63facbc1963c6e15
 
 
 We aim to make inference on the distribution of the following quantities:
@@ -267,11 +251,7 @@ dynamics, are independent of the exceedances, and may be looked at separately.
 %a sum-stable distribution \cite{MeerschaertSikorskii}.  
 As mentioned in the introduction, we assume a heavy-tailed distribution 
 for the waiting times, more precisely that the tail function 
-<<<<<<< HEAD
-$\overline F_W(x) := 1 - F_W(x)$ of the CDF of $W$ is regularly varying:
-=======
 $\overline F_W := 1 - F_W$ of the CDF of $W$ is regularly varying:
->>>>>>> e8a2740f18521244a4c2cbcd63facbc1963c6e15
 \begin{align}
 t \mapsto \overline F_W(t) \in RV(-\beta), \quad \beta \in (0,1)
 \end{align}
@@ -281,19 +261,6 @@ meaning that \cite{seneta,thebook}
 = \lambda^{-\beta}.
 \end{align*}
 By \cite[Cor.~8.2.19]{thebook} (also compare \cite[Th.~4.5.1]{Whitt2010}), this is equivalent to $W_1$ being in the 
-<<<<<<< HEAD
-(sum-) domain of attraction of a positively skewed stable random variable $D$ with 
-stability parameter $\beta$, which means the weak convergence
-\begin{align}
-(W_1 + \ldots + W_n)/b(n) \Rightarrow D, \quad (n \to \infty)
-\end{align}
-for some $b(n) \in RV(1/\beta)$.
-The i.i.d.\ nature of the $W_k$ allows for a more general, functional limit
-theorem \cite[Ex.~11.2.18]{thebook}, \cite[Th.~4.5.3]{Whitt2010}:
-\begin{align}
-(W_1 + \ldots + W_{\lfloor cr \rfloor}) / b(c) \Rightarrow D(r), 
-\quad (c \to \infty),
-=======
 (sum-) domain of attraction of a positively skewed stable law $D$ with 
 stability parameter $\beta$, which means the weak convergence
 \begin{align}
@@ -304,7 +271,6 @@ theorem \cite[Ex.~11.2.18]{thebook}, \cite[Th.~4.5.3]{Whitt2010}:
 \begin{align}
 b(c)(W_1 + \ldots + W_{\lfloor cr \rfloor}) \Rightarrow D(cr), 
 \quad c \to \infty,
->>>>>>> e8a2740f18521244a4c2cbcd63facbc1963c6e15
 \end{align}
 where $\{D(r)\}_{t \ge 0}$ is a stable subordinator, defined via 
 \begin{align}
@@ -326,30 +292,17 @@ where $E(t)$ denotes the inverse stable subordinator \cite{invSubord}
 \begin{align}
 E(t) = \inf\{r: D(r) > t\}, \quad t \ge 0,
 \end{align}
-<<<<<<< HEAD
-and where $\tilde b(c)$ is asymptotically inverse to $b(c)$, in the sense
-of \cite[p.20]{seneta}: 
-\begin{align}
-b(\tilde b(c)) \sim c \sim \tilde b(b(c))
-\end{align}
-where the $\sim$ symbol indicates that the quotient of both sides converges to
-=======
 and where $\tilde b(c)$ is asymptotically inverse to $1/b(c)$, in the sense
 of \cite[p.20]{seneta}: 
 \begin{align}
 1/b(\tilde b(c)) \sim c \sim \tilde b(1/b(c))
 \end{align}
 where a $\sim$ symbol indicates that the quotient of both sides converges to
->>>>>>> e8a2740f18521244a4c2cbcd63facbc1963c6e15
 $1$ as $c \to \infty$. 
 Note that $\tilde b(c) \in RV(\beta)$. 
 
 The inverse stable subordinator $E(t)$ governs the temporal dynamics of
-<<<<<<< HEAD
-the scaling limit of the CTRM process $M(t)$, see Theorem~\ref{th:AEt} below. 
-=======
 the scaling limit of the CTRM process $M(t)$, see Theorem~\ref{th:AEt}. 
->>>>>>> e8a2740f18521244a4c2cbcd63facbc1963c6e15
 It is self-similar with exponent $\beta$
 \cite{limitCTRW}, non-decreasing, and the (regenerative, random) set 
 $\mathcal R$ of its points of increase is a fractal with dimension $\beta$ 
@@ -413,11 +366,7 @@ using the semi-Markov property of fractional Poisson processes.
 
 
 
-<<<<<<< HEAD
-\cite{MeerschaertStoev08} have shown that for large times $t$, 
-=======
 \cite{Meerschaert2009} have shown that for large times $t$, 
->>>>>>> e8a2740f18521244a4c2cbcd63facbc1963c6e15
 the process $M(t)$ converges to a (rescaled) time-changed 
 extreme-value process $A(E(t))$. 
 Here, $A(t)$ is an extreme-value process in the sense of \cite{Lamperti1964}
@@ -454,6 +403,6 @@ where $x_L$ and $x_R$ denote the left and right endpoint of the GEV distribution
 
 \bibliographystyle{alpha}
 
-\bibliography{/Users/poyda/BibTex/CTRMstats}
+\bibliography{CTRMstats}
 
 \end{document}

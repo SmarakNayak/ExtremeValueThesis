@@ -13,8 +13,8 @@ TT = cumsum(rstable(n,beta, 1, gamma=1, delta=0, pm=1))*b.n
 # magnitudes of events (distribution irrelevant)
 JJ = rgev(n, xi = 0.3, mu = 0, beta = 1)
 #Restrict attention to unit interval
-JJ <- JJ[TT < 1]
-TT <- TT[TT < 1]
+# JJ <- JJ[TT < 1]
+# TT <- TT[TT < 1]
 
 ## Estimate tail index of inter-arrival times, where data are thinned
 ## out at different cutoffs
