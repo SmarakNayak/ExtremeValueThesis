@@ -5,7 +5,7 @@ output: html_document
 
 ### Simulation
 
-```{r init, cache=T, include=F}
+```{r init, cache=F, include=F}
 require(stabledist)
 require(fExtremes)
 require(plyr)
@@ -14,40 +14,40 @@ n = 2^{16}
 # tail parameter of waiting times
 beta = 0.8
 # scale parameter of waiting times
-delta = n^(-1/beta)
+delta = n^(1/beta)
 # shape parameter of GEV distribution
 xi = 0.7
 # times of events:
-TT = cumsum(rstable(n,beta, 1, gamma=1, delta=0, pm=1)) * delta
+TT = cumsum(rstable(n,beta, 1, gamma=1, delta=0, pm=1)) / delta
 # magnitudes of events (distribution irrelevant)
 JJ = rgev(n, xi = xi, mu = 0, beta = 1) / n^(xi) # don't know scaling!
-# restrict attention to unit interval:
-JJ <- JJ[TT < 1]
-TT <- TT[TT < 1]
 # consider the cutoff at the top epsMax values:
 epsMax <- 0.10
 # this cutoff translates to this many magnitudes:
 m <- ceiling(epsMax * length(JJ))
 idxJ <- order(JJ, decreasing = T)[1:m] 
 ```
-We assume i.i.d. waiting times drawn from the positively skewed stable
+
+We assume $N$ i.i.d. waiting times drawn from the positively skewed stable
 distribution with stability parameter $\beta=`r beta`$, scaled with 
-$n^{-1/\beta}$. This defines a renewal process, at whose renewal times we
+$N^{-1/\beta}$. This defines a renewal process, at whose renewal times we
 assume i.i.d. magnitudes, drawn from a Generalized Extreme Value Distribution
 with shape parameter $\xi = `r xi`$: 
+
 ```{r CTRM-plot, echo = F}
 plot(TT,JJ, type = "h", xlim = c(0,1), ylim = c(-0.1,1), main = "CTRM process", xlab = "time", ylab = "magnitude")
 # lines(TT, cummax(JJ), col = 2)
 ```
+
 Besides the magnitude of large events, their *timing* is of interest to us. 
 We define the exceedance time of level $\ell \in [x_0,x_F]$ as
 the random variable
 \begin{align*}
-T_\ell = \inf\{t: M(t) > \ell\}
+T_\ell = \inf\{t: M(N(t)) > \ell\}
 \end{align*}
 and the exceedance as 
 \begin{align*}
-X_\ell = M(T_\ell) - \ell.
+X_\ell = M(N(T_\ell)) - \ell.
 \end{align*}
 
 ```{r exceedances, echo=F, fig.cap="Exceedance times (blue circles) and Exceedance sizes (red lines)."}
@@ -102,29 +102,29 @@ M(t) = \bigvee_{k=1}^{N(t)} J_k
 \end{align}
 where $N(t)$ is the renewal process as above: Assume that
 
-- $\left[ \bigvee_{k=1}^{\lfloor ct \rfloor} J_k - d(c)\right] / a(c) \Rightarrow A(t)$
-- $b(c)^{-1}\sum_{k=1}^{\lfloor ct \rfloor} W_k \Rightarrow D(t)$
+- $\left[ \bigvee_{k=1}^{\lfloor nt \rfloor} J_k - d(n)\right] / a(n) \Rightarrow A(t)$
+- $b(n)^{-1}\sum_{k=1}^{\lfloor nt \rfloor} W_k \Rightarrow D(t)$
 
-converge (weakly in Skorokhod space) for some norming sequences $a(c)$,
-$d(c)$ and $b(c)$. Then 
+converge (weakly in Skorokhod space) for some norming sequences $a(n)$,
+$d(n)$ and $b(n)$ which increase as $n \to \infty$. Then 
 
 \begin{align}
 \frac{M(ct) - d(\tilde b(c))}{a(\tilde b(c))}
 \Rightarrow
-A(E(t))
+A(E(t)), \quad c \to \infty
 \end{align}
 
 where 
-$\tilde b(c)$ is asymptotically inverse to $b(c)$ and
+$\tilde b(c)$ is asymptotically inverse to $b(n)$ and
 $E(t) = \inf\{r: D(r) > t\}$ is the stochastic process inverse to $D(t)$.
 
-For large $c$ and $t$ comparable to $c$, we may hence approximate 
+For "large" $c$ and for $t$ comparable to $c$, we may hence approximate 
 
 \begin{align}
 M(t) \approx a(\tilde b(c)) A(E(t/c)) + d(\tilde b(c)). 
 \end{align}
 
-Recalling that $c \sim b(\tilde b(c))$, may substitute $n = \tilde b(c)$
+Recalling that $c \sim b(\tilde b(c))$, we set $n = \tilde b(c)$
 to get
 
 \begin{align}
@@ -152,32 +152,47 @@ with $b(n)$.  It was shown by Meerschaert & Stoev (2008) that
 $$\xi_a \stackrel{d}{=} (-\log F_A(a))^{-1/\beta} W_\beta$$
 
 where $F_A(\cdot)$ is the CDF of $A:= A(1)$. Summing up, the exceedance
-time $T_\ell$ is asymptotically Mittag-Leffler distributed:
+time $T_\ell$ is asymptotically Mittag-Leffler distributed
+as the threshold $\ell$ approaches the right end $x_*$ of the distribution
+of $J$:
 
 \begin{align}
-T_\ell \stackrel{a}{\sim} {\rm ML}\left(\beta, -b(n) [\log F_A(\ell^*)]^{-1/\beta}\right)
+T_\ell \stackrel{a}{\sim} {\rm ML}\left(\beta, b(n) [-\log F_A(\ell^*)]^{-1/\beta}\right)
 \end{align}
 
 
 
 ## Estimation
 
+Note that $N$ is the total number of observations, whereas $n$ is the number
+of observations used in the approximation
 
-Since 
+$$A \approx \frac{\bigvee_{k=1}^n J_k - d(n)}{a(n)}.$$
+
+Roughly speaking, the set of all $N$ observations is divided at the
+exceedance times into smaller blocks of size $\approx n$. 
+(Is that right?) Since
 
 \begin{align}
 \bigvee_{k=1}^n J_k \le \ell \stackrel{\approx}{\Longleftrightarrow}
 A \le \ell^*,
 \end{align}
-we may estimate $F_A(\ell^*)$ empirically by 
+we have 
 \begin{align}
-\varepsilon(\ell^*) := 1-F_A(\ell^*) \approx \#\{k: J_k \le \ell\} / n.
+-\log F_A(\ell^*) 
+\approx -n \log F_J(\ell)
+\approx -n \log \hat F_J(\ell)
+\approx n (1- \hat F_J(\ell))
+\approx n \#\{k: J_k > \ell\} / N,
 \end{align}
+where the empirical CDF of $J$ is 
+$$\hat F_J(\ell) := \#\{k: J_k \le \ell\}/N.$$
 
 Assume now a time series of magnitudes, and that interest lies in the
 estimation of the timings of the large magnitudes.
-Consider a minimum threshold $\ell_0$, e.g. at the $`r 1- epsMax`$ quantile.
-Vary the threshold $\ell$ on the interval $[\ell_0, x_F]$, and consider
+Consider a minimum threshold $\ell_{min}$, e.g. at the $`r 1- epsMax`$ quantile
+of the empirical distribution of $J$.
+Vary the threshold $\ell$ on the interval $[\ell_{min}, \ell_{max}]$, and consider
 the resulting sequences of exceedance sizes and exceedance times 
 $\{(X_{\ell,i}, T_{\ell,i})\}$. 
 Due to the renewal property, this sequence is i.i.d., and 
@@ -211,8 +226,16 @@ lines(estimates$topk,estimates$betaL, type="l", lty =2)
 abline(h = beta, lty = 3)
 ```
 
-Since the scale parameter 
-$\delta := -b(n)[\log(1 - \varepsilon(\ell^*))]^{-1/\beta}$
+Recall that the scale parameter of the Mittag-Leffler distribution satisfies
+asymptotically
+
+$$\delta = b(n)[-\log F_A(\ell^*)]^{-1/\beta}
+= \frac{b(n)}{n^{1/\beta}} [- \log F_J(\ell)]^{-1/\beta}.$$
+
+
+
+
+
 depends on the threshold $\ell^*$ as well as on the tail parameter $\beta$, 
 we plot the estimate of $b(n)$
 \begin{align}
@@ -220,11 +243,11 @@ b(n) = \delta \times (-\log(1-\varepsilon(\ell^*)))^{1/\beta}
 \end{align}
 with an estimate for $\beta$ plugged in from the previous step. 
 
-```{r scale-plot, cache=T, echo=F, warning=F, fig.cap="Estimate of scale parameter of Mittag Leffler distribution (y-axis), for observations thresholded at the top k observations (x-axis). The dotted line represents the true scaling parameter."}
+```{r scale-plot, cache=F, echo=F, warning=F, fig.cap="Estimate of scale parameter of Mittag Leffler distribution (y-axis), for observations thresholded at the top k observations (x-axis). The dotted line represents the true scaling parameter."}
 # extract scale from parametrization
 estimates$delta <- estimates$mu^{-1/estimates$beta}
 # eps := fraction of magnitudes above threshold
-estimates$eps <- estimates$topk / n
+estimates$eps <- estimates$topk / n 
 # plot with known beta:
 # plot(estimates$topk, estimates$delta * (-log(1-estimates$eps))^(1/beta), type="l", xlab = "k", ylab = "delta (beta known)", main="scale parameter")
 # plot with estimated beta:
