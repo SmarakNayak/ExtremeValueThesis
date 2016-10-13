@@ -41,6 +41,30 @@ ml.par.est = function (T, a) {
 	return(list(nu = nu, mu = mu, CInu=c(l.nu, u.nu), CImu=c(l.mu, u.mu)) )      
 }
 
+# the same as above, but with a different parametrization: 
+# nu = shape, as above
+# delta = scale
+# T = data, 1-a= 1- alpha =confidence level/coefficient
+ml.par.est.delta = function (T, a) {
+  log.T = log(T)
+  m = mean(log.T)
+  s.2 = var(log.T)
+  nu = pi/sqrt(3*(s.2 + pi^2/6))
+  delta = exp(m + EULER.C)
+  n=length(T)
+  
+  se.nu=sqrt( (nu^2)*(32-20*nu^2-nu^4)/(40*n)  )
+  zcv=qnorm(1-a/2,0,1)  
+  l.nu= nu -zcv*se.nu
+  u.nu =  nu + zcv*se.nu
+  
+  se.delta = sqrt(((pi^2*delta^2)/(6*n))*((2/nu^2) - 1)) #delta
+  l.delta= delta -zcv*se.delta
+  u.delta =  delta + zcv*se.delta
+  
+  return(list(nu = nu, delta = delta, CInu=c(l.nu, u.nu), CIdelta=c(l.delta, u.delta)))      
+}
+
 #Generate Mittag-Leffler distributed data 
 #or inter-event or  inter-jump times of a fractional Poisson process
 # dat=mittag.leffler(n=500,nu=0.2, mu=2)
