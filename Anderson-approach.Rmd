@@ -1,0 +1,180 @@
+---
+title: "Anderson approach"
+author: "Peter Straka"
+date: "13/10/2016"
+output:
+  pdf_document: default
+  html_document:
+    fig_caption: yes
+    fig_height: 4
+    fig_width: 4
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache=TRUE)
+kmin = 10
+kmax = 10000
+```
+
+
+Suppose we are given a time series of observations with i.i.d. inter-event
+times $W_k$ with Pareto distribution
+
+$$\mathbf P[W_k > t] = 1 - F_W(t) = 
+\begin{cases}
+\left(\frac{t}{\sigma}\right)^{-\beta}, & x \ge \sigma
+\\
+0, & x < \sigma
+\end{cases}$$
+
+where $\beta \in (0,1)$ and $\sigma$ is a scale parameter. 
+With e.g. event magnitudes of unit exponential size, this defines a 
+marked renewal process:
+
+```{r renewal}
+# total number of observations 
+N = 5 * 10^5
+# tail exponent of Pareto waiting times:
+beta = 0.8
+# scale parameter of Pareto waiting times:
+sigma = 1
+# the Pareto waiting times:
+WW <- sigma * runif(N)^(-1/beta)
+# event occurrence times:
+TT <- cumsum(WW)
+# event magnitudes:
+JJ <- rexp(N)
+plot(TT,JJ,type='h')
+```
+
+Now we vary the threshold $\ell$ so that there are between `r kmin` and 
+`r kmax` exceedances. 
+For each choice of $k=$ `r kmin`, `r kmin + 1`, ..., `r kmax`, use the dataset
+of $k$ exceedances to estimate the shape parameter $\beta$ and scale parameter
+$\delta$ of the Mittag-Leffler distribution. 
+First $\beta$:
+
+
+```{r beta}
+require(plyr)
+# indices of the largest jumps:
+idxJ <- order(JJ, decreasing = T)[1:kmax]
+# extracts (preceding) durations of the m largest exceedances
+T_ell <- function(TT,idxJ,m){
+  m=ceiling(m)
+  thinT <- sort(TT[idxJ[1:m]])
+  diff(c(0,thinT))
+}
+
+
+# creates a dataframe with point estimates and confidence intervals
+# of the Mittag-Leffler shape and scale parameters:
+source("MittagLefflerEstimation.R")
+estimates <- ldply(.data = seq(kmin,kmax), function(k){
+  est <- ml.par.est.delta(T_ell(TT,idxJ,k),0.05)
+  return(c(est$nu, est$CInu, est$delta, est$CIdelta, k))
+})
+# beta = shape; sigma = scale; k = number of largest magnitudes used in estimate
+names(estimates) <- c("beta","betaL","betaH","delta","deltaL","deltaH","k")
+
+# plot the tail parameter estimates
+plot(estimates$k,estimates$beta, type="l",ylab= "beta", xlab = "k", ylim = c(0,1.3), main="ML tail parameter")
+lines(estimates$k,estimates$betaH, type="l", lty =2)
+lines(estimates$k,estimates$betaL, type="l", lty =2)
+abline(h = beta, lty = 3)
+```
+
+Now $\delta$. From Anderson, we have 
+
+\begin{align}
+\frac{T_\ell}{n(1/(1-F_J(\ell)))} \Rightarrow W_\beta, \quad \ell \uparrow x_*
+\end{align}
+
+where $W_\beta$ is Mittag-Leffler with scale $1$
+(and $x_*$ denotes the right end of the support of the distribution of $J$).
+Write $v \in [1,\infty)$ for the number of recurrence epochs; 
+i.e. $v=100$ means that an event occurs once every $100$ times. 
+Choose the level $\ell(v)$ in such a way that an exceedance occurs
+only once every $v$ observations (s. Beirlant, Ch.2, where $\ell = U$). Then 
+
+$$1 - F_J(\ell(v)) = 1/v$$
+
+and the above weak convergence result becomes 
+
+\begin{align}
+\frac{T_{\ell(v)}}{n(v)} \Rightarrow W_\beta, \quad v \to \infty.
+\end{align}
+
+Since $T_{\ell(v)} \approx n(v) W_\beta$, we may identify the scale parameter, 
+depending on the threshold via $v$:
+
+$$\delta = n(v).$$
+
+Recall that the function $n(v)$ is regularly varying at $\infty$ with
+parameter $1/\beta$. Assume that $n(v) = C \times v^{1/\beta}$. 
+On a logarithmic scale, the parameter $\beta$ appears as the slope 
+$1/\beta$:
+
+```{r delta}
+# plot the scale parameter estimates on a log-log-scale
+v <- N/estimates$k
+plot(v, estimates$delta, type='l', log="xy")
+lines(v, estimates$deltaL, type='l', lty=2)
+lines(v, estimates$deltaH, type='l', lty=2)
+
+# plot the theoretically correct sloped line through the middle point
+ii <- which(estimates$k == 100)
+x_0 <- v[ii]
+y_0 <- estimates$delta[ii]
+a <- y_0/x_0^(1/beta)
+x <- seq(from=min(v), to=max(v), by=1)
+y <- a * x^(1/beta)
+lines(x,y, col=2)
+```
+
+To estimate $C$, we calculate 
+
+$$\hat C = n(v) v^{-1/\beta}$$
+
+for various values of $v$. The actual value of $C$ can be easily calculated: 
+Recall that $n(t)$ is (asymptotically) inverse to 
+\begin{align}
+g(t) := 
+\frac{t}{\Gamma(2-\beta) \int_0^t(1-F_W(u))\,du}
+= \frac{t^\beta}{\Gamma(2-\beta) \sigma^\beta},
+\end{align}
+
+which has the exact inverse 
+
+\begin{align}
+n(v) = \sigma \left( \Gamma(2-\beta) v \right)^{1/\beta}.
+\end{align}
+
+Thus 
+
+$$C = \sigma(\Gamma(2-\beta)) = `r sigma*gamma(2-beta)^(1/beta)`.$$
+
+Below are the estimates $\hat C$, where $\beta$ is assumed known / unknown. 
+The dashed line corresponds to the actual value of $C$.
+
+```{r Cknown}
+# plot with known beta
+C <- sigma*gamma(2-beta)^(1/beta)
+C_hat_known <- estimates$delta/v^(1/beta)
+plot(v,C_hat_known, type='l', ylim = range(c(C_hat_known,C)), log="x")
+lines(v,estimates$deltaL/v^(1/beta), lty=2)
+lines(v,estimates$deltaH/v^(1/beta), lty=2)
+abline(h=C, lty=2)
+```
+
+and where $\beta$ is plugged in from the previous estimate:
+
+```{r Cunknown}
+# plot wit unknown beta
+C_hat <- estimates$delta/v^(1/estimates$beta)
+plot(v,C_hat, type='l', ylim = range(c(C_hat,C)), log="x")
+lines(v,estimates$deltaL/v^(1/estimates$beta), lty=2)
+lines(v,estimates$deltaH/v^(1/estimates$beta), lty=2)
+abline(h=C, lty=2)
+```
+

@@ -2,11 +2,11 @@
 .Rhistory
 .RData
 ExtremeValueThesis.Rproj
-<<<<<<< HEAD
-=======
 stabilityPlots.pdf
->>>>>>> 832662a3cd342d882866e77091c3f1bb2453995f
 stabilityPlots_cache
 stabilityPlots.html
 stabilityPlots_files
 .DS_Store
+Anderson-approach_cache
+Anderson-approach_files
+*.html
