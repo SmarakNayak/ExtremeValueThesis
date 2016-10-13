@@ -12,7 +12,7 @@
 %
  
 \documentclass[honours,12pt]{UNSWthesis}
-\linespread{1.5}
+\linespread{1.2}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{amsthm}
@@ -389,7 +389,7 @@ A stochastic process $\{X(t)\}_{t\geq 0}$ has a \textbf{jump} at time t if the p
 \end{definition}
 
 \begin{definition}
-A stochastic process $\{X(t)\}_{t\geq 0}$ is c\'{a}dl\'{a}g (derived from the French term "continue à droite, limite à gauche" if it has right continuous paths with left hand limits. i.e	$X_-(t)$ exists and $X_-(t)$ exists and is equal to $X(t)$.\\
+A stochastic process $\{X(t)\}_{t\geq 0}$ is c\'{a}dl\'{a}g (derived from the French term "continue à droite, limite à gauche" if it has right continuous paths with left hand limits. i.e	$X_-(t)$ exists and $X_+(t)$ exists and is equal to $X(t)$.\\
 \end{definition}
 
 \begin{definition}
@@ -434,45 +434,42 @@ for all continuous and bounded real-valued functions $f$ on $\Omega$. We then wr
 
 \begin{definition}
 Let $X_n:\Omega\to E$ be a sequence of random variables with a corresponding sequence of probability measures $\{\PP_{X_n}\}_{n\geq 1}$ on the measurable space $(\Omega, \FF)$. Then $\{X_n\}_{n\geq 1}$ \textbf{converges in distribution} to a random variable $X:\Omega\to E$ if 
-\[\PP_{X_n} \to \PP_X \] where $\PP_X$ is the probability measure of X. We then write $X_n \overset{d}{\to}X.$
+\[\PP_{X_n} \to \PP_X \] where $\PP_X$ is the probability measure of X. We then write $X_n \overset{d}{\to}X.$\\
+\end{definition}
+
+\begin{definition}\label{def:equalDist}
+Let $X_1:\Omega\to E$ be a  random variable with a corresponding probability measure $\PP_{X_1}$ on the measurable space $(\Omega, \FF)$. Then $X_1$ is \textbf{equal in distribution} to a random variable $X_2:\Omega\to E$ if 
+\[\PP_{X_1} = \PP_{X_2} \] where $\PP_{X_2}$ is the probability measure of $X_2$. We then write $X_1 \overset{d}{=}X_2.$\\
 \end{definition}
 \chapter{Scaling Limit Theorems}
+In this chapter we will provide an analysis of some well known scaling limit theorems, eventually arriving at a scaling limit for CTRM. We require these scaling limits before we can develop our statistical inference methods for CTRM.
 \section{Problem Formulation}
-The Continuous Time Random \emph{Walk} (CTRW) has been a highly successful 
-model for anomalous diffusion in the past two decades 
-\cite{Metzler2000,HLS2010b}, likely due to its tractable and flexible scaling
-properties.
-The stochastic process we study in this article is conceptually very close
-to the CTRW, since essentially the jumps $J_k$ are reinterpreted as 
-magnitudes, and instead of the cumulative sum, one tracks the cumulative 
-maximum. Similarly tractable scaling properties apply to the CTRM, see below.
-For the above reasons, we use the name CTRM in this article.
-
-
+In this section we rigorously define our problem as well as establish some preliminary notation that we will use to solve the problem.
 \begin{definition}
-Assume i.i.d.\ pairs of random variables $(J_k, W_k)$, $k = 1, 2, \ldots$
+Assume i.i.d. pairs of random variables $(J_k, W_k)$, $k = 1, 2, \ldots$
 where $W_k > 0$ represents the inter-arrival times of certain events and 
-$J_k \in \R$ the corresponding event magnitudes.  
-Write 
+$J_k \in \R$ the corresponding event magnitudes. Now write
+\begin{align}
+	S(n)=\sum_{i=1}^n W_i
+\end{align}
+as the sum of the first $n$ inter-arrival times. Also write
 \begin{align} \label{eq:renewal-process}
-N(t) = \max\{n \in \mathbb N: W_1 + \ldots + W_n \le t\}
+N(t) = \max\{n \in \mathbb N: S(n) \le t\}
 \end{align}
 for the renewal process
-associated with the $W_k$ (where the maximum of the empty set is set to $0$).
+associated with the $W_k$.
 Then the process
 \begin{align}
 M(t) = \bigvee_{k=1}^{N(t)} J_k
 = \max\{J_k: k = 1, \ldots, N(t)\}, \quad t \ge 0.
 \end{align}
-is called a CTRM (Continuous Time Random Maxima process).
+is called a CTRM (Continuous Time Random Maxima process), where the maximum of the empty set is set to $0$.\\
 \end{definition}
-
- 
 
 It is clear that the sample paths of $N(t)$ and $M(t)$ are right-continuous
 with left-hand limits. 
 If $W_k$ is interpreted as the time \emph{leading up} to the event with magnitude
-$J_k$, then $M(t)$ is indeed the largest magnitude up to time $t$.
+$J_k$, then $M(t)$ is the largest magnitude observed until time $t$.
 The alternative case where $W_k$ represents the inter-arrival time 
 \textit{following} $J_k$ 
 is termed ``second type'' (in the shock model literature) or OCTRM
@@ -482,13 +479,12 @@ given by
 \tilde M(t) = \bigvee_{k=1}^{N(t)+1} J_k, \quad t \ge 0.
 \end{align}
 Finally, the model is called \emph{coupled} when $W_k$ and $J_k$ are not independent.
-In this article we focus on the uncoupled case,  
+In this thesis we focus on the uncoupled case,  
 for which it can be shown that the processes $M(t)$ and
 $\tilde M(t)$ have the same limiting distributions at large times
 \cite{Hees2015}, and hence we focus on the CTRM $M(t)$. 
 
-
-We aim to make inference on the distribution of the following quantities:
+However deriving the distribution of $M(t)$ is difficult for a number of reasons that will be explained in further detail in \ref{s-max} \textcolor{red}{not sure if this is true}. It is for this reason that we choose to make inference on the distribution of the following quantities:
 \begin{definition}
 Let $M(t)$ be an uncoupled CTRM whose magnitudes $J_k$ are supported on the interval
 $[x_0, x_F]$.  Then the exceedance time of level $\ell \in [x_0,x_F]$ is
@@ -501,7 +497,7 @@ and the exceedance is
 X_\ell = M(T_\ell) - \ell.
 \end{align*}
 \end{definition}
-
+These quantities are chosen as it is natural to be concerned with both the size and the timing of events of large magnitude. Possessing a strong understanding of these large events will aid in managing the consequences associated with extreme natural phenomena, financial loss and human behaviour.
 \begin{lemma}
 Given a level $\ell \in [x_0,x_F]$, exceedance $X_\ell$ and exceedance time
 $T_\ell$ are independent. Moreover, 
@@ -518,7 +514,7 @@ $S_0 = 0$.
 \end{lemma}
 
 \begin{proof}
-Let $\tau_\ell = \min\{k: J_k > x\}$. Then
+Let $\tau_\ell = \min\{k: J_k > x\}$. Then \textcolor{red}{rigorize this}
 \begin{align*}
 T_\ell > t, X_\ell > x 
 &\Longleftrightarrow
@@ -555,7 +551,52 @@ One checks that $\pr[T_\ell > t, X_\ell > x] = \pr[T_\ell > t] \pr[X_\ell > x]$,
 \end{proof}
 The distribution of the exceedance is hence, as expected, simply the
 conditional distribution of a magnitude $J_k$ given $J_k > \ell$. We will look at the distributions of exceedances and exceedance times in further detail in chapter \ref{dist}.
+\section{Background}
+Before we examine the stochastic process limits that we will utilise in this thesis it will be illustrative to analyse one of the most well known examples of a stochastic process - Brownian Motion. One of the methods used to derive Brownian motion is devised by trying to seek a continuous time representation of the discrete time random walk. Recall that a discrete time random walk is defined in the following manner.\\
+\begin{definition}
+Let $\{U_i\}_{1\leq i \leq n}$ be i.i.d. U(0,1) random variables. Form the partial sums at time k as
+\[
+	S_k=\sum_{i=1}^k U_i,
+\]
+then successive partial sums form a \textbf{random walk} with $S_n$ being the position after n steps.
+\\
+\end{definition}
+Now the general method of achieving the continuous limit of a discrete function is to consider the sum $S_n$ as $n\to\infty$ and then rescaling to ensure $S_n$ remains finite. Now by the CLT we have:
 
+
+
+\section{Stable Distributions}
+In order for our inter-arrival waiting times $W_k$ to be modelled correctly they should be heavy tailed and completely right skewed so as not to violate our initial bursty assumption. Stable distributions are an extensive class of probability distributions that allow for both skew and heavy tails and are thus a perfect distribution to describe our waiting times with. As we will find out later in this section they also have many useful properties. The class was first defined by Paul L\'{e}vy in the early 20th century but was under utilised due to the lack of closed formulas for densities and distribution functions for all but a few stable distributions (Gaussian, Cauchy and L\'{e}vy). However its use has increased since advances in computing methods now allow for the computation of stable densities, distribution functions and quantiles.
+\begin{definition}\cite{jpnolan-stable}
+A random variable X is \textbf{sum-stable} if for $X_1$ and $X_2$ independent copies of X and any positive constants a and b we have
+\[
+	aX_1+bX_2\overset{d}{=}cX+d
+\]
+for some positive c and some d $\in\R.$ We then say that X follows a \textbf{stable distribution}. Note that the symbol $\overset{d}{=}$ was defined in Definition \ref{def:equalDist}.\\
+\end{definition}
+\begin{remark}
+Note that other texts refer to what we have just defined as \textbf{sum-stable} as just \textbf{stable}. We make this modification in order to easily differentiate it from the term \textbf{max-stable} which we will define in section \ref{s-max}.\\
+\end{remark}
+
+\noindent One of the reasons the stable distribution is so useful is that we can now generalise the classical Central Limit Theorem. Recall that the Central Limit Theorem says that the normalized sum of i.i.d. random variables with a finite variance converges to a normal distribution. To be more precise, let $\{X_i\}_{1\leq i \leq n}$ be i.i.d. random variables with mean $\mu$ and variance $\sigma^2$. Then the classical Central Limit Theorem states that
+\[
+	\frac{\bar{X}_n-\mu}{\sigma/\sqrt{n}} \overset{d}{\to}Z \sim N(0,1) \textrm{ as 				$n\to\infty$}
+\]
+where $\bar{X}_n=(\sum^n_{i=1}X_i)/n$. Rewriting the above to match the notation we will use from now on we have
+\[
+	\frac{\sum^n_{i=1}X_i-a_n}{b_n} \overset{d}{\to}Z \sim N(0,1) \textrm{ as $n\to\infty$}
+\]
+where $a_n=\sqrt{n}\sigma/\mu$ and $b_n=\sigma\sqrt{n}.$\\
+
+\noindent The Generalized Central Limit Theorem generalises the Central Limit theorem by dropping the assumption that the variance is finite.
+
+\begin{theorem}
+\textbf{Generalised Central Limit Theorem} Let $\{X_i\}_{1\leq i \leq n}$ be an i.i.d. sequence of random variables. There exists constants $a_n>0, b_n \in \R$ and a nondegenerate random variable Z with 
+\[
+	\frac{\sum^n_{i=1}X_i-a_n}{b_n} \overset{d}{\to}Z
+\]
+if and only if Z is a stable random variable.
+\end{theorem}
 \section{Scaling Limit of the Sum of Waiting Times}
 %By the stable central limit theorem, it is well known that for a large 
 %number of observation pairs $(J_k,W_k)$, 
@@ -563,7 +604,7 @@ conditional distribution of a magnitude $J_k$ given $J_k > \ell$. We will look a
 %%approaches a max-stable (GEV) distribution \cite{ColesBook}, whereas 
 %the distribution of the sum of $W_k$ approaches 
 %a sum-stable distribution \cite{MeerschaertSikorskii}.  
-As mentioned in the introduction, we assume a heavy-tailed distribution 
+As mentioned in the previous section, we assume a heavy-tailed distribution 
 for the waiting times, more precisely that the tail function 
 $\overline F_W := 1 - F_W$ of the CDF of $W$ is regularly varying:
 \begin{align}
@@ -636,12 +677,23 @@ Having only two parameters ($\beta \in (0,1)$ and a scale parameter)
 the inverse stable subordinator hence models scaling limits of heavy-tailed 
 waiting times parsimoniously.
 
-\section{Scaling Limit of the Maximum of Event Magnitudes}
+\section{Scaling Limit of the Maximum of Event Magnitudes}\label{s-max}
 \section{Scaling Limit of CTRM}
+The Continuous Time Random \emph{Walk} (CTRW) has been a highly successful 
+model for anomalous diffusion in the past two decades 
+\cite{Metzler2000,HLS2010b}, likely due to its tractable and flexible scaling
+properties.
+The stochastic process we study in this article is conceptually very close
+to the CTRW, since essentially the jumps $J_k$ are reinterpreted as 
+magnitudes, and instead of the cumulative sum, one tracks the cumulative 
+maximum. Similarly tractable scaling properties apply to the CTRM, see below.
+For the above reasons, we use the name CTRM in this article.
 
 \chapter{Distribution of CTRM}\label{dist}
 \section{Distribution of Exceedances}
 \section{Distribution of Exceedance Durations}
+An Overview of Generalized Gamma Mittag–Leffler Model and
+Its Applications 
 %From Meerschaert we have $T_\ell\sim ML\left(\beta,\frac{b(n)}{(-logF(\ell))^{1/\beta}}\right)$ if we note that the taylor series approximation of $-logF(\ell)$ is $1-F(\ell)$ we have $T_\ell\sim ML\left(\beta,\frac{b(n)}{(1-F(\ell))^{1/\beta}}\right)$. Now as $\ell\to\infty$, $1-F(\ell)\to 0$. Thus $(1-F(\ell))^{1/\beta}\to1-F(\ell)$ and we have $T_\ell\sim ML\left(\beta,\frac{b(n)}{1-F(\ell)}\right)$, which implies that $b(n)=n(t)\in RV(1/\beta)$ which is the asymptotic inverse of $g(t)$ as defined in Anderson.%
 
 \chapter{Statistical Inference}
@@ -649,7 +701,7 @@ waiting times parsimoniously.
 \section{Maximum Likelihood Estimator for Generalised Pareto Random Variables}
 \section{Stability of Parameter Estimates}
 \section{Goodness of Fit}%%If there is time
-
+We will test Goodness of Fit as Mainardi et al with the reduced chi squared test
 \chapter{Model Fitting}
 The accuracy of the Mittag-Leffler log moment estimator and the Generalised Pareto MLE has been established in \cite{Cahoy2013} and \cite{GPaccuracyCitation} respectively. However it is yet to be confirmed that these estimation methods work for exceedances and exceedance durations. Thus before we apply our inference methods to actual data, we will check that we can correctly estimate the theoretical Mittag-Leffler and Generalised Pareto parameters derived from a simulated bursty process. If we are able to accurately estimate these parameters we can then proceed to apply the estimation methods to actual data, confident in knowing that the actual parameters will be estimated.
 
