@@ -70,6 +70,9 @@
 \newcommand{\FF}{\mathcal{F}}
 \newcommand{\Law}{\mathop{\rm Law}}
 \newcommand{\Cov}{\mathop{\rm Cov}}
+\newcommand{\sign}{\mathop{\rm sign}}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % The following are much more esoteric commands that I have left in
@@ -375,6 +378,10 @@ Let $(\Omega,\FF)$ and $(E,\mathcal{E})$ be measurable spaces. A function $f: \O
 Let $(\Omega,\FF,\PP)$ be a probability space and $(E,\mathcal{E})$ a measurable space. A \textbf{random variable} is a function $X:\Omega \rightarrow E$ that is $(\FF,\mathcal{E})$-measurable. We call $(E,\mathcal{E})$ the \textbf{state space}. \\
 \end{definition}
 
+\begin{definition}
+\textbf{Brownian Motion}
+\end{definition}
+
 \section{Stochastic Processes}
 Generally speaking, a stochastic process $\{X_t\}_{t\geq 0}$ is a collection of random variables that represent the evolution of some object over time. As this thesis focuses heavily on stochastic processes it is important that we rigorously define what a stochastic process is.\\
 
@@ -441,6 +448,7 @@ Let $X_n:\Omega\to E$ be a sequence of random variables with a corresponding seq
 Let $X_1:\Omega\to E$ be a  random variable with a corresponding probability measure $\PP_{X_1}$ on the measurable space $(\Omega, \FF)$. Then $X_1$ is \textbf{equal in distribution} to a random variable $X_2:\Omega\to E$ if 
 \[\PP_{X_1} = \PP_{X_2} \] where $\PP_{X_2}$ is the probability measure of $X_2$. We then write $X_1 \overset{d}{=}X_2.$\\
 \end{definition}
+
 \chapter{Scaling Limit Theorems}
 In this chapter we will provide an analysis of some well known scaling limit theorems, eventually arriving at a scaling limit for CTRM. We require these scaling limits before we can develop our statistical inference methods for CTRM.
 \section{Problem Formulation}
@@ -552,7 +560,7 @@ One checks that $\pr[T_\ell > t, X_\ell > x] = \pr[T_\ell > t] \pr[X_\ell > x]$,
 The distribution of the exceedance is hence, as expected, simply the
 conditional distribution of a magnitude $J_k$ given $J_k > \ell$. We will look at the distributions of exceedances and exceedance times in further detail in chapter \ref{dist}.
 \section{Background}
-Before we examine the stochastic process limits that we will utilise in this thesis it will be illustrative to analyse one of the most well known examples of a stochastic process - Brownian Motion. One of the methods used to derive Brownian motion is devised by trying to seek a continuous time representation of the discrete time random walk. Recall that a discrete time random walk is defined in the following manner.\\
+A stochastic process limit is the limit of an indexed sequence of stochastic processes. Before we examine the stochastic process limits that we will utilise in this thesis it will be illustrative to analyse one of the most well known examples of a stochastic process limit - Brownian Motion. One of the methods used to derive Brownian motion is devised by trying to seek a continuous time representation of the discrete time random walk. Recall that a discrete time random walk is defined in the following manner.\\
 \begin{definition}
 Let $\{U_i\}_{1\leq i \leq n}$ be i.i.d. U(0,1) random variables. Form the partial sums at time k as
 \[
@@ -561,12 +569,29 @@ Let $\{U_i\}_{1\leq i \leq n}$ be i.i.d. U(0,1) random variables. Form the parti
 then successive partial sums form a \textbf{random walk} with $S_n$ being the position after n steps.
 \\
 \end{definition}
-Now the general method of achieving the continuous limit of a discrete function is to consider the sum $S_n$ as $n\to\infty$ and then rescaling to ensure $S_n$ remains finite. Now by the CLT we have:
+\noindent The general method of achieving a continuous limit of a discrete function is to consider a continuous analogue of the sum $S_n$ as $n\to\infty$ and then rescaling to ensure the continuous analogue remains finite. We can then appeal to the CLT which gives us the discrete limit
+\begin{align}\label{eq:clt}
+\frac{S_n-nm}{\sqrt{n\sigma^2}}\overset{d}{\to}Z\sim N(0,1)\textrm{ as $n\to\infty$}
+\end{align}
 
+\noindent where $m:=\E[U_k]=1/2$ and $\sigma^2:=Var(U_k)=1/12.$
+In order to extend this discrete limit to a continuous limit we first consider two different continuous time representations of a discrete time random walk. One obvious way of forming a process from the random walk is to perform linear interpolation between each discrete point. Thus we can consider
+\[
+	\tilde{S}(t):=(t-\lfloor t \rfloor)U_{\lfloor t \rfloor +1} + S_{\lfloor t \rfloor}\quad\textrm{for all } t\geq0,
+\]
+or more simply we can consider the step function
+\[
+	\hat{S}(t):=S_{\lfloor t \rfloor}\quad\textrm{for all } t\geq0.
+\]
 
-
+\textcolor{red}{maybe some graphs here}
+As it turns out for large values of $t$ both processes are equivalent. Although the interpolation function is more intuitive, the step function is easier to work with and so we only consider the step function from now on. Now that we have a continuous analogue of the discrete random walk we wish to find the limiting process. If we consider $t$ in the closed interval $[0,1]$ then following \ref{eq:clt} it can be shown that
+\[
+	\frac{S_{\lfloor nt\rfloor}-\lfloor nt \rfloor m}{\sqrt{n\sigma^2}}\overset{d}{\to}B_t\sim N(0,t)\textrm{ as $n\to\infty$},
+\]
+\noindent where $B_t$ is the standard Brownian Motion. This result remains unchanged for all $t\geq0$. Now that we have outlined how one can derive Brownian Motion as a stochastic process limit of the rescaled $\hat{S}(nt)$ the stochastic process limits presented in later sections will be more accessible.
 \section{Stable Distributions}
-In order for our inter-arrival waiting times $W_k$ to be modelled correctly they should be heavy tailed and completely right skewed so as not to violate our initial bursty assumption. Stable distributions are an extensive class of probability distributions that allow for both skew and heavy tails and are thus a perfect distribution to describe our waiting times with. As we will find out later in this section they also have many useful properties. The class was first defined by Paul L\'{e}vy in the early 20th century but was under utilised due to the lack of closed formulas for densities and distribution functions for all but a few stable distributions (Gaussian, Cauchy and L\'{e}vy). However its use has increased since advances in computing methods now allow for the computation of stable densities, distribution functions and quantiles.
+In order for our inter-arrival waiting times $W_k$ to be modelled correctly they should be heavy tailed and completely right skewed so as not to violate our initial bursty assumption. Stable distributions are an extensive class of probability distributions that allow for both skew and heavy tails and are thus a perfect distribution to describe our waiting times with. As we will find out later in this section they also have many useful properties. The class was first defined by Paul L\'{e}vy in the early 20th century but was under utilised due to the lack of closed formulas for densities and distribution functions for all but a few stable distributions (Gaussian, Cauchy and L\'{e}vy). However its use has increased since advances in computing methods now allow for the computation of stable densities, distribution functions and quantiles.\\
 \begin{definition}\cite{jpnolan-stable}
 A random variable X is \textbf{sum-stable} if for $X_1$ and $X_2$ independent copies of X and any positive constants a and b we have
 \[
@@ -577,6 +602,27 @@ for some positive c and some d $\in\R.$ We then say that X follows a \textbf{sta
 \begin{remark}
 Note that other texts refer to what we have just defined as \textbf{sum-stable} as just \textbf{stable}. We make this modification in order to easily differentiate it from the term \textbf{max-stable} which we will define in section \ref{s-max}.\\
 \end{remark}
+
+\noindent As a closed form for the density of a stable random variable cannot be found for all cases we instead choose to specify a stable random variable by its characteristic function.\\
+\begin{definition}\label{def:stableChar}
+Let X$\sim S(\beta,\alpha,\gamma,\delta)$ then the characteristic function $\phi_X(s)=\E[e^{isX}]$ is given by
+\[
+	\phi_X(s)=\begin{cases}
+			\exp\left(-\gamma^\beta|s|^\beta[1-i\alpha \sign(s)\tan(\frac{\pi\beta}{2})]+i\delta s\right) &\beta\neq1\\
+			\exp\left(-\gamma|s|[1+i\alpha \sign(s)\frac{2}{\pi}\log(s)]+i\delta s\right) &\beta=1.
+			\end{cases} 
+\]
+\end{definition}
+
+\noindent As there are over half a dozen parameterisations of a stable random variable please note the parameterisation we use is consistent with \cite{MeerschaertStoev08} \& \cite{Samorodnitsky}. Definition \ref{def:stableChar} implies that a stable distribution possesses four different parameters:
+\begin{itemize}
+	\item An index of stability $\beta \in (0,2]$ which determines heavy tailedness 
+	\item A skewness parameter $\alpha \in [-1,1]$
+	\item A scale parameter $\gamma\geq0$
+	\item A location parameter $\delta \in \R$\\
+\end{itemize}
+
+As we are only interested in heavy tailed
 
 \noindent One of the reasons the stable distribution is so useful is that we can now generalise the classical Central Limit Theorem. Recall that the Central Limit Theorem says that the normalized sum of i.i.d. random variables with a finite variance converges to a normal distribution. To be more precise, let $\{X_i\}_{1\leq i \leq n}$ be i.i.d. random variables with mean $\mu$ and variance $\sigma^2$. Then the classical Central Limit Theorem states that
 \[
@@ -597,6 +643,8 @@ where $a_n=\sqrt{n}\sigma/\mu$ and $b_n=\sigma\sqrt{n}.$\\
 \]
 if and only if Z is a stable random variable.
 \end{theorem}
+
+DOA goes here
 \section{Scaling Limit of the Sum of Waiting Times}
 %By the stable central limit theorem, it is well known that for a large 
 %number of observation pairs $(J_k,W_k)$, 
