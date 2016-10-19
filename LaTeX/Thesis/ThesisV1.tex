@@ -447,7 +447,7 @@ Let $X_n:\Omega\to E$ be a sequence of random variables with a corresponding seq
 
 \begin{definition}\label{def:equalDist}
 Let $X_1:\Omega\to E$ be a  random variable with a corresponding probability measure $\PP_{X_1}$ on the measurable space $(\Omega, \FF)$. Then $X_1$ is \textbf{equal in distribution} to a random variable $X_2:\Omega\to E$ if 
-\[\PP_{X_1} = \PP_{X_2} \] where $\PP_{X_2}$ is the probability measure of $X_2$. We then write $X_1 \overset{d}{=}X_2.$\\
+\[\PP_{X_1} = \PP_{X_2} \] where $\PP_{X_2}$ is the probability measure of $X_2$. We then write $X_1 \overset{d}{=}X_2$ or $X_1 \sim X_2$.\\
 \end{definition}
 
 \chapter{Scaling Limit Theorems}
@@ -561,39 +561,91 @@ One checks that $\pr[T_\ell > t, X_\ell > x] = \pr[T_\ell > t] \pr[X_\ell > x]$,
 The distribution of the exceedance is hence, as expected, simply the
 conditional distribution of a magnitude $J_k$ given $J_k > \ell$. We will look at the distributions of exceedances and exceedance times in further detail in chapter \ref{dist}.
 \section{Background}\label{s:background}
-A stochastic process limit is the limit of an indexed sequence of stochastic processes. Before we examine the stochastic process limits that we will utilise in this thesis it will be illustrative to analyse one of the most well known examples of a stochastic process limit - Brownian Motion. One of the methods used to derive Brownian motion is devised by trying to seek a continuous time representation of the discrete time random walk. Recall that a discrete time random walk is defined in the following manner.\\
+A stochastic process limit is the limit of a sequence of stochastic processes. Before we examine the stochastic process limits that we will utilise in this thesis it will be illustrative to analyse one of the most well known examples of a stochastic process limit - Brownian Motion. One of the methods used to derive Brownian motion is devised by trying to seek a continuous time representation of the discrete time random walk. Recall that a discrete time random walk is defined in the following manner.\\
 \begin{definition}
-Let $\{U_i\}_{1\leq i \leq n}$ be i.i.d. U(0,1) random variables. Form the partial sums at time k as
+Let $\{U_i\}_{1\leq i \leq n}$ be i.i.d. U(0,1) random variables. Write the partial sums at time k as
 \[
 	S_k=\sum_{i=1}^k U_i,
 \]
 then successive partial sums form a \textbf{random walk} with $S_n$ being the position after n steps.
 \\
 \end{definition}
-\noindent The general method of achieving a continuous limit of a discrete function is to consider a continuous analogue of the sum $S_n$ as $n\to\infty$ and then rescaling to ensure the continuous analogue remains finite. We can then appeal to the CLT which gives us the discrete limit
+\noindent The general method of achieving a continuous limit of a discrete function is to consider a continuous analogue of the sum $S_n$ as $n\to\infty$ and then rescaling to ensure the continuous analogue remains finite. We can then appeal to the Central Limit Theorem which gives us the discrete limit
 \begin{align}\label{eq:clt}
-\frac{S_n-nm}{\sqrt{n\sigma^2}}\overset{d}{\to}Z\sim N(0,1)\textrm{ as $n\to\infty$}
+\frac{S_n-n\mu}{\sqrt{n\sigma^2}}\overset{d}{\longrightarrow}Z\sim N(0,1)\textrm{ as $n\to\infty$}
 \end{align}
 
-\noindent where $m:=\E[U_k]=1/2$ and $\sigma^2:=\Var(U_k)=1/12.$
-In order to extend this discrete limit to a continuous limit we first consider two different continuous time representations of a discrete time random walk. One obvious way of forming a process from the random walk is to perform linear interpolation between each discrete point. Thus we can consider
-\[
+\noindent where $\mu:=\E[U_k]=1/2$ and $\sigma^2:=\Var(U_k)=1/12.$
+The random walk only accepts integer arguments so in order to extend this discrete limit to a continuous limit we first consider two different continuous time representations of a discrete time random walk. One obvious way of forming a process from the random walk is to perform linear interpolation between each discrete point. Thus, we can consider
+\begin{align}
 	\tilde{S}(t):=(t-\lfloor t \rfloor)U_{\lfloor t \rfloor +1} + S_{\lfloor t \rfloor}\quad\textrm{for all } t\geq0,
-\]
-or more simply we can consider the step function
-\[
-	\hat{S}(t):=S_{\lfloor t \rfloor}\quad\textrm{for all } t\geq0.
-\]
+\end{align}
+or more simply, we can consider the step function
+\begin{align}\label{fun:step}
+	S_{\lfloor t \rfloor}=U_1+\cdots+U_{\lfloor t \rfloor}  \quad\textrm{for all } t\geq0.
+\end{align}
 
 \textcolor{red}{maybe some graphs here}
-As it turns out for large values of $t$ both processes are equivalent. Although the interpolation function is more intuitive, the step function is easier to work with and so we only consider the step function from now on. Now that we have a continuous analogue of the discrete random walk we wish to find the limiting process. If we consider $t$ in the closed interval $[0,1]$ then following \ref{eq:clt} it can be shown that
-\[
-	\frac{S_{\lfloor nt\rfloor}-\lfloor nt \rfloor m}{\sqrt{n\sigma^2}}\overset{d}{\to}B_t\sim N(0,t)\textrm{ as $n\to\infty$},
-\]
-\noindent where $B_t$ is the standard Brownian Motion. This result remains unchanged for all $t\geq0$. Now that we have outlined how one can derive Brownian Motion as a stochastic process limit of the rescaled $\hat{S}(nt)$ the stochastic process limits presented in later sections will be more accessible.
+As it turns out for large values of $t$ both processes are equivalent, see \cite{Whitt2010} for more details. Although the interpolation function is more intuitive, the step function is easier to work with and so we only utilise the step function from now on. We now add a time scaling constant $c$ and consider 
+\begin{align}\label{fun:scaleStep}
+	S_{\lfloor ct \rfloor}=U_1+\cdots+U_{\lfloor ct \rfloor}  \quad\textrm{for all } t\geq0.
+\end{align}
+Whereas in \ref{fun:step} a step can only occur at the end of every time period, the inclusion of $c$ in \ref{fun:scaleStep} allows us to adjust how often steps occur. For example, if we multiply $c$ by 60, then steps that were occurring every minute now occur every second. Clearly as $c$ approaches infinity steps start to occur continuously. Now that we have a continuous analogue of the discrete random walk we wish to find the limiting process. Following \ref{eq:clt} we would expect that
+\begin{align}\label{eq:BMconv}
+	\frac{S_{\lfloor ct\rfloor}-\lfloor ct \rfloor \mu}{\sqrt{c\sigma^2}}\overset{d}{\longrightarrow}B_t\sim N(0,t)\textrm{ as $c\to\infty$},
+\end{align}
+
+\noindent where $B_t$ is the standard Brownian Motion. An easy way to check that the above weak convergence is correct is to consider the Fourier transforms of both sides.\\
+\begin{definition}
+	Let $Y:\Omega\to E$ be a random variable with probability density function $f_Y(x)$. Then the \textbf{Fourier Transform}  of $f_Y(x)$ is
+	\[
+		\hat{f}_Y(s)=\E[e^{-isY}]=\int_\Omega e^{-isx} f_Y(x)dx.
+	\]
+\end{definition}
+
+\noindent When the first two moments are finite we can use the Taylor series expansion of $e^z=1+z+z^2/2!+...$ to see that
+\begin{align}
+	\hat{f}_Y(s)&=\int_\Omega\left(1-isx+\frac{1}{2!}(-isx)^2+\cdots \right)f_Y(x)dx\\
+	&=\int_\Omega f_Y(x)dx - is \int_\Omega x f_Y(x)dx - \frac{s^2}{2}\int_\Omega x^2 f_Y(x)dx +\cdots\\
+	&=1-is\E[Y]-\frac{s^2}{2}\E[Y^2] +o(s^2),
+\end{align}
+\noindent where $o(s^2)$ is a function that approaches zero faster than $s^2$ as $s\to0.$ 
+
+Suppose $Y\sim Y_k=U_k-\mu$ then 
+\begin{align}
+\hat{f}_{Y}(s)=1-\frac{s^2}{2}\sigma^2+o(s^2),
+\end{align}
+\noindent since $\E[Y]=0$, and $\E[Y^2]=\Var(Y)+\E[Y]^2=\sigma^2$. We now have the necessary tools to calculate the Fourier transform of the rescaled $S_{\lfloor ct\rfloor}$ defined in \ref{eq:BMconv}. Using the fact that the Fourier transform of a sum is simply the product of the individual Fourier transforms we then have
+
+\begin{align}
+	\E\left[\exp\left( -is\frac{S_{\lfloor ct\rfloor}-\lfloor ct \rfloor \mu}{\sqrt{c\sigma^2}}    \right)\right]
+	&= \E\left[\exp\left( -is\frac{Y_1+\cdots+Y_{\lfloor ct\rfloor}}{\sqrt{c\sigma^2}}    \right)\right]\\
+	&= \E\left[\exp\left( \frac{-isY}{\sqrt{c\sigma^2}}    \right)\right]^{\lfloor ct\rfloor}\\
+	&=\hat{f}_{Y}\left(\frac{s}{\sqrt{c\sigma^2}}\right)^{\lfloor ct\rfloor}.
+\end{align}
+
+Given that $(1+(r/n)+o(n^{-1}))^n\to e^r$ as $n\to\infty$ for any $r\in\R$ we then have
+
+\begin{align}
+	\E\left[\exp\left( -is\frac{S_{\lfloor ct\rfloor}-\lfloor ct \rfloor \mu}{\sqrt{c\sigma^2}}    \right)\right]
+	&=\hat{f}_{Y}\left(\frac{s}{\sqrt{c\sigma^2}}\right)^{\lfloor ct\rfloor}\\
+	&=\left(1-\frac{s^2}{2c}+o(c^{-1})\right)^{\lfloor ct\rfloor}\\
+	&=\Bigg[\left(1-\frac{s^2}{2c}+o(c^{-1})\right)^c\Bigg]^\frac{\lfloor ct\rfloor}{c}\\	
+	&\to e^{-ts^2/2} \quad\textrm{as $c\to\infty,$}
+\end{align}
+\noindent since $\lfloor ct\rfloor/c\to t$ as $c\to\infty.$
+
+We now refer to the L\'{e}vy Continuity Theorem to prove the weak convergence outlined in \ref{eq:BMconv}.\\
+
+\begin{definition}\cite{thebook}
+	\textbf{L\'{e}vy Continuity Theorem}. If $X_n,X$ are random variables on $\R$, then $X_n\overset{d}{\longrightarrow}X$ implies that $\hat{f}_{X_n}(s)\to\hat{f}_X(s)$ for each $s\in \R$, uniformly on compact subsets. Conversely, if $X_n$ is a sequence of random variables such that $\hat{f}_{X_n}(s)\to\hat{f}_X(s)$ for each $s\in \R$, and the limit is continuous at $s=0$, then $\hat{f}_X(s)$ is the Fourier transform of some random variable $X$, and $X_n\overset{d}{\longrightarrow}X$.\\
+\end{definition}
+\noindent This theorem essentially states that $X_n\overset{d}{\longrightarrow}X$ if and only if $\hat{f}_{X_n}(s)\to\hat{f}_X(s)$. We previously showed that the limit of the Fourier transform of the rescaled $S_{\lfloor ct\rfloor}$ is $e^{-ts^2/2}$ which is also the Fourier transform of a $N(0,t)$ random variable. Thus we must have the result outlined in \ref{eq:BMconv}.
+
+Now that we have shown how one can derive Brownian Motion as a stochastic process limit of the rescaled $S_{\lfloor ct\rfloor}$, the stochastic process limits presented in later sections will be more accessible.
 \section{Stable Distributions}
 In order for our inter-arrival waiting times $W_k$ to be modelled correctly they should be heavy tailed and completely right skewed so as not to violate our initial bursty assumption. Stable distributions are an extensive class of probability distributions that allow for both skew and heavy tails and are thus a perfect distribution to describe our waiting times with. As we will find out later in this section they also have many useful properties. The class was first defined by Paul L\'{e}vy in the early 20th century but was under utilised due to the lack of closed formulas for densities and distribution functions for all but a few stable distributions (Gaussian, Cauchy and L\'{e}vy). However its use has increased since advances in computing methods \textcolor{red}{expand} now allow for the computation of stable densities, distribution functions and quantiles.\\
-\begin{definition}\cite{jpnolan-stable}
+\begin{definition}\cite{Nolan2015}
 A random variable X is \textbf{sum-stable} if for $X_1$ and $X_2$ independent copies of X and any positive constants a and b we have
 \[
 	aX_1+bX_2\overset{d}{=}cX+d
@@ -615,7 +667,7 @@ Let $X\sim S(\beta,\alpha,\gamma,\delta)$ be a stable random variable. Then the 
 \end{align}\\
 \end{definition}
 
-\noindent There are over half a dozen parameterisations of a stable random variable but the well informed reader will note that the parameterisation we use is consistent with \cite{MeerschaertStoev08} \& \cite{Samorodnitsky}. Definition \ref{def:stableChar} then implies that a stable distribution possesses four different parameters:
+\noindent There are over half a dozen parameterisations of a stable random variable but the well informed reader will note that the parameterisation we use is consistent with \cite{MeerschaertStoev08} \& \cite{Samorodnitsky1994}. Definition \ref{def:stableChar} then implies that a stable distribution possesses four different parameters:
 \begin{itemize}
 	\item An index of stability $\beta \in (0,2]$ which determines heavy tailedness 
 	\item A skewness parameter $\alpha \in [-1,1]$
@@ -630,7 +682,7 @@ Let $X\sim S(\beta,\alpha,\gamma,\delta)$ be a stable random variable. Then the 
 	\item Standard scale parameter $\gamma=1$ and standard location parameter $\delta=0$\\
 \end{itemize}
 
-\noindent To check that the mean is infinite when $\beta \in (0,1)$ we first see from \cite{Janicki and Weron}\textcolor{red}{check parameterisation} that if a Central Limit Theorem type argument is used we have
+\noindent To check that the mean is infinite when $\beta \in (0,1)$ we first see from \cite{JanickiWeron1994}\textcolor{red}{check parameterisation} that if a Central Limit Theorem type argument is used we have
 \begin{align}
 \lim_{x\to\infty} x^\beta\PP(X>x)=C_\beta\frac{1+\alpha}{2}\gamma^\beta,\\
 \lim_{x\to\infty} x^\beta\PP(X<-x)=C_\beta\frac{1-\alpha}{2}\gamma^\beta,
@@ -667,7 +719,7 @@ if and only if Z is a stable random variable.\\
 
 \noindent The Generalised Central Limit theorem is so useful as it allows us to find the limiting distribution of rescaled random variables with undefined moments. This means we can apply our theorem to our inter-arrival waiting times $W_k$ with infinite means. As discussed in Section \ref{s:background} finding the limiting distribution is a prerequisite for finding any stochastic process limit. The Generalised Central Limit Theorem also naturally leads to the following definition.\\
 
-\begin{definition}\cite{nolan}
+\begin{definition}\cite{Nolan2015}
 	A random variable X is in the \textbf{domain of attraction} of Z if there exists constants $a_n>0,b_n\in\R$ with
 	\[
 		\frac{\sum^n_{i=1}X_i-a_n}{b_n} \overset{d}{\longrightarrow}Z,
