@@ -1,0 +1,60 @@
+---
+title: "Simulate Mittag-Leffler"
+author: "Peter Straka"
+date: "18/10/2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Generating Stables
+
+We first generate random variables $X$ with the Laplace transform
+
+$$\mathcal L[X](\lambda) = \mathbf E e^{-\lambda X} = e^{-\lambda^\alpha}$$ 
+
+where $\alpha \in (0,1)$. 
+The package `stabledist` with option `pm=1` runs with the parametrisation
+as in Samorodnitsky & Taqqu: 
+\begin{align*}
+\mathcal F[X](\theta) = \mathbf E e^{i\theta X} = \exp \left\lbrace -\sigma^\alpha |\theta|^\alpha \left(1 - i\beta({\rm sign} \theta) \tan \frac{\alpha \pi}{2}\right) + i \mu \theta \right\rbrace.
+\end{align*}
+
+Hence we aim to find $\alpha, \beta, \sigma, \delta$ such that 
+$$\mathcal L[X](-i\theta) = \mathcal F[X](\theta), \quad \theta > 0.$$
+
+Now see that 
+\begin{multline*}
+e^{-(-i\theta)^\alpha}
+= \exp\left(-(\theta e^{-i \pi / 2})^\alpha\right)
+= \exp\left(-\left(\theta^\alpha e^{-i\alpha \pi/2}\right)\right)
+= \exp\left(-\theta^\alpha\left(\cos \frac{\alpha\pi}{2} - i \sin\frac{\alpha\pi}{2}\right)\right)
+\\
+= \exp\left(-\theta^\alpha \cos\frac{\alpha\pi}{2}\left(1 - i \tan \frac{\alpha\pi}{2}\right)\right)
+=  \mathcal F[X](\theta), \quad \theta > 0
+\end{multline*}
+whenever $\sigma^\alpha = \cos\frac{\alpha\pi}{2}, \beta = 1, \mu = 0$. 
+
+```{r}
+require(stabledist)
+n = 500
+# set parameters: 
+alpha = 0.4
+beta = 1
+sigma = (cos(alpha * pi / 2))^(1/alpha)
+mu = 0
+# generate stables: 
+y <- rstable(n = n, alpha = alpha, beta = beta, gamma = sigma, delta = mu, pm = 1)
+# exponentials:
+x <- rexp(n = n, rate = 1)
+# Mittag-Lefflers:
+w <- y * x^(1/alpha)
+```
+
+```{r}
+source("../MittagLefflerEstimation.R", local=TRUE)
+ml.par.est.delta(10000*w,0.95)
+```
+
