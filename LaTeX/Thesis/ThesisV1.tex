@@ -12,7 +12,7 @@
 %
  
 \documentclass[honours,12pt]{UNSWthesis}
-\linespread{1.5}
+\linespread{1.2}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{amsthm}
@@ -70,6 +70,10 @@
 \newcommand{\FF}{\mathcal{F}}
 \newcommand{\Law}{\mathop{\rm Law}}
 \newcommand{\Cov}{\mathop{\rm Cov}}
+\newcommand{\Var}{\mathop{\rm Var}}
+\newcommand{\sign}{\mathop{\rm sign}}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % The following are much more esoteric commands that I have left in
@@ -324,7 +328,7 @@ Let $\Omega$ be a nonempty set and let $\FF$ be a collection of subsets of $\Ome
 \begin{enumerate}
 \item The empty set $\emptyset \in \FF$,
 \item If $A\in \FF$ then the complement $A^c\in \FF$, and
-\item If $A_1,A_2,\ldots \in \FF$ then their union $\cup_{n=1}^\infty A_n \in \FF$.
+\item If $A_1,A_2,\ldots \in \FF$ then their union $\bigcup_{n=1}^\infty A_n \in \FF$.
 \end{enumerate}
 \end{definition}
 \noindent It follows that a $\sigma$-algebra is also closed under intersection.\\
@@ -368,11 +372,20 @@ The Dirac measure can be thought of as the indicator function. Another example o
 
 
 \begin{definition}
-Let $(\Omega,\FF)$ and $(E,\mathcal{E})$ be measurable spaces. A function $f: \Omega \rightarrow E$ is ($\FF,\mathcal{E}$)-\textbf{measurable} if $f^{-1}(S)\in \FF$ for every $S\in \mathcal{E}$.\\
+Let $(\Omega,\FF)$ and $(E,\mathcal{E})$ be measurable spaces. Then a function $f: \Omega \rightarrow E$ is ($\FF,\mathcal{E}$)-\textbf{measurable} if $f^{-1}(S)\in \FF$ for every $S\in \mathcal{E}$.\\
 \end{definition}
 
 \begin{definition}
 Let $(\Omega,\FF,\PP)$ be a probability space and $(E,\mathcal{E})$ a measurable space. A \textbf{random variable} is a function $X:\Omega \rightarrow E$ that is $(\FF,\mathcal{E})$-measurable. We call $(E,\mathcal{E})$ the \textbf{state space}. \\
+\end{definition}
+
+\begin{definition}
+	Let X be a random variable defined on a probability space $(\Omega,\FF,\PP)$. Its \textbf{characteristic function} $\phi_X(s):\Omega\to\C$ is defined by 
+	\begin{align*}
+		\phi_X(s)&=\E[e^{isX}]\\
+		&=\int_\Omega e^{isX(\omega)} \PP(d\omega)
+	\end{align*}
+	for every $s \in \R$.
 \end{definition}
 
 \section{Stochastic Processes}
@@ -385,11 +398,11 @@ A \textbf{stochastic process} is a collection of random variables $\{X_t\}_{t\in
 \noindent If we fix a $t_0\in \mathcal{I}$ then $X(t_0,\omega)$ is simply a random variable. If we fix a $\omega_0\in \Omega$ then $X(t,\omega_0)$ is a function with respect to $t$ and is the trajectory of a single realisation of the stochastic process $X(t)$. From now on we will only consider stochastic processes where our ordered set $\mathcal{I}=\Rp$ represents an interval in continuous time. We now write $\{X(t)\}_{t\geq 0}:\Rp\times\Omega\to\R$.\\ 
 
 \begin{definition}
-A stochastic process $\{X(t)\}_{t\geq 0}$ has a \textbf{jump} at time t if the process is discontinuous at that point. i.e. $X(t) \neq X_-(t)$.\\
+A stochastic process $\{X(t)\}_{t\geq 0}$ has a \textbf{jump} at time t if the process is discontinuous at that point. More precisely $X(t) \neq X_-(t)$.\\
 \end{definition}
 
 \begin{definition}
-A stochastic process $\{X(t)\}_{t\geq 0}$ is c\'{a}dl\'{a}g (derived from the French term "continue à droite, limite à gauche" if it has right continuous paths with left hand limits. i.e	$X_-(t)$ exists and $X_-(t)$ exists and is equal to $X(t)$.\\
+A stochastic process $\{X(t)\}_{t\geq 0}$ is c\'{a}dl\'{a}g (derived from the French term "continue à droite, limite à gauche") if it has right continuous paths with left hand limits. i.e	$X_-(t)$ exists and $X_+(t)$ exists and is equal to $X(t)$.\\
 \end{definition}
 
 \begin{definition}
@@ -400,6 +413,15 @@ A \textbf{filtration} $\{\FF_t\}_{t\geq 0}$ is a collection of $\sigma$-algebras
 
 \begin{definition}
 Let $(\Omega,\FF,\PP)$ be a probability space with the filtration $\FF = \{\FF\}_{t\geq 0}$ and let $(E,\mathcal{E})$ a measurable space. We say the stochastic process $\{X_t\}_{t\geq 0}$ is $\boldsymbol{\FF}$\textbf{- adapted} if for every $t\geq 0$, $X_t: \Omega \rightarrow E$ is $(\FF_t, \mathcal{E})$ - measurable.\\
+\end{definition}
+
+\begin{definition}
+Let $(\Omega, \FF,\PP)$ be a probability space. A real valued stochastic process $\{W_t\}_{t\geq 0}$ with continuous paths is a \textbf{standard Brownian motion} if for all $0<s<t$,
+\begin{itemize}
+\item $W_0 = 0\ a.s.$,
+\item $W_t - W_s \sim N(0,t-s)$, and
+\item the increments $W_t - W_s$ are independent. That is, $W_t - W_s$ is independent of $\sigma(W_r,r\leq s)$.\\
+\end{itemize}
 \end{definition}
 
 \section{Weak Convergence}
@@ -426,53 +448,51 @@ A sequence $\{x_n\}_{n\geq1}$ in a metric space (E,d) \textbf{converges to a lim
 \begin{definition}
 A sequence of probability measures $\{\PP_n\}_{n \geq 1}$ on the measurable space $(\Omega, \FF)$ \textbf{converges weakly} to a probability measure $\PP$ on $(\Omega, \FF)$ if
 \[
-\lim_{n\rightarrow \infty} \int_E fd\PP_n = \int_Efd\PP
+\lim_{n\rightarrow \infty} \int_\Omega fd\PP_n = \int_\Omega fd\PP
 \]
 for all continuous and bounded real-valued functions $f$ on $\Omega$. We then write \[\PP_n\rightarrow\PP.\]
 \end{definition}
-\noindent Note that this definition is essentially \ref{def:metricConvergence} with $E$ as the set of all probability measures on the measurable space $(\Omega, \FF)$ and $d(\PP,\mathbb{Q})=|\int_Efd\PP- \int_Efd\mathbb{Q}|.$
+\noindent Note that this definition is just \ref{def:metricConvergence} with $E$ as the set of all probability measures on the measurable space $(\Omega, \FF)$ and $d(\PP,\mathbb{Q})=|\int_\Omega fd\PP- \int_\Omega fd\mathbb{Q}|$, where $\mathbb{Q}$ is another probability measure on $(\Omega, \FF).$\\
 
 \begin{definition}
 Let $X_n:\Omega\to E$ be a sequence of random variables with a corresponding sequence of probability measures $\{\PP_{X_n}\}_{n\geq 1}$ on the measurable space $(\Omega, \FF)$. Then $\{X_n\}_{n\geq 1}$ \textbf{converges in distribution} to a random variable $X:\Omega\to E$ if 
-\[\PP_{X_n} \to \PP_X \] where $\PP_X$ is the probability measure of X. We then write $X_n \overset{d}{\to}X.$
+\[\PP_{X_n} \to \PP_X \] where $\PP_X$ is the probability measure of X. We then write $X_n \overset{d}{\to}X.$\\
 \end{definition}
+
+\begin{definition}\label{def:equalDist}
+Let $X_1:\Omega\to E$ be a  random variable with a corresponding probability measure $\PP_{X_1}$ on the measurable space $(\Omega, \FF)$. Then $X_1$ is \textbf{equal in distribution} to a random variable $X_2:\Omega\to E$ if 
+\[\PP_{X_1} = \PP_{X_2} \] where $\PP_{X_2}$ is the probability measure of $X_2$. We then write $X_1 \overset{d}{=}X_2$ or $X_1 \sim X_2$.\\
+\end{definition}
+
 \chapter{Scaling Limit Theorems}
+In this chapter we will provide an analysis of some well known scaling limit theorems, eventually arriving at a scaling limit for CTRM. We require these scaling limits before we can develop our statistical inference methods for CTRM.
 \section{Problem Formulation}
-The Continuous Time Random \emph{Walk} (CTRW) has been a highly successful 
-model for anomalous diffusion in the past two decades 
-\cite{Metzler2000,HLS2010b}, likely due to its tractable and flexible scaling
-properties.
-The stochastic process we study in this article is conceptually very close
-to the CTRW, since essentially the jumps $J_k$ are reinterpreted as 
-magnitudes, and instead of the cumulative sum, one tracks the cumulative 
-maximum. Similarly tractable scaling properties apply to the CTRM, see below.
-For the above reasons, we use the name CTRM in this article.
-
-
+In this section we rigorously define our problem as well as establish some preliminary notation that we will use to solve the problem.
 \begin{definition}
-Assume i.i.d.\ pairs of random variables $(J_k, W_k)$, $k = 1, 2, \ldots$
+Assume identically and independently distributed (i.i.d.) pairs of random variables $(J_k, W_k)$, $k = 1, 2, \ldots$
 where $W_k > 0$ represents the inter-arrival times of certain events and 
-$J_k \in \R$ the corresponding event magnitudes.  
-Write 
+$J_k \in \R$ the corresponding event magnitudes. Now write
+\begin{align}
+	S(n)=\sum_{i=1}^n W_i
+\end{align}
+as the sum of the first $n$ inter-arrival times. Also write
 \begin{align} \label{eq:renewal-process}
-N(t) = \max\{n \in \mathbb N: W_1 + \ldots + W_n \le t\}
+N(t) = \max\{n \in \mathbb N: S(n) \le t\}
 \end{align}
 for the renewal process
-associated with the $W_k$ (where the maximum of the empty set is set to $0$).
+associated with the $W_k$.
 Then the process
 \begin{align}
 M(t) = \bigvee_{k=1}^{N(t)} J_k
 = \max\{J_k: k = 1, \ldots, N(t)\}, \quad t \ge 0.
 \end{align}
-is called a CTRM (Continuous Time Random Maxima process).
+is called a CTRM (Continuous Time Random Maxima process), where the maximum of the empty set is set to $0$.\\
 \end{definition}
-
- 
 
 It is clear that the sample paths of $N(t)$ and $M(t)$ are right-continuous
 with left-hand limits. 
 If $W_k$ is interpreted as the time \emph{leading up} to the event with magnitude
-$J_k$, then $M(t)$ is indeed the largest magnitude up to time $t$.
+$J_k$, then $M(t)$ is the largest magnitude observed until time $t$.
 The alternative case where $W_k$ represents the inter-arrival time 
 \textit{following} $J_k$ 
 is termed ``second type'' (in the shock model literature) or OCTRM
@@ -482,13 +502,12 @@ given by
 \tilde M(t) = \bigvee_{k=1}^{N(t)+1} J_k, \quad t \ge 0.
 \end{align}
 Finally, the model is called \emph{coupled} when $W_k$ and $J_k$ are not independent.
-In this article we focus on the uncoupled case,  
+In this thesis we focus on the uncoupled case,  
 for which it can be shown that the processes $M(t)$ and
 $\tilde M(t)$ have the same limiting distributions at large times
 \cite{Hees2015}, and hence we focus on the CTRM $M(t)$. 
 
-
-We aim to make inference on the distribution of the following quantities:
+However deriving the distribution of $M(t)$ is difficult for a number of reasons that will be explained in further detail in \ref{s-max} \textcolor{red}{not sure if this is true}. It is for this reason that we choose to make inference on the distribution of the following quantities:
 \begin{definition}
 Let $M(t)$ be an uncoupled CTRM whose magnitudes $J_k$ are supported on the interval
 $[x_0, x_F]$.  Then the exceedance time of level $\ell \in [x_0,x_F]$ is
@@ -501,7 +520,7 @@ and the exceedance is
 X_\ell = M(T_\ell) - \ell.
 \end{align*}
 \end{definition}
-
+These quantities are chosen as it is natural to be concerned with both the size and the timing of events of large magnitude. Possessing a strong understanding of these large events will aid in managing the consequences associated with extreme natural phenomena, financial loss and human behaviour.
 \begin{lemma}
 Given a level $\ell \in [x_0,x_F]$, exceedance $X_\ell$ and exceedance time
 $T_\ell$ are independent. Moreover, 
@@ -518,7 +537,7 @@ $S_0 = 0$.
 \end{lemma}
 
 \begin{proof}
-Let $\tau_\ell = \min\{k: J_k > x\}$. Then
+Let $\tau_\ell = \min\{k: J_k > x\}$. Then \textcolor{red}{rigorize this}
 \begin{align*}
 T_\ell > t, X_\ell > x 
 &\Longleftrightarrow
@@ -555,7 +574,174 @@ One checks that $\pr[T_\ell > t, X_\ell > x] = \pr[T_\ell > t] \pr[X_\ell > x]$,
 \end{proof}
 The distribution of the exceedance is hence, as expected, simply the
 conditional distribution of a magnitude $J_k$ given $J_k > \ell$. We will look at the distributions of exceedances and exceedance times in further detail in chapter \ref{dist}.
+\section{Background}\label{s:background}
+A stochastic process limit is the limit of a sequence of stochastic processes. Before we examine the stochastic process limits that we will utilise in this thesis it will be illustrative to analyse one of the most well known examples of a stochastic process limit - Brownian Motion. One of the methods used to derive Brownian motion is devised by trying to seek a continuous time representation of the discrete time random walk. Recall that a discrete time random walk is defined in the following manner.\\
+\begin{definition}
+Let $\{U_i\}_{1\leq i \leq n}$ be i.i.d. U(0,1) random variables. Write the partial sums at time k as
+\[
+	S_k=\sum_{i=1}^k U_i,
+\]
+then successive partial sums form a \textbf{random walk} with $S_n$ being the position after n steps.
+\\
+\end{definition}
+\noindent The general method of achieving a continuous limit of a discrete function is to consider a continuous analogue of the sum $S_n$ as $n\to\infty$ and then rescaling to ensure the continuous analogue remains finite. We can then appeal to the Central Limit Theorem which gives us the discrete limit
+\begin{align}\label{eq:clt}
+\frac{S_n-n\mu}{\sqrt{n\sigma^2}}\overset{d}{\longrightarrow}Z\sim N(0,1)\textrm{ as $n\to\infty$}
+\end{align}
 
+\noindent where $\mu:=\E[U_k]=1/2$ and $\sigma^2:=\Var(U_k)=1/12.$
+The random walk only accepts integer arguments so in order to extend this discrete limit to a continuous limit we first consider two different continuous time representations of a discrete time random walk. One obvious way of forming a process from the random walk is to perform linear interpolation between each discrete point. Thus, we can consider
+\begin{align}
+	\tilde{S}(t):=(t-\lfloor t \rfloor)U_{\lfloor t \rfloor +1} + S_{\lfloor t \rfloor}\quad\textrm{for all } t\geq0,
+\end{align}
+or more simply, we can consider the step function
+\begin{align}\label{fun:step}
+	S_{\lfloor t \rfloor}=U_1+\cdots+U_{\lfloor t \rfloor}  \quad\textrm{for all } t\geq0.
+\end{align}
+
+\textcolor{red}{maybe some graphs here}
+As it turns out for large values of $t$ both processes are equivalent, see \cite{Whitt2010} for more details. Although the interpolation function is more intuitive, the step function is easier to work with and so we only utilise the step function from now on. We now add a time scaling constant $c$ and consider 
+\begin{align}\label{fun:scaleStep}
+	S_{\lfloor ct \rfloor}=U_1+\cdots+U_{\lfloor ct \rfloor}  \quad\textrm{for all } t\geq0.
+\end{align}
+Whereas in \ref{fun:step} a step can only occur at the end of every time period, the inclusion of $c$ in \ref{fun:scaleStep} allows us to adjust how often steps occur. For example, if we multiply $c$ by 60, then steps that were occurring every minute now occur every second. Clearly as $c$ approaches infinity steps start to occur continuously. Now that we have a continuous analogue of the discrete random walk we wish to find the limiting process. Following \ref{eq:clt} we would expect that
+\begin{align}\label{eq:BMconv}
+	\frac{S_{\lfloor ct\rfloor}-\lfloor ct \rfloor \mu}{\sqrt{c\sigma^2}}\overset{d}{\longrightarrow}B_t\sim N(0,t)\textrm{ as $c\to\infty$},
+\end{align}
+
+\noindent where $B_t$ is the standard Brownian Motion. An easy way to check that the above weak convergence is correct is to consider the Fourier transforms of both sides.\\
+\begin{definition}
+	Let $Y:\Omega\to E$ be a random variable with probability density function $f_Y(x)$. Then the \textbf{Fourier Transform}  of $f_Y(x)$ is
+	\[
+		\hat{f}_Y(s)=\E[e^{-isY}]=\int_\Omega e^{-isx} f_Y(x)dx.
+	\]
+\end{definition}
+
+\noindent When the first two moments are finite we can use the Taylor series expansion of $e^z=1+z+z^2/2!+...$ to see that
+\begin{align}
+	\hat{f}_Y(s)&=\int_\Omega\left(1-isx+\frac{1}{2!}(-isx)^2+\cdots \right)f_Y(x)dx\\
+	&=\int_\Omega f_Y(x)dx - is \int_\Omega x f_Y(x)dx - \frac{s^2}{2}\int_\Omega x^2 f_Y(x)dx +\cdots\\
+	&=1-is\E[Y]-\frac{s^2}{2}\E[Y^2] +o(s^2),
+\end{align}
+\noindent where $o(s^2)$ is a function that approaches zero faster than $s^2$ as $s\to0.$ 
+
+Suppose $Y\sim Y_k=U_k-\mu$ then 
+\begin{align}
+\hat{f}_{Y}(s)=1-\frac{s^2}{2}\sigma^2+o(s^2),
+\end{align}
+\noindent since $\E[Y]=0$, and $\E[Y^2]=\Var(Y)+\E[Y]^2=\sigma^2$. We now have the necessary tools to calculate the Fourier transform of the rescaled $S_{\lfloor ct\rfloor}$ defined in \ref{eq:BMconv}. Using the fact that the Fourier transform of a sum is simply the product of the individual Fourier transforms we then have
+
+\begin{align}
+	\E\left[\exp\left( -is\frac{S_{\lfloor ct\rfloor}-\lfloor ct \rfloor \mu}{\sqrt{c\sigma^2}}    \right)\right]
+	&= \E\left[\exp\left( -is\frac{Y_1+\cdots+Y_{\lfloor ct\rfloor}}{\sqrt{c\sigma^2}}    \right)\right]\\
+	&= \E\left[\exp\left( \frac{-isY}{\sqrt{c\sigma^2}}    \right)\right]^{\lfloor ct\rfloor}\\
+	&=\hat{f}_{Y}\left(\frac{s}{\sqrt{c\sigma^2}}\right)^{\lfloor ct\rfloor}.
+\end{align}
+
+Given that $(1+(r/n)+o(n^{-1}))^n\to e^r$ as $n\to\infty$ for any $r\in\R$ we then have
+
+\begin{align}
+	\E\left[\exp\left( -is\frac{S_{\lfloor ct\rfloor}-\lfloor ct \rfloor \mu}{\sqrt{c\sigma^2}}    \right)\right]
+	&=\hat{f}_{Y}\left(\frac{s}{\sqrt{c\sigma^2}}\right)^{\lfloor ct\rfloor}\\
+	&=\left(1-\frac{s^2}{2c}+o(c^{-1})\right)^{\lfloor ct\rfloor}\\
+	&=\Bigg[\left(1-\frac{s^2}{2c}+o(c^{-1})\right)^c\Bigg]^\frac{\lfloor ct\rfloor}{c}\\	
+	&\to e^{-ts^2/2} \quad\textrm{as $c\to\infty,$}
+\end{align}
+\noindent since $\lfloor ct\rfloor/c\to t$ as $c\to\infty.$
+
+We now refer to the L\'{e}vy Continuity Theorem to prove the weak convergence outlined in \ref{eq:BMconv}.\\
+
+\begin{theorem}\cite{thebook}
+	\textbf{L\'{e}vy Continuity Theorem}. If $X_n,X$ are random variables on $\R$, then $X_n\overset{d}{\longrightarrow}X$ implies that $\hat{f}_{X_n}(s)\to\hat{f}_X(s)$ for each $s\in \R$, uniformly on compact subsets. Conversely, if $X_n$ is a sequence of random variables such that $\hat{f}_{X_n}(s)\to\hat{f}_X(s)$ for each $s\in \R$, and the limit is continuous at $s=0$, then $\hat{f}_X(s)$ is the Fourier transform of some random variable $X$, and $X_n\overset{d}{\longrightarrow}X$.\\
+\end{theorem}
+\noindent This theorem essentially states that $X_n\overset{d}{\longrightarrow}X$ if and only if $\hat{f}_{X_n}(s)\to\hat{f}_X(s)$. We previously showed that the limit of the Fourier transform of the rescaled $S_{\lfloor ct\rfloor}$ is $e^{-ts^2/2}$ which is also the Fourier transform of a $N(0,t)$ random variable. Thus we must have the result outlined in \ref{eq:BMconv}.
+
+Now that we have shown how one can derive Brownian Motion as a stochastic process limit of the rescaled $S_{\lfloor ct\rfloor}$, the stochastic process limits presented in later sections will be more accessible.
+\section{Stable Distributions}
+In order for our inter-arrival waiting times $W_k$ to be modelled correctly they should be heavy tailed and completely right skewed so as not to violate our initial bursty assumption. Stable distributions are an extensive class of probability distributions that allow for both skew and heavy tails and are thus a perfect distribution to describe our waiting times with. As we will find out later in this section they also have many useful properties. The class was first defined by Paul L\'{e}vy in the early 20th century but was under utilised due to the lack of closed formulas for densities and distribution functions for all but a few stable distributions (Gaussian, Cauchy and L\'{e}vy). However its use has increased since advances in computing methods \textcolor{red}{expand} now allow for the computation of stable densities, distribution functions and quantiles.\\
+\begin{definition}\cite{Nolan2015}
+A random variable X is \textbf{sum-stable} if for $X_1$ and $X_2$ independent copies of X and any positive constants a and b we have
+\[
+	aX_1+bX_2\overset{d}{=}cX+d
+\]
+for some positive c and some d $\in\R.$ We then say that X follows a \textbf{stable distribution}. Note that the symbol $\overset{d}{=}$ was defined in Definition \ref{def:equalDist}.\\
+\end{definition}
+\begin{remark}
+Note that other texts refer to what we have just defined as \textbf{sum-stable} as just \textbf{stable}. We make this modification in order to easily differentiate it from the term \textbf{max-stable} which we will define in section \ref{s-max}.\\
+\end{remark}
+
+\noindent As a closed form for the density of a stable random variable cannot be found for all cases we instead choose to specify a stable random variable by its characteristic function.\\
+\begin{definition}\label{def:stableChar}
+Let $X\sim S(\beta,\alpha,\gamma,\delta)$ be a stable random variable. Then the characteristic function $\phi_X(s)=\E[e^{isX}]$ is given by
+\begin{align}
+	\phi_X(s)=\begin{cases}
+			\exp\left(-\gamma^\beta \; |s|^\beta \; [1-i\alpha \sign(s)\tan(\frac{\pi\beta}{2})]+i\delta s\right) &\beta\neq1\\
+			\exp\left(-\gamma \; |s| \; [1+i\alpha \sign(s)\frac{2}{\pi}\log(s)]+i\delta s\right) &\beta=1.
+			\end{cases} 
+\end{align}\\
+\end{definition}
+
+\noindent There are over half a dozen parameterisations of a stable random variable but the well informed reader will note that the parameterisation we use is consistent with \cite{MeerschaertStoev08} \& \cite{Samorodnitsky1994}. Definition \ref{def:stableChar} then implies that a stable distribution possesses four different parameters:
+\begin{itemize}
+	\item An index of stability $\beta \in (0,2]$ which determines heavy tailedness 
+	\item A skewness parameter $\alpha \in [-1,1]$
+	\item A scale parameter $\gamma\geq0$
+	\item A location parameter $\delta \in \R$\\
+\end{itemize}
+
+\noindent As we are using the stable distribution to model bursty waiting times we need a completely right skewed distribution with a heavy tail (infinite mean). Thus we consider waiting times drawn from a stable distribution with:
+\begin{itemize}
+	\item Index of stability $\beta \in (0,1)$ to ensure heavy tailedness
+	\item Skewness parameter $\alpha=1$ to ensure a right skewed distribution
+	\item Standard scale parameter $\gamma=1$ and standard location parameter $\delta=0$\\
+\end{itemize}
+
+\noindent To check that the mean is infinite when $\beta \in (0,1)$ we first see from \cite{JanickiWeron1994}\textcolor{red}{check parameterisation} that if a Central Limit Theorem type argument is used we have
+\begin{align}
+\lim_{x\to\infty} x^\beta\PP(X>x)=C_\beta\frac{1+\alpha}{2}\gamma^\beta,\\
+\lim_{x\to\infty} x^\beta\PP(X<-x)=C_\beta\frac{1-\alpha}{2}\gamma^\beta,
+\end{align}
+\noindent where
+\[
+	C_\beta=\left(\int^\infty_0 x^{-\beta} \sin(x) dx  \right)^{-1}=\frac{2}{\pi}\Gamma(\beta)\sin\frac{\pi\beta}{2}.
+\]
+\noindent When $\alpha=1$ we have $\lim_{x\to\infty}\PP(X<-x)=0$, as one would expect. Since a Pareto random variable $T$ with parameter $\beta$ has a tail function $\PP(T>t)=ct^{-\beta}$ for some $c\in \R$ and $t>c^{1/\beta}$, we can then observe that the tails of a stable distribution are asymptotically equivalent to a Pareto distribution and thus exhibit power-law behaviour. \textcolor{red}{Thus if we show that a Pareto distribution with $\beta \in (0,1)$ has an infinite mean then the corresponding stable distribution also has an infinite mean.} Now if $p(t)$ is the density of $T$ we have that 
+\[
+	\E[T]=\int^\infty_0 tp(t)dt = \int^\infty_0 t\frac{c\beta}{t^{\beta+1}}dt = c\beta\int^\infty_0 t^{-\beta}dt = c\beta \left[\frac{t^{1-\beta}}{1-\beta}\right]^\infty_0.
+\]
+The above expectation is clearly infinite if $0<\beta\leq1$, but if $\beta=1$ our initial stable distribution reduces to a Cauchy distribution and thus we exclude that case.\textcolor{red}{why ignore Cauchy?? also maybe talk about variance here}\\
+
+One of the reasons the stable distribution is so useful is that we can now generalise the classical Central Limit Theorem. Recall that the Central Limit Theorem says that the normalised sum of i.i.d. random variables with a finite variance converges to a normal distribution. To be more precise, let $\{X_i\}_{1\leq i \leq n}$ be i.i.d. random variables with mean $\mu$ and variance $\sigma^2$. Then the classical Central Limit Theorem states that
+\[
+	\frac{\bar{X}_n-\mu}{\sigma/\sqrt{n}} \overset{d}{\to}Z \sim N(0,1) \textrm{ as 				$n\to\infty$}
+\]
+where $\bar{X}_n=(\sum^n_{i=1}X_i)/n$. Rewriting the above to match the notation we will use from now on we have
+\[
+	\frac{\sum^n_{i=1}X_i-a_n}{b_n} \overset{d}{\to}Z \sim N(0,1) \textrm{ as $n\to\infty$}
+\]
+where $a_n=\sqrt{n}\sigma/\mu$ and $b_n=\sigma\sqrt{n}.$\\
+
+\noindent The Generalised Central Limit Theorem generalises the Central Limit theorem by dropping the assumption that the variance is finite.\\
+
+\begin{theorem}
+\textbf{Generalised Central Limit Theorem} Let $\{X_i\}_{1\leq i \leq n}$ be an i.i.d. sequence of random variables. There exists constants $a_n>0, b_n \in \R$ and a nondegenerate random variable Z with 
+\[
+	\frac{\sum^n_{i=1}X_i-a_n}{b_n} \overset{d}{\longrightarrow}Z
+\]
+if and only if Z is a stable random variable.\\
+\end{theorem}
+
+\noindent The Generalised Central Limit theorem is so useful as it allows us to find the limiting distribution of rescaled random variables with undefined moments. This means we can apply our theorem to our inter-arrival waiting times $W_k$ with infinite means. As discussed in Section \ref{s:background} finding the limiting distribution is a prerequisite for finding any stochastic process limit. The Generalised Central Limit Theorem also naturally leads to the following definition.\\
+
+\begin{definition}\cite{Nolan2015}
+	A random variable X is in the \textbf{domain of attraction} of Z if there exists constants $a_n>0,b_n\in\R$ with
+	\[
+		\frac{\sum^n_{i=1}X_i-a_n}{b_n} \overset{d}{\longrightarrow}Z,
+	\]
+	where $X_1,X_2,X_3,...$ are independent identically distributed copies of X. We then say $X\in DOA(Z)$.\\
+\end{definition}
+
+\noindent The above definition will be useful in the next section where we present a stochastic process limit for the the sum of our inter-arrival waiting times.\\
 \section{Scaling Limit of the Sum of Waiting Times}
 %By the stable central limit theorem, it is well known that for a large 
 %number of observation pairs $(J_k,W_k)$, 
@@ -563,7 +749,7 @@ conditional distribution of a magnitude $J_k$ given $J_k > \ell$. We will look a
 %%approaches a max-stable (GEV) distribution \cite{ColesBook}, whereas 
 %the distribution of the sum of $W_k$ approaches 
 %a sum-stable distribution \cite{MeerschaertSikorskii}.  
-As mentioned in the introduction, we assume a heavy-tailed distribution 
+As mentioned in the previous section, we assume a heavy-tailed distribution 
 for the waiting times, more precisely that the tail function 
 $\overline F_W := 1 - F_W$ of the CDF of $W$ is regularly varying:
 \begin{align}
@@ -636,12 +822,23 @@ Having only two parameters ($\beta \in (0,1)$ and a scale parameter)
 the inverse stable subordinator hence models scaling limits of heavy-tailed 
 waiting times parsimoniously.
 
-\section{Scaling Limit of the Maximum of Event Magnitudes}
+\section{Scaling Limit of the Maximum of Event Magnitudes}\label{s-max}
 \section{Scaling Limit of CTRM}
+The Continuous Time Random \emph{Walk} (CTRW) has been a highly successful 
+model for anomalous diffusion in the past two decades 
+\cite{Metzler2000,HLS2010b}, likely due to its tractable and flexible scaling
+properties.
+The stochastic process we study in this article is conceptually very close
+to the CTRW, since essentially the jumps $J_k$ are reinterpreted as 
+magnitudes, and instead of the cumulative sum, one tracks the cumulative 
+maximum. Similarly tractable scaling properties apply to the CTRM, see below.
+For the above reasons, we use the name CTRM in this article.
 
 \chapter{Distribution of CTRM}\label{dist}
 \section{Distribution of Exceedances}
 \section{Distribution of Exceedance Durations}
+An Overview of Generalized Gamma Mittag–Leffler Model and
+Its Applications 
 %From Meerschaert we have $T_\ell\sim ML\left(\beta,\frac{b(n)}{(-logF(\ell))^{1/\beta}}\right)$ if we note that the taylor series approximation of $-logF(\ell)$ is $1-F(\ell)$ we have $T_\ell\sim ML\left(\beta,\frac{b(n)}{(1-F(\ell))^{1/\beta}}\right)$. Now as $\ell\to\infty$, $1-F(\ell)\to 0$. Thus $(1-F(\ell))^{1/\beta}\to1-F(\ell)$ and we have $T_\ell\sim ML\left(\beta,\frac{b(n)}{1-F(\ell)}\right)$, which implies that $b(n)=n(t)\in RV(1/\beta)$ which is the asymptotic inverse of $g(t)$ as defined in Anderson.%
 
 \chapter{Statistical Inference}
@@ -649,7 +846,7 @@ waiting times parsimoniously.
 \section{Maximum Likelihood Estimator for Generalised Pareto Random Variables}
 \section{Stability of Parameter Estimates}
 \section{Goodness of Fit}%%If there is time
-
+We will test Goodness of Fit as Mainardi et al with the reduced chi squared test
 \chapter{Model Fitting}
 The accuracy of the Mittag-Leffler log moment estimator and the Generalised Pareto MLE has been established in \cite{Cahoy2013} and \cite{GPaccuracyCitation} respectively. However it is yet to be confirmed that these estimation methods work for exceedances and exceedance durations. Thus before we apply our inference methods to actual data, we will check that we can correctly estimate the theoretical Mittag-Leffler and Generalised Pareto parameters derived from a simulated bursty process. If we are able to accurately estimate these parameters we can then proceed to apply the estimation methods to actual data, confident in knowing that the actual parameters will be estimated.
 
@@ -658,6 +855,7 @@ We assume $n$ i.i.d. waiting times are drawn from the positively skewed stable
 distribution with stability parameter $\beta=0.8$, scaled with 
 $n^{-1/\beta}$ to ensure convergence to a stable subordinator. This defines a renewal process, at whose renewal times we assume $n$ i.i.d. magnitudes are drawn from a Generalized Extreme Value Distribution
 with shape parameter $\xi = 0.7$.
+	
 	\begin{figure}[H]
         \centering
         \caption{A simulated bursty process}
@@ -677,6 +875,7 @@ X_\ell = M(T_\ell) - \ell.
 \end{align*}
 
 As these random variables are the quantities of interest it is natural for us to then consider the (simulated) sample exceedances and their corresponding durations over the threshold level $\ell$.
+	
 	\begin{figure}[H]
         \centering
         \includegraphics[width=\textwidth]{Figures/Exceedances.png}
