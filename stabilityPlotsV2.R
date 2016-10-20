@@ -3,13 +3,16 @@ require(fExtremes)
 require(plyr)
 require(POT) ##install.packages("POT", repos="http://R-Forge.R-project.org") 
 # number of observations
-n = 500000
+n = 100000
 # tail parameter of waiting times
-beta = 0.7
-#constants to scale waiting times into Stable(1) RV
+beta = 0.4
+# scaling constant for "unit" stable under parametrisation pm = 1 below
+sigma = (cos(beta * pi / 2))^(1 / beta)
+# norming sequence
 b.n=n^(-1/beta)
 # times of events:
-TT = cumsum(rstable(n,beta, 1, gamma=1, delta=0, pm=1))*b.n
+TT = cumsum(rstable(n = n, alpha = beta, beta = 1, 
+                    gamma = sigma, delta = 0, pm = 1)) * b.n
 # magnitudes of events (distribution irrelevant)
 JJ = rgev(n, xi = 0.3, mu = 0, beta = 1)
 #Restrict attention to unit interval
@@ -27,12 +30,7 @@ epsMax <- 0.01
 m <- ceiling(epsMax * n)
 # indices of the largest jumps:
 idxJ <- order(JJ, decreasing = T)[1:m]
-# extracts (preceding) durations of the m largest exceedances
-Tell <- function(TT,idxJ,m){
-  m=ceiling(m)
-  thinT <- sort(TT[idxJ[1:m]])
-  diff(c(0,thinT))
-}
+source("extractDurations.R")
 # creates a dataframe with point estimates and confidence intervals
 # of the Mittag-Leffler parameters mu and nu:
 estimates <- ldply(.data = seq(50,m), function(k){
@@ -54,7 +52,7 @@ estimates$eps <- estimates$topk / n
 estimates$truedelta <- (-log(1-estimates$eps))^-(1/beta)*b.n
 #plot estimates of scale parameter delta
 plot(estimates$topk,estimates$delta, type="l",ylab= "delta", xlab = "k", 
-     ylim = c(0,0.0003), main="ML scale parameter")
+     main="ML scale parameter")
 lines(estimates$topk,estimates$deltaH, type="l", lty =2)
 lines(estimates$topk,estimates$deltaL, type="l", lty =2)
 lines(estimates$topk,estimates$truedelta,type="l",lty=3)
@@ -66,7 +64,7 @@ estimates$bKnown<-estimates$delta * (-log(1-estimates$eps))^(1/beta)
 estimates$bKnownH<-estimates$bKnown+(estimates$deltaH-estimates$delta)*(-log(1-estimates$eps))^(1/beta)
 estimates$bKnownL<-estimates$bKnown-(estimates$delta-estimates$deltaL)*(-log(1-estimates$eps))^(1/beta)
 
-plot(estimates$eps, estimates$bKnown, type="l", ylim=c(0,5*b.n), xlab = "eps", ylab = "b(n) (beta known)", main="b(n)")
+plot(estimates$eps, estimates$bKnown, type="l", ylim=c(0,2*b.n), xlab = "eps", ylab = "b(n) (beta known)", main="b(n)")
 lines(estimates$eps,estimates$bKnownH, type="l", lty =2)
 lines(estimates$eps,estimates$bKnownL, type="l", lty =2)
 abline(h = b.n, lty = 3)
@@ -74,7 +72,7 @@ abline(h = b.n, lty = 3)
 ## plot with estimated beta:
 #plot(estimates$eps, estimates$delta * (-log(1-estimates$eps))^(1/estimates$beta), type="l", ylim=c(0,10), xlab = "eps", ylab = "b(n) (beta unknown)", main="b(n)")
 
-plot(estimates$eps, estimates$b, type="l", ylim=c(0,5*b.n), xlab = "eps", ylab = "b(n) (beta unknown)", main="b(n)")
+plot(estimates$eps, estimates$b, type="l", ylim=c(0,2*b.n), xlab = "eps", ylab = "b(n) (beta unknown)", main="b(n)")
 lines(estimates$eps,estimates$bH, type="l", lty =2)
 lines(estimates$eps,estimates$bL, type="l", lty =2)
 abline(h = b.n, lty = 3)
