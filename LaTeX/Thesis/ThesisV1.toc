@@ -3,23 +3,23 @@
 \contentsline {section}{\numberline {2.1}Probability and Measure Theory}{2}{section.2.1}
 \contentsline {section}{\numberline {2.2}Stochastic Processes}{4}{section.2.2}
 \contentsline {section}{\numberline {2.3}Weak Convergence}{5}{section.2.3}
-\contentsline {chapter}{\numberline {Chapter 3}Scaling Limit Theorems}{7}{chapter.3}
+\contentsline {chapter}{\numberline {Chapter 3}Approach without scaling limits}{7}{chapter.3}
 \contentsline {section}{\numberline {3.1}Problem Formulation}{7}{section.3.1}
-\contentsline {section}{\numberline {3.2}Background}{9}{section.3.2}
-\contentsline {section}{\numberline {3.3}Stable Distributions}{12}{section.3.3}
-\contentsline {section}{\numberline {3.4}Scaling Limit of the Sum of Waiting Times}{16}{section.3.4}
-\contentsline {section}{\numberline {3.5}Scaling Limit of the Maximum of Event Magnitudes}{17}{section.3.5}
-\contentsline {section}{\numberline {3.6}Scaling Limit of CTRM}{17}{section.3.6}
-\contentsline {chapter}{\numberline {Chapter 4}Distribution of CTRM}{18}{chapter.4}
-\contentsline {section}{\numberline {4.1}Distribution of Exceedances}{18}{section.4.1}
-\contentsline {section}{\numberline {4.2}Distribution of Exceedance Durations}{18}{section.4.2}
-\contentsline {chapter}{\numberline {Chapter 5}Statistical Inference}{19}{chapter.5}
-\contentsline {section}{\numberline {5.1}Log Moment Estimator for Mittag-Leffler Random Variables}{19}{section.5.1}
-\contentsline {section}{\numberline {5.2}Maximum Likelihood Estimator for Generalised Pareto Random Variables}{19}{section.5.2}
-\contentsline {section}{\numberline {5.3}Stability of Parameter Estimates}{19}{section.5.3}
-\contentsline {section}{\numberline {5.4}Goodness of Fit}{19}{section.5.4}
-\contentsline {chapter}{\numberline {Chapter 6}Model Fitting}{20}{chapter.6}
-\contentsline {section}{\numberline {6.1}Model Fit of Simulated Data}{20}{section.6.1}
-\contentsline {section}{\numberline {6.2}Model Fit of Real Data}{21}{section.6.2}
-\contentsline {chapter}{\numberline {Chapter 7}Conclusion}{22}{chapter.7}
-\contentsline {chapter}{References}{23}{chapter.7}
+\contentsline {section}{\numberline {3.2}Distribution of Exceedances}{9}{section.3.2}
+\contentsline {section}{\numberline {3.3}Distribution of Exceedance Durations}{9}{section.3.3}
+\contentsline {chapter}{\numberline {Chapter 4}Scaling Limit Theorems}{10}{chapter.4}
+\contentsline {section}{\numberline {4.1}Background}{10}{section.4.1}
+\contentsline {section}{\numberline {4.2}Stable Distributions}{13}{section.4.2}
+\contentsline {section}{\numberline {4.3}Scaling Limit of the Sum of Waiting Times}{17}{section.4.3}
+\contentsline {section}{\numberline {4.4}Scaling Limit of the Maximum of Event Magnitudes}{20}{section.4.4}
+\contentsline {section}{\numberline {4.5}Scaling Limit of CTRM}{20}{section.4.5}
+\contentsline {chapter}{\numberline {Chapter 5}Statistical Inference}{21}{chapter.5}
+\contentsline {section}{\numberline {5.1}Log Moment Estimator for Mittag-Leffler Random Variables}{21}{section.5.1}
+\contentsline {section}{\numberline {5.2}Maximum Likelihood Estimator for Generalised Pareto Random Variables}{21}{section.5.2}
+\contentsline {section}{\numberline {5.3}Stability of Parameter Estimates}{21}{section.5.3}
+\contentsline {section}{\numberline {5.4}Goodness of Fit}{21}{section.5.4}
+\contentsline {chapter}{\numberline {Chapter 6}Model Fitting}{22}{chapter.6}
+\contentsline {section}{\numberline {6.1}Model Fit of Simulated Data}{22}{section.6.1}
+\contentsline {section}{\numberline {6.2}Model Fit of Real Data}{24}{section.6.2}
+\contentsline {chapter}{\numberline {Chapter 7}Conclusion}{25}{chapter.7}
+\contentsline {chapter}{References}{26}{chapter.7}

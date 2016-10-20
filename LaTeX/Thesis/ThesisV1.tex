@@ -12,7 +12,7 @@
 %
  
 \documentclass[honours,12pt]{UNSWthesis}
-\linespread{1.2}
+\linespread{1.3}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{amsthm}
@@ -72,7 +72,8 @@
 \newcommand{\Cov}{\mathop{\rm Cov}}
 \newcommand{\Var}{\mathop{\rm Var}}
 \newcommand{\sign}{\mathop{\rm sign}}
-
+\newcommand{\Floor}[1]{{\lfloor {#1} \rfloor}}
+\newcommand{\cd}{\overset{d}{\longrightarrow}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -464,8 +465,7 @@ Let $X_1:\Omega\to E$ be a  random variable with a corresponding probability mea
 \[\PP_{X_1} = \PP_{X_2} \] where $\PP_{X_2}$ is the probability measure of $X_2$. We then write $X_1 \overset{d}{=}X_2$ or $X_1 \sim X_2$.\\
 \end{definition}
 
-\chapter{Scaling Limit Theorems}
-In this chapter we will provide an analysis of some well known scaling limit theorems, eventually arriving at a scaling limit for CTRM. We require these scaling limits before we can develop our statistical inference methods for CTRM.
+\chapter{Approach without scaling limits}
 \section{Problem Formulation}
 In this section we rigorously define our problem as well as establish some preliminary notation that we will use to solve the problem.
 \begin{definition}
@@ -574,7 +574,18 @@ and letting $x \downarrow 0$, one gets $\pr[T_\ell > t]$.
 One checks that $\pr[T_\ell > t, X_\ell > x] = \pr[T_\ell > t] \pr[X_\ell > x]$, implying independence.
 \end{proof}
 The distribution of the exceedance is hence, as expected, simply the
-conditional distribution of a magnitude $J_k$ given $J_k > \ell$. We will look at the distributions of exceedances and exceedance times in further detail in chapter \ref{dist}.
+conditional distribution of a magnitude $J_k$ given $J_k > \ell$. We will look at the distributions of exceedances and exceedance times in further detail in the next few sections.
+\section{Distribution of Exceedances}
+\section{Distribution of Exceedance Durations}
+An Overview of Generalized Gamma Mittag–Leffler Model and
+Its Applications 
+%From Meerschaert we have $T_\ell\sim ML\left(\beta,\frac{b(n)}{(-logF(\ell))^{1/\beta}}\right)$ if we note that the taylor series approximation of $-logF(\ell)$ is $1-F(\ell)$ we have $T_\ell\sim ML\left(\beta,\frac{b(n)}{(1-F(\ell))^{1/\beta}}\right)$. Now as $\ell\to\infty$, $1-F(\ell)\to 0$. Thus $(1-F(\ell))^{1/\beta}\to1-F(\ell)$ and we have $T_\ell\sim ML\left(\beta,\frac{b(n)}{1-F(\ell)}\right)$, which implies that $b(n)=n(t)\in RV(1/\beta)$ which is the asymptotic inverse of $g(t)$ as defined in Anderson.%
+
+
+
+
+\chapter{Scaling Limit Theorems}
+In this chapter we will provide an analysis of some well known scaling limit theorems, eventually arriving at a scaling limit for CTRM. We require these scaling limits before we can develop our statistical inference methods for CTRM.
 \section{Background}\label{s:background}
 A stochastic process limit is the limit of a sequence of stochastic processes. Before we examine the stochastic process limits that we will utilise in this thesis it will be illustrative to analyse one of the most well known examples of a stochastic process limit - Brownian Motion. One of the methods used to derive Brownian motion is devised by trying to seek a continuous time representation of the discrete time random walk. Recall that a discrete time random walk is defined in the following manner.\\
 \begin{definition}
@@ -600,7 +611,8 @@ or more simply, we can consider the step function
 	S_{\lfloor t \rfloor}=U_1+\cdots+U_{\lfloor t \rfloor}  \quad\textrm{for all } t\geq0.
 \end{align}
 
-\textcolor{red}{maybe some graphs here}
+where $\lfloor t \rfloor$ denotes the largest integer not larger than $t$.
+% you have used this symbol earlier!\textcolor{red}{maybe some graphs here}
 As it turns out for large values of $t$ both processes are equivalent, see \cite{Whitt2010} for more details. Although the interpolation function is more intuitive, the step function is easier to work with and so we only utilise the step function from now on. We now add a time scaling constant $c$ and consider 
 \begin{align}\label{fun:scaleStep}
 	S_{\lfloor ct \rfloor}=U_1+\cdots+U_{\lfloor ct \rfloor}  \quad\textrm{for all } t\geq0.
@@ -639,7 +651,7 @@ Suppose $Y\sim Y_k=U_k-\mu$ then
 	&=\hat{f}_{Y}\left(\frac{s}{\sqrt{c\sigma^2}}\right)^{\lfloor ct\rfloor}.
 \end{align}
 
-Given that $(1+(r/n)+o(n^{-1}))^n\to e^r$ as $n\to\infty$ for any $r\in\R$ we then have
+\noindent Given that $(1+(r/n)+o(n^{-1}))^n\to e^r$ as $n\to\infty$ for any $r\in\R$ we then have
 
 \begin{align}
 	\E\left[\exp\left( -is\frac{S_{\lfloor ct\rfloor}-\lfloor ct \rfloor \mu}{\sqrt{c\sigma^2}}    \right)\right]
@@ -652,7 +664,7 @@ Given that $(1+(r/n)+o(n^{-1}))^n\to e^r$ as $n\to\infty$ for any $r\in\R$ we th
 
 We now refer to the L\'{e}vy Continuity Theorem to prove the weak convergence outlined in \ref{eq:BMconv}.\\
 
-\begin{definition}\cite{thebook}
+\begin{definition}\cite{thebook}\label{def:levyContinuity}
 	\textbf{L\'{e}vy Continuity Theorem}. If $X_n,X$ are random variables on $\R$, then $X_n\overset{d}{\longrightarrow}X$ implies that $\hat{f}_{X_n}(s)\to\hat{f}_X(s)$ for each $s\in \R$, uniformly on compact subsets. Conversely, if $X_n$ is a sequence of random variables such that $\hat{f}_{X_n}(s)\to\hat{f}_X(s)$ for each $s\in \R$, and the limit is continuous at $s=0$, then $\hat{f}_X(s)$ is the Fourier transform of some random variable $X$, and $X_n\overset{d}{\longrightarrow}X$.\\
 \end{definition}
 \noindent This theorem essentially states that $X_n\overset{d}{\longrightarrow}X$ if and only if $\hat{f}_{X_n}(s)\to\hat{f}_X(s)$. We previously showed that the limit of the Fourier transform of the rescaled $S_{\lfloor ct\rfloor}$ is $e^{-ts^2/2}$ which is also the Fourier transform of a $N(0,t)$ random variable. Thus we must have the result outlined in \ref{eq:BMconv}.
@@ -688,11 +700,11 @@ Note that other texts refer to what we have just defined as \textbf{sum-stable} 
 
 \noindent As a closed form for the density of a stable random variable cannot be found for all cases we instead choose to specify a stable random variable by its characteristic function.\\
 \begin{definition}\label{def:stableChar}
-Let $X\sim S(\beta,\alpha,\gamma,\delta)$ be a stable random variable. Then the characteristic function $\phi_X(s)=\E[e^{isX}]$ is given by
+Let $X\sim S(\alpha,\beta,\sigma,\mu)$ be a stable random variable. Then the characteristic function $\phi_X(s)=\E[e^{isX}]$ is given by
 \begin{align}
 	\phi_X(s)=\begin{cases}
-			\exp\left(-\gamma^\beta \; |s|^\beta \; [1-i\alpha \sign(s)\tan(\frac{\pi\beta}{2})]+i\delta s\right) &\beta\neq1\\
-			\exp\left(-\gamma \; |s| \; [1+i\alpha \sign(s)\frac{2}{\pi}\log(s)]+i\delta s\right) &\beta=1.
+			\exp\left(-\sigma^\alpha \; |s|^\alpha \; [1-i\beta \sign(s)\tan(\frac{\pi\alpha}{2})]+i\mu s\right) &\alpha\neq1\\
+			\exp\left(-\sigma \; |s| \; [1+i\beta \sign(s)\frac{2}{\pi}\log(s)]+i\mu s\right) &\alpha=1.
 			\end{cases} 
 \end{align}\\
 \end{definition}
@@ -716,7 +728,7 @@ but we use \cite[Def~1.1.6]{Samorodnitsky1994}. Definition \ref{def:stableChar} 
 % parameter gamma which is not equal to 1, see "simulateML.Rmd"!
 \end{itemize}
 
-\noindent To check that the mean is infinite when $\beta \in (0,1)$ we first see from \cite{JanickiWeron1994}\textcolor{red}{check parameterisation} that if a Central Limit Theorem type argument is used we have
+\noindent To check that the mean is infinite when $\beta \in (0,1)$ we first see from \cite{JanickiWeron1994} that if a Central Limit Theorem type argument is used we have
 \begin{align}
 \lim_{x\to\infty} x^\beta\PP(X>x)=C_\beta\frac{1+\alpha}{2}\gamma^\beta,\\
 \lim_{x\to\infty} x^\beta\PP(X<-x)=C_\beta\frac{1-\alpha}{2}\gamma^\beta,
@@ -741,21 +753,20 @@ where $\bar{X}_n=(\sum^n_{i=1}X_i)/n$. Rewriting the above to match the notation
 \]
 where $a_n=\sqrt{n}\sigma/\mu$ and $b_n=\sigma\sqrt{n}.$\\
 
-\noindent The Generalised Central Limit Theorem generalises the Central Limit theorem by dropping the assumption that the variance, or even the mean, is finite.\\
+\noindent The Generalised Central Limit Theorem generalises the Central Limit Theorem by dropping the assumption that the variance, or even the mean, is finite. This theorem is important to us as we are assuming our waiting times $W_k$ have an infinite mean.\\
 
-\begin{theorem}% CITATION!
+\begin{theorem}\cite{Nolan2015}% CITATION!
 % Also, this is not really the GCLT, it's more a possible definition of a 
 % sum-stable random variable
-\textbf{Generalised Central Limit Theorem} Let $\{X_i\}_{1\leq i \leq n}$ be an i.i.d. sequence of random variables. There exists constants $a_n>0, b_n \in \R$ and a nondegenerate random variable Z with 
+\textbf{Generalised Central Limit Theorem} A nondegenerate random variable Z is sum-stable if and only if there is an i.i.d. sequence of random variables $\{X_i\}_{1\leq i \leq n}$  and constants $a_n>0, b_n \in \R$ with 
 \[
-	\frac{\sum^n_{i=1}X_i-a_n}{b_n} \overset{d}{\longrightarrow}Z
+	\frac{\sum^n_{i=1}X_i-a_n}{b_n} \overset{d}{\longrightarrow}Z.
 \]
-if and only if Z is a sum-stable random variable.\\
 \end{theorem}
 
-\noindent The Generalised Central Limit theorem is so useful as it allows us to find the limiting distribution of rescaled random variables with undefined moments. This means we can apply our theorem to our inter-arrival waiting times $W_k$ with infinite means. As discussed in Section \ref{s:background} finding the limiting distribution is a prerequisite for finding any stochastic process limit. The Generalised Central Limit Theorem also naturally leads to the following definition.\\
+\noindent The Generalised Central Limit Theorem implies that the only possible non-trivial limit of the normalised sum of our waiting times is sum-stable. If a limit exists we can then extend this limit to stochastic process convergence as in \ref{s:background}. The theorem also naturally leads to the following definition.\\
 
-\begin{definition}\cite{Nolan2015}
+\begin{definition}\cite{Nolan2015}\label{def:DOA}
 	A random variable X is in the \textbf{domain of attraction} of Z if there exists constants $a_n>0,b_n\in\R$ with
 	\[
 		\frac{\sum^n_{i=1}X_i-a_n}{b_n} \overset{d}{\longrightarrow}Z,
@@ -763,33 +774,89 @@ if and only if Z is a sum-stable random variable.\\
 	where $X, X_1, X_2, X_3, \ldots$ are i.i.d. We then say $X\in DOA(Z)$.\\
 \end{definition}
 
-\noindent The above definition will be useful in the next section where we present a stochastic process limit for the the sum of our inter-arrival waiting times.\\
-\section{Scaling Limit of the Sum of Waiting Times}
+\noindent The above definition will be useful in section \ref{s:waitingTimes} where we present a stochastic process limit for the the sum of our inter-arrival waiting times.\\
+
+\section{Scaling Limit of the Sum of Waiting Times}\label{s:waitingTimes}
 %By the stable central limit theorem, it is well known that for a large 
 %number of observation pairs $(J_k,W_k)$, 
 %%the maximum of $J_k$
 %%approaches a max-stable (GEV) distribution \cite{ColesBook}, whereas 
 %the distribution of the sum of $W_k$ approaches 
-%a sum-stable distribution \cite{MeerschaertSikorskii}.  
-As mentioned in the previous section, we assume a heavy-tailed distribution 
-for the waiting times, more precisely that the tail function 
-$\overline F_W := 1 - F_W$ of the CDF of $W$ is regularly varying:
+%a sum-stable distribution \cite{MeerschaertSikorskii}. 
+
+In order to introduce the necessary and sufficient conditions for the Generalised Central Theorem to hold we must first define the concept of regular variation.
+\begin{definition}\label{def:RV}
+	Suppose that $R:[A,\infty)\to(o,\infty)$ is Borel measurable, for some $A>0$. We say that R(x) \textbf{varies regularly} or is \textbf{regularly varying} with index $\rho$, and we write $R\in RV(\rho)$, if
+	\begin{align*}
+	\lim_{x\to\infty}\frac{R(\lambda x)}{R(x)}=\lambda^\rho, 
+	\end{align*}
+	for all $\lambda>0.$ If $\rho=0$ we then say $R(x)$ is \textbf{slowly varying} or \textbf{varies slowly}.\\
+\end{definition}
+\begin{remark}
+	It is easy to see that every regularly varying function R of index $\rho$ has representation
+	\[
+		R(x)=x^\rho L(x)
+	\]
+	where L is some slowly varying function.\\
+\end{remark}
+Now we can state the extended limit theorem which provides us with a useful criterion that ensures the sum of our waiting times converges to a nondegenerate random variable.
+\begin{theorem}\label{th:ECLT}\cite[Th.~4.5]{MeerschaertSikorskii2012}
+	\textbf{Extended Central Limit Theorem} If Z is sum-stable with index $0<\alpha<2$, then $X\in DOA(Z)$ if and only if $\PP[|X|>x]$ is regularly varying with index $-\alpha$ and
+	\begin{align}\label{eq:tailCondition}
+			\lim_{x\to\infty}\frac{\PP[X>x]}{\PP[|X|>x]}=p\quad\textrm{for some }0\leq p\leq1.
+	\end{align}
+\end{theorem}
+\noindent Thus the Extended Central Limit Theorem in conjunction with Definition \ref{def:DOA} tells us that the normalized sum of random variables with an infinite mean will converge in distribution to a nondegenerate random variable as long as the condition outlined in \ref{eq:tailCondition} holds and the tail is regularly varying.
+
+As our waiting times $W_k$ are strictly greater than zero, they are completely right skewed and condition \ref{eq:tailCondition} always holds. So if we assume a heavy-tailed distribution for the waiting times such that the tail function 
+$\overline F_W := 1 - F_W$ of the CDF of $W$ is regularly varying, i.e.
 \begin{align}
-t \mapsto \overline F_W(t) \in RV(-\beta), \quad \beta \in (0,1)
+t \mapsto \overline F_W(x) \in RV(-\alpha), \quad \alpha \in (0,1)
 \end{align}
-meaning that \cite{seneta,thebook}
+meaning that \cite{seneta,thebook},\ref{def:RV}
 \begin{align*}
-\lim_{t \to \infty}\frac{\overline F_W(\lambda t)}{\overline F_W(t)}
-= \lambda^{-\beta}, \quad \lambda > 0.
+\lim_{x \to \infty}\frac{\overline F_W(\lambda x)}{\overline F_W(x)}
+= \lambda^{-\alpha}, \quad \lambda > 0.
 \end{align*}
-By \cite[Cor.~8.2.19]{thebook} (also compare \cite[Th.~4.5.1]{Whitt2010}), 
-% actually, this result is due to the GCLT! Ask me for a reference. 
-this is equivalent to $W_1$ being in the 
+Then by Theorem \ref{th:ECLT}
+this is equivalent to $W_k$ being in the 
 (sum-) domain of attraction of a positively skewed stable law $D$ with 
-stability parameter $\beta$, which means the weak convergence
+stability parameter $\alpha$, which means the weak convergence \textcolor{red}{need reference for why a(n)=0}
 \begin{align}
-b(n)(W_1 + \ldots + W_n) \Rightarrow D, \quad n \to \infty.
+\frac{W_1 + \ldots + W_n}{b(n)} \overset{d}{\longrightarrow} D, \quad n \to \infty.
 \end{align}
+
+\noindent In fact if we specify $W_k$ such that $\overline F_W(x)=cx^{-\alpha}$ for some $c>0$, for all $x>c^{1/\alpha}$ and $0<\alpha<1$. Then $\overline F_W(x)$ is clearly regularly varying with index $-\alpha$ and by \cite[Th~3.39]{MeerschaertSikorskii2012} we have the more specific result
+
+\begin{align}\label{eq:paretoConv}
+	\frac{W_1 + \ldots + W_n}{n^{1/\alpha}} \overset{d}{\longrightarrow} Y, \quad n \to \infty.
+\end{align}
+\noindent where $Y$ is stably distributed and has the characteristic function
+\begin{align}\label{eq:Ycharacteristic}
+	\phi_Y(s)=\E[e^{isY}]=\exp[-c\Gamma(1-\alpha)(-is)^\alpha]
+\end{align}
+\noindent where $\Gamma(x)$ is the gamma function. Now that the convergence for the sum of our waiting times has been established, in a manner similar to how we arrived at the stochastic process limit of a discrete random walk (\ref{eq:BMconv}), we can extend this result to a stochastic process limit.
+\begin{theorem}\cite[Th~3.41]{MeerschaertSikorskii2012}
+Suppose $W_k$ are i.i.d. such that $\overline F_W(x)=cx^{-\alpha}$ for some $c>0$, for all $x>c^{1/\alpha}$ and $0<\alpha<1$. Then
+\begin{align}\label{eq:partialParetoSum}
+	n^{-1/\alpha}\sum\limits^\Floor{nt}_{j=1} W_j \cd Z(t)
+\end{align}
+for all $t>0$, where
+\begin{align}
+	\phi_{Z_t}(s)=\E[e^{isZ_t}]=\exp[-ct\Gamma(1-\alpha)(-is)^\alpha],
+\end{align}
+writing $Z(t):=Z_t$.
+\end{theorem} 
+\begin{proof}
+From \cite[Th~3.39]{MeerschaertSikorskii2012} and \ref{eq:paretoConv} we have $n^{-1/\alpha}(W_1 + \ldots + W_n) \overset{d}{\longrightarrow} Y$ as $n \to \infty$, and the limit $Y$ has characteristic function $\phi_Y(s)$ defined in \ref{eq:Ycharacteristic}. Let $\phi_{W_n}(s)=\E[\exp(n^{-1/\alpha}W_1)]$ be the characteristic function of a scaled waiting time. By L\'{e}vy's Continuity Theorem (\ref{def:levyContinuity}) we have that $\phi_{W_n}(s)^n\to \phi_Y(s)$. The properties of a characteristic function then tell us that the characteristic function of the scaled partial sum $n^{-1/\alpha}\sum\limits^\Floor{nt}_{j=1} W_j$ is
+\[
+	\phi_{W_n}(s)^\Floor{nt}=\left(\phi_{W_n}(s)^n\right)^\frac{\Floor{nt}}{n}\to\phi_Y(s)^t,\quad n \to\infty
+\]
+for any $t>0$ because $\frac{\Floor{nt}}{n}\to t$ as $n\to\infty$. Once again by L\'{e}vy's Continuity Theorem we have that the limit $Z_t$ has characteristic function
+\[
+	\phi_{Z_t}(s)=\phi_Y(s)^t=\exp[-ct\Gamma(1-\alpha)(-is)^\alpha].
+\]
+\end{proof}
 The i.i.d.\ nature of the $W_k$ allows for a more general, functional limit
 theorem \cite[Ex.~11.2.18]{thebook}, \cite[Th.~4.5.3]{Whitt2010}:
 \begin{align}
@@ -800,9 +867,7 @@ where $\{D(r)\}_{t \ge 0}$ is a stable subordinator, defined via
 \begin{align}
 \ex[e^{-\lambda D(r)}] = e^{-r \lambda^\beta},
 \end{align}
-where $\lfloor r \rfloor$ denotes the largest integer not larger than $r$,
-% you have used this symbol earlier!
-and where convergence holds on the stochastic process level, i.e.\ in the sense
+where convergence holds on the stochastic process level, i.e.\ in the sense
 of weak convergence in Skorokhod space endowed with the $J_1$ topology
 \cite[Sec.~3.3]{Whitt2010}. 
 % this type of convergence might be worth explaining in a separate paragraph,
@@ -863,13 +928,6 @@ to the CTRW, since essentially the jumps $J_k$ are reinterpreted as
 magnitudes, and instead of the cumulative sum, one tracks the cumulative 
 maximum. Similarly tractable scaling properties apply to the CTRM, see below.
 For the above reasons, we use the name CTRM in this article.
-
-\chapter{Distribution of CTRM}\label{dist}
-\section{Distribution of Exceedances}
-\section{Distribution of Exceedance Durations}
-An Overview of Generalized Gamma Mittag–Leffler Model and
-Its Applications 
-%From Meerschaert we have $T_\ell\sim ML\left(\beta,\frac{b(n)}{(-logF(\ell))^{1/\beta}}\right)$ if we note that the taylor series approximation of $-logF(\ell)$ is $1-F(\ell)$ we have $T_\ell\sim ML\left(\beta,\frac{b(n)}{(1-F(\ell))^{1/\beta}}\right)$. Now as $\ell\to\infty$, $1-F(\ell)\to 0$. Thus $(1-F(\ell))^{1/\beta}\to1-F(\ell)$ and we have $T_\ell\sim ML\left(\beta,\frac{b(n)}{1-F(\ell)}\right)$, which implies that $b(n)=n(t)\in RV(1/\beta)$ which is the asymptotic inverse of $g(t)$ as defined in Anderson.%
 
 \chapter{Statistical Inference}
 \section{Log Moment Estimator for Mittag-Leffler Random Variables}
