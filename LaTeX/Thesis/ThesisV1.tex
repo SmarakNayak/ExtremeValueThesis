@@ -524,6 +524,7 @@ These quantities are chosen as it is natural to be concerned with both the size 
 \begin{lemma}
 Given a level $\ell \in [x_0,x_F]$, exceedance $X_\ell$ and exceedance time
 $T_\ell$ are independent. Moreover, 
+% might want to leave out the formula for P(T_\ell > t)
 \begin{align*}
 \pr[X_\ell > x]
 &= \frac{\overline F_J(\ell + x)}{\overline F_J(\ell)}, \quad x > 0,
@@ -651,14 +652,29 @@ Given that $(1+(r/n)+o(n^{-1}))^n\to e^r$ as $n\to\infty$ for any $r\in\R$ we th
 
 We now refer to the L\'{e}vy Continuity Theorem to prove the weak convergence outlined in \ref{eq:BMconv}.\\
 
-\begin{theorem}\cite{thebook}
+\begin{definition}\cite{thebook}
 	\textbf{L\'{e}vy Continuity Theorem}. If $X_n,X$ are random variables on $\R$, then $X_n\overset{d}{\longrightarrow}X$ implies that $\hat{f}_{X_n}(s)\to\hat{f}_X(s)$ for each $s\in \R$, uniformly on compact subsets. Conversely, if $X_n$ is a sequence of random variables such that $\hat{f}_{X_n}(s)\to\hat{f}_X(s)$ for each $s\in \R$, and the limit is continuous at $s=0$, then $\hat{f}_X(s)$ is the Fourier transform of some random variable $X$, and $X_n\overset{d}{\longrightarrow}X$.\\
-\end{theorem}
+\end{definition}
 \noindent This theorem essentially states that $X_n\overset{d}{\longrightarrow}X$ if and only if $\hat{f}_{X_n}(s)\to\hat{f}_X(s)$. We previously showed that the limit of the Fourier transform of the rescaled $S_{\lfloor ct\rfloor}$ is $e^{-ts^2/2}$ which is also the Fourier transform of a $N(0,t)$ random variable. Thus we must have the result outlined in \ref{eq:BMconv}.
+
+% You have basically reproven the Central Limit Theorem. The proof of result
+% (3.2.5) is a one-liner following from (3.2.1): 
+
+\begin{align*}
+\frac{S_{\lfloor ct \rfloor} - \lfloor ct \rfloor\mu}{\sqrt{c \sigma^2}}
+= \frac{\sqrt{\lfloor ct \rfloor}}{\sqrt{\lfloor ct \rfloor}}
+\frac{S_{\lfloor ct \rfloor} - \lfloor ct \rfloor\mu}{\sqrt{c \sigma^2}}
+\to \sqrt t B_1 \stackrel{d}{=} B_ts
+\end{align*}
+by (3.2.1). 
+
+% I would leave out the proof of the central limit theorem. 
 
 Now that we have shown how one can derive Brownian Motion as a stochastic process limit of the rescaled $S_{\lfloor ct\rfloor}$, the stochastic process limits presented in later sections will be more accessible.
 \section{Stable Distributions}
-In order for our inter-arrival waiting times $W_k$ to be modelled correctly they should be heavy tailed and completely right skewed so as not to violate our initial bursty assumption. Stable distributions are an extensive class of probability distributions that allow for both skew and heavy tails and are thus a perfect distribution to describe our waiting times with. As we will find out later in this section they also have many useful properties. The class was first defined by Paul L\'{e}vy in the early 20th century but was under utilised due to the lack of closed formulas for densities and distribution functions for all but a few stable distributions (Gaussian, Cauchy and L\'{e}vy). However its use has increased since advances in computing methods \textcolor{red}{expand} now allow for the computation of stable densities, distribution functions and quantiles.\\
+In order for our inter-arrival waiting times $W_k$ to be modelled correctly they should be heavy tailed and completely right skewed so as not to violate our initial bursty assumption.
+% what bursty assumption?
+Stable distributions are an extensive class of probability distributions that allow for both skew and heavy tails and are thus a perfect distribution to describe our waiting times with. As we will find out later in this section they also have many useful properties. The class was first defined by Paul L\'{e}vy in the early 20th century but was under utilised due to the lack of closed formulas for densities and distribution functions for all but a few stable distributions (Gaussian, Cauchy and L\'{e}vy). However its use has increased since advances in computing methods \textcolor{red}{expand} now allow for the computation of stable densities, distribution functions and quantiles.\\
 \begin{definition}\cite{Nolan2015}
 A random variable X is \textbf{sum-stable} if for $X_1$ and $X_2$ independent copies of X and any positive constants a and b we have
 \[
@@ -681,11 +697,13 @@ Let $X\sim S(\beta,\alpha,\gamma,\delta)$ be a stable random variable. Then the 
 \end{align}\\
 \end{definition}
 
-\noindent There are over half a dozen parameterisations of a stable random variable but the well informed reader will note that the parameterisation we use is consistent with \cite{MeerschaertStoev08} \& \cite{Samorodnitsky1994}. Definition \ref{def:stableChar} then implies that a stable distribution possesses four different parameters:
+\noindent There are over half a dozen parameterisations of a stable random variable, 
+but we use \cite[Def~1.1.6]{Samorodnitsky1994}. Definition \ref{def:stableChar} then implies that a stable distribution possesses four different parameters:
 \begin{itemize}
 	\item An index of stability $\beta \in (0,2]$ which determines heavy tailedness 
 	\item A skewness parameter $\alpha \in [-1,1]$
-	\item A scale parameter $\gamma\geq0$
+% swapping around alpha and beta confuses me... stability should be alpha
+	\item A scale parameter $\gamma > 0$
 	\item A location parameter $\delta \in \R$\\
 \end{itemize}
 
@@ -694,6 +712,8 @@ Let $X\sim S(\beta,\alpha,\gamma,\delta)$ be a stable random variable. Then the 
 	\item Index of stability $\beta \in (0,1)$ to ensure heavy tailedness
 	\item Skewness parameter $\alpha=1$ to ensure a right skewed distribution
 	\item Standard scale parameter $\gamma=1$ and standard location parameter $\delta=0$\\
+% "Standard" in terms of Laplace transform means we have to take a scale
+% parameter gamma which is not equal to 1, see "simulateML.Rmd"!
 \end{itemize}
 
 \noindent To check that the mean is infinite when $\beta \in (0,1)$ we first see from \cite{JanickiWeron1994}\textcolor{red}{check parameterisation} that if a Central Limit Theorem type argument is used we have
@@ -721,14 +741,16 @@ where $\bar{X}_n=(\sum^n_{i=1}X_i)/n$. Rewriting the above to match the notation
 \]
 where $a_n=\sqrt{n}\sigma/\mu$ and $b_n=\sigma\sqrt{n}.$\\
 
-\noindent The Generalised Central Limit Theorem generalises the Central Limit theorem by dropping the assumption that the variance is finite.\\
+\noindent The Generalised Central Limit Theorem generalises the Central Limit theorem by dropping the assumption that the variance, or even the mean, is finite.\\
 
-\begin{theorem}
+\begin{theorem}% CITATION!
+% Also, this is not really the GCLT, it's more a possible definition of a 
+% sum-stable random variable
 \textbf{Generalised Central Limit Theorem} Let $\{X_i\}_{1\leq i \leq n}$ be an i.i.d. sequence of random variables. There exists constants $a_n>0, b_n \in \R$ and a nondegenerate random variable Z with 
 \[
 	\frac{\sum^n_{i=1}X_i-a_n}{b_n} \overset{d}{\longrightarrow}Z
 \]
-if and only if Z is a stable random variable.\\
+if and only if Z is a sum-stable random variable.\\
 \end{theorem}
 
 \noindent The Generalised Central Limit theorem is so useful as it allows us to find the limiting distribution of rescaled random variables with undefined moments. This means we can apply our theorem to our inter-arrival waiting times $W_k$ with infinite means. As discussed in Section \ref{s:background} finding the limiting distribution is a prerequisite for finding any stochastic process limit. The Generalised Central Limit Theorem also naturally leads to the following definition.\\
@@ -738,7 +760,7 @@ if and only if Z is a stable random variable.\\
 	\[
 		\frac{\sum^n_{i=1}X_i-a_n}{b_n} \overset{d}{\longrightarrow}Z,
 	\]
-	where $X_1,X_2,X_3,...$ are independent identically distributed copies of X. We then say $X\in DOA(Z)$.\\
+	where $X, X_1, X_2, X_3, \ldots$ are i.i.d. We then say $X\in DOA(Z)$.\\
 \end{definition}
 
 \noindent The above definition will be useful in the next section where we present a stochastic process limit for the the sum of our inter-arrival waiting times.\\
@@ -758,9 +780,11 @@ t \mapsto \overline F_W(t) \in RV(-\beta), \quad \beta \in (0,1)
 meaning that \cite{seneta,thebook}
 \begin{align*}
 \lim_{t \to \infty}\frac{\overline F_W(\lambda t)}{\overline F_W(t)}
-= \lambda^{-\beta}.
+= \lambda^{-\beta}, \quad \lambda > 0.
 \end{align*}
-By \cite[Cor.~8.2.19]{thebook} (also compare \cite[Th.~4.5.1]{Whitt2010}), this is equivalent to $W_1$ being in the 
+By \cite[Cor.~8.2.19]{thebook} (also compare \cite[Th.~4.5.1]{Whitt2010}), 
+% actually, this result is due to the GCLT! Ask me for a reference. 
+this is equivalent to $W_1$ being in the 
 (sum-) domain of attraction of a positively skewed stable law $D$ with 
 stability parameter $\beta$, which means the weak convergence
 \begin{align}
@@ -777,13 +801,17 @@ where $\{D(r)\}_{t \ge 0}$ is a stable subordinator, defined via
 \ex[e^{-\lambda D(r)}] = e^{-r \lambda^\beta},
 \end{align}
 where $\lfloor r \rfloor$ denotes the largest integer not larger than $r$,
+% you have used this symbol earlier!
 and where convergence holds on the stochastic process level, i.e.\ in the sense
 of weak convergence in Skorokhod space endowed with the $J_1$ topology
 \cite[Sec.~3.3]{Whitt2010}. 
+% this type of convergence might be worth explaining in a separate paragraph,
+% maybe instead your derivation of the CLT above with Fourier transforms.
 
 The renewal process paths $N(t)$ result, up to a constant, from
 inverting the non-decreasing sample paths of the sum
 $r \mapsto W_1 + \ldots + W_{\lfloor r \rfloor}$.
+% Inverting... how? 
 Accordingly, the scaling limit of the renewal process is \cite{limitCTRW} 
 \begin{align}
 N(ct) / \tilde b(c) \Rightarrow E(t), \quad c \to \infty
@@ -797,6 +825,8 @@ of \cite[p.20]{seneta}:
 \begin{align}
 1/b(\tilde b(c)) \sim c \sim \tilde b(1/b(c))
 \end{align}
+% I think it would be less confusing if _all_ norming sequences, i.e.
+% b(c), \tilde b(c), a(c) and d(c) would be increasing to \infty as c \to \infty!
 where a $\sim$ symbol indicates that the quotient of both sides converges to
 $1$ as $c \to \infty$. 
 Note that $\tilde b(c) \in RV(\beta)$. 
@@ -848,17 +878,24 @@ Its Applications
 \section{Goodness of Fit}%%If there is time
 We will test Goodness of Fit as Mainardi et al with the reduced chi squared test
 \chapter{Model Fitting}
-The accuracy of the Mittag-Leffler log moment estimator and the Generalised Pareto MLE has been established in \cite{Cahoy2013} and \cite{GPaccuracyCitation} respectively. However it is yet to be confirmed that these estimation methods work for exceedances and exceedance durations. Thus before we apply our inference methods to actual data, we will check that we can correctly estimate the theoretical Mittag-Leffler and Generalised Pareto parameters derived from a simulated bursty process. If we are able to accurately estimate these parameters we can then proceed to apply the estimation methods to actual data, confident in knowing that the actual parameters will be estimated.
+The accuracy of the Mittag-Leffler log moment estimator and the Generalised Pareto MLE has been studied 
+% not very great properties... e.g. not unbiased. MLE is probably better
+in \cite{Cahoy2013} and \cite{GPaccuracyCitation} respectively. However it is yet to be confirmed that these estimation methods work for exceedances and exceedance durations. Thus before we apply our inference methods to actual data, we will check that we can correctly estimate the theoretical Mittag-Leffler and Generalised Pareto parameters derived from a simulated bursty process. If we are able to accurately estimate these parameters we can then proceed to apply the estimation methods to actual data, confident in knowing that the actual parameters will be estimated.
 
 \section{Model Fit of Simulated Data}
 We assume $n$ i.i.d. waiting times are drawn from the positively skewed stable
 distribution with stability parameter $\beta=0.8$, scaled with 
 $n^{-1/\beta}$ to ensure convergence to a stable subordinator. This defines a renewal process, at whose renewal times we assume $n$ i.i.d. magnitudes are drawn from a Generalized Extreme Value Distribution
 with shape parameter $\xi = 0.7$.
+% the distribution of magnitudes is irrelevant, and we have just picked something
+% for the sake of concreteness.
 	
 	\begin{figure}[H]
         \centering
         \caption{A simulated bursty process}
+% GENERAL REMARK: It's more accurate to call this process a max-renewal
+% process (with heavy-tailed waiting times). Bursty process could also be a
+% Hawkes process. You might want to update the title as well... happy to discuss.
         %\includegraphics[width=\textwidth]{Figures/unitCTRMprocessNoTitle.png}
         \includegraphics[scale=0.45]{Figures/unitCTRMprocessNoTitle.png}
         %\label{fig:my_label}
