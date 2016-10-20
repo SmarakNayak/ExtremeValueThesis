@@ -7,7 +7,7 @@
 \contentsline {section}{\numberline {3.1}Problem Formulation}{7}{section.3.1}
 \contentsline {section}{\numberline {3.2}Background}{9}{section.3.2}
 \contentsline {section}{\numberline {3.3}Stable Distributions}{12}{section.3.3}
-\contentsline {section}{\numberline {3.4}Scaling Limit of the Sum of Waiting Times}{15}{section.3.4}
+\contentsline {section}{\numberline {3.4}Scaling Limit of the Sum of Waiting Times}{16}{section.3.4}
 \contentsline {section}{\numberline {3.5}Scaling Limit of the Maximum of Event Magnitudes}{17}{section.3.5}
 \contentsline {section}{\numberline {3.6}Scaling Limit of CTRM}{17}{section.3.6}
 \contentsline {chapter}{\numberline {Chapter 4}Distribution of CTRM}{18}{chapter.4}
