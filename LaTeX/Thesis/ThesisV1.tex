@@ -74,6 +74,7 @@
 \newcommand{\sign}{\mathop{\rm sign}}
 \newcommand{\Floor}[1]{{\lfloor {#1} \rfloor}}
 \newcommand{\cd}{\overset{d}{\longrightarrow}}
+\newcommand{\D}{\mathbb{D}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -367,9 +368,9 @@ Let $\mu$ be a measure defined on the measurable space $(\Omega,\FF)$. We call t
 \end{definition}
 {\noindent}A useful result of Dirac measures is the identity
 \[
-\int \delta_x(dy) f(y) = f(x).
+\int f(y)\delta_x(dy) = f(x).
 \]
-The Dirac measure can be thought of as the indicator function. Another example of a measure is the Lebesgue measure, which is the standard measure on the Euclidean space $\R^d$. The rigorous definition of a Lebesgue measure is fairly analytical and is omitted. The Lebesgue measure is essentially an extension of the standard notions of length, area and volume to $d$-dimensional Euclidean spaces.\\
+The Dirac measure extends the concept of indicator functions to sets. Another example of a measure is the Lebesgue measure, which is the standard measure on the Euclidean space $\R^d$. The rigorous definition of a Lebesgue measure is fairly analytical and is omitted. The Lebesgue measure is essentially an extension of the standard notions of length, area and volume to $d$-dimensional Euclidean spaces.\\
 
 
 \begin{definition}
@@ -403,7 +404,14 @@ A stochastic process $\{X(t)\}_{t\geq 0}$ has a \textbf{jump} at time t if the p
 \end{definition}
 
 \begin{definition}
-A stochastic process $\{X(t)\}_{t\geq 0}$ is c\'{a}dl\'{a}g (derived from the French term "continue à droite, limite à gauche") if it has right continuous paths with left hand limits. i.e	$X_-(t)$ exists and $X_+(t)$ exists and is equal to $X(t)$.\\
+A stochastic process $\{X(t)\}_{t\geq 0}$ is \textbf{c\`{a}dl\`{a}g} (derived from the French term "continue \`{a} droite, limite \`{a} gauche") if it is continuous from the right
+\[
+	\lim_{\epsilon\to0+}X(t+\epsilon)=X(t),
+\]
+with left hand limits
+\[
+	\lim_{\epsilon\to0+}X(t-\epsilon)=X(t-).
+\]
 \end{definition}
 
 \begin{definition}
@@ -457,12 +465,71 @@ for all continuous and bounded real-valued functions $f$ on $\Omega$. We then wr
 
 \begin{definition}
 Let $X_n:\Omega\to E$ be a sequence of random variables with a corresponding sequence of probability measures $\{\PP_{X_n}\}_{n\geq 1}$ on the measurable space $(\Omega, \FF)$. Then $\{X_n\}_{n\geq 1}$ \textbf{converges in distribution} to a random variable $X:\Omega\to E$ if 
-\[\PP_{X_n} \to \PP_X \] where $\PP_X$ is the probability measure of X. We then write $X_n \overset{d}{\to}X.$\\
+\[
+\PP_{X_n} \to \PP_X
+\] where $\PP_X$ is the probability measure of X. We then write $X_n \overset{d}{\to}X.$\\
 \end{definition}
 
 \begin{definition}\label{def:equalDist}
 Let $X_1:\Omega\to E$ be a  random variable with a corresponding probability measure $\PP_{X_1}$ on the measurable space $(\Omega, \FF)$. Then $X_1$ is \textbf{equal in distribution} to a random variable $X_2:\Omega\to E$ if 
 \[\PP_{X_1} = \PP_{X_2} \] where $\PP_{X_2}$ is the probability measure of $X_2$. We then write $X_1 \overset{d}{=}X_2$ or $X_1 \sim X_2$.\\
+\end{definition}
+
+\section{The Skorokhod Space}
+The stochastic processes we will be discussing in this thesis will not necessarily be continuous as they may contain jumps. Thus it is necessary to consider the Skorokhod space, which is the space of such processes, and its associated theory in order to examine the convergence of stochastic processes with jumps.
+\begin{definition}
+	The \textbf{Skorokhod Space} $\D(\mathcal{I},\R^d)$ is the space of all $\R^d$-valued c\`{a}dl\`{a}g functions defined on a subinterval $\mathcal{I}$ of the real line.
+\end{definition}
+
+In order to properly discuss convergence in the Skorokhod space we will assign it a metric. Let us first consider the simplest case of the Skorokhod space, $\D([0,1],\R)$, and two functions $f_1(t)$ and $f_2(t)$ which have jumps of size one at $t=1/2$ and $t=1/2+\epsilon$ respectively, but are identical otherwise. If we consider the limit as $\epsilon\to0$, the traditional uniform metric $||x_1-x_2||$ defined in terms of the uniform norm $||x||:=\sup_{0\leq t\leq1}\{|x(t)|\}$ will always equal one. Despite the two functions becoming more similar as $\epsilon$ gets closer to zero the metric gives no indication of the increased similarity between the two functions. The uniform metric essentially allows for functions with small differences in space to be considered close but not small differences in timing. This shortcoming of the uniform metric in the Skorokhod space motivates the use of the $J_1$ metric.
+\begin{definition}
+	Let $\Lambda$ be the set of strictly increasing functions $\lambda$ mapping the domain $[0,1]$ onto itself, such that both $\lambda$ and its inverse $\lambda^{-1}$ are continuous. Furthermore, let $\lambda(0)=0$ and $\lambda(1)=1$. Then, for $x_1,x_2\in\D$, the standard \textbf{$\boldsymbol{J_1}$ metric} on $\D([0,1],\R)$ is 
+	\begin{align*}
+		d_{J_1}(x_1,x_2):=\inf_{\lambda \in \Lambda}\{||x_1 \circ \lambda -x_2||\vee||\lambda - e|| \}
+	\end{align*}
+	where e is the identity map on $[0,1]$.
+\end{definition}
+\noindent Intuitively $\Lambda$ is the set of all the possible time distortions, thus $x_1(\lambda(t))$ can be thought of the function $x_1$ after a distortion of time. Using this intuition $||x_1 \circ \lambda -x_2||$ measures the difference between two functions after one has been distorted by $\lambda$ and $||\lambda - e||$ measures the size of the time distortion. Convergence is then achieved if both norms tend to zero.
+
+ In the context of our earlier example regarding $f_1(t)$ and $f_2(t)$ it is clear that $f_2(t)$ requires only an infinitesimally small distortion of time as $\epsilon\to0$ in order for it to become identical to $f_1(t)$. Thus $f_2(t)\to f_1(t)$ as $\epsilon\to0$ if we are equipped with the $J_1$ metric. It should now be easy to see that the $J_1$ metric allows for functions with both small differences in space and small differences in timing to be considered close.
+
+For the rest of this thesis, we will always assume that the domain is the interval
+$[0,\infty)$ and the range is $\R$ as the stochastic process we are concerned with are in this form. Thus we will simply write $\D$ to be the Skorokhod space of $\R$ valued functions defined on $\Rp$.
+\textcolor{red}{do i need to talk about the equivalent metric which makes $\D$ complete}
+\section{Central Limit Theorems}
+In the classical setting the Central Limit Theorem refers to the convergence of a sum of independent and identically distributed (i.i.d.) random variables with finite second moments towards a normal distribution. However in this thesis we will be operating in a more general setting and it is thus imperative that we define the terminology we will use throughout this thesis to avoid confusion.
+
+\begin{definition}
+	Consider a sequence $\{X_n:n\geq1\}$ of $\R$ valued random variables and form the associated \textbf{partial sums}
+	\[
+		S_n:=X_1+\cdots+X_n,\quad n\geq1,
+	\]
+with $S_0=0$. We say that $\{X_n\}$ or $\{S_n\}$ obeys a \textbf{central limit theorem} if there exist a sequence of constants $\{b_n:n\geq 1\}$, a constant $m$ and a nondegenerate random variable S such that there is the following convergence in distribution
+\begin{align}\label{eq:partialSum}
+	\frac{S_n-mn}{b_n}\cd S \quad in\quad \R.
+\end{align}
+We then call $m$ the \textbf{translation scaling constant} and $\{b_n\}$ the \textbf{space scaling sequence}.
+\end{definition}
+
+\begin{definition}
+Let $\{X_n:n\geq1\}$ be a sequence of $\R$ valued i.i.d. random variables with mean $\mu$ and finite variance $\sigma^2$. Then the \textbf{Classical Central Limit Theorem} states that
+\begin{align*}
+	\frac{\bar{X}_n-\mu}{\sigma/\sqrt{n}} \cd Z \sim N(0,1) \textrm{ as 				$n\to\infty$}
+\end{align*}
+where $\bar{X}_n=(\sum^n_{i=1}X_i)/n$.
+\end{definition}
+In this case our translation scaling constant $m=\mu$ and our space scaling sequence is $\{b_n=\sigma\sqrt{n}:n\geq1 \}$. It is hence obvious that the translation scaling constant and the space scaling sequence adjust for the drift and deviation of the partial sums to ensure convergence.
+
+\begin{definition}
+	A sequence of \textbf{normalised partial sum processes} in $\D$ associated with \ref{eq:partialSum} is formed by letting
+	\begin{align}
+		\textbf{S}_n(t):=\frac{S_\Floor{nt}-mnt}{b_n},\quad t\geq 0,
+	\end{align}
+	where $\lfloor t \rfloor$ denotes the largest integer not larger than $t$. We then say $\{X_n\}$, $\{S_n\}$ or $\{\textbf{S}_n\}$ obeys a \textbf{functional central limit theorem} if there exists a proper stochastic process $\textbf{S}:=\{\textbf{S}(t):t\geq0\}$ with sample paths in $\D$ such that
+	\begin{align*}
+		\textbf{S}_n \cd \textbf{S}\quad in\ \ \D
+	\end{align*}
+	under a topology on $\D$.
 \end{definition}
 
 \chapter{Approach without scaling limits}
@@ -585,7 +652,7 @@ Its Applications
 
 
 \chapter{Scaling Limit Theorems}
-In this chapter we will provide an analysis of some well known scaling limit theorems, eventually arriving at a scaling limit for CTRM. We require these scaling limits before we can develop our statistical inference methods for CTRM.
+In this chapter we will provide an analysis of some well known scaling limit theorems, eventually arriving at a scaling limit for a CTRM process. We require these scaling limits before we can develop our statistical inference methods for a CTRM process.
 \section{Background}\label{s:background}
 A stochastic process limit is the limit of a sequence of stochastic processes. Before we examine the stochastic process limits that we will utilise in this thesis it will be illustrative to analyse one of the most well known examples of a stochastic process limit - Brownian Motion. One of the methods used to derive Brownian motion is devised by trying to seek a continuous time representation of the discrete time random walk. Recall that a discrete time random walk is defined in the following manner.\\
 \begin{definition}
@@ -596,7 +663,7 @@ Let $\{U_i\}_{1\leq i \leq n}$ be i.i.d. U(0,1) random variables. Write the part
 then successive partial sums form a \textbf{random walk} with $S_n$ being the position after n steps.
 \\
 \end{definition}
-\noindent The general method of achieving a continuous limit of a discrete function is to consider a continuous analogue of the sum $S_n$ as $n\to\infty$ and then rescaling to ensure the continuous analogue remains finite. We can then appeal to the Central Limit Theorem which gives us the discrete limit
+\noindent The general method of achieving a continuous limit of a discrete function is to consider a continuous analogue of the sum $S_n$ as $n\to\infty$ and then rescaling to ensure the continuous analogue remains finite. We can then appeal to the Classical Central Limit Theorem which gives us the discrete limit
 \begin{align}\label{eq:clt}
 \frac{S_n-n\mu}{\sqrt{n\sigma^2}}\overset{d}{\longrightarrow}Z\sim N(0,1)\textrm{ as $n\to\infty$}
 \end{align}
@@ -611,9 +678,9 @@ or more simply, we can consider the step function
 	S_{\lfloor t \rfloor}=U_1+\cdots+U_{\lfloor t \rfloor}  \quad\textrm{for all } t\geq0.
 \end{align}
 
-where $\lfloor t \rfloor$ denotes the largest integer not larger than $t$.
+
 % you have used this symbol earlier!\textcolor{red}{maybe some graphs here}
-As it turns out for large values of $t$ both processes are equivalent, see \cite{Whitt2010} for more details. Although the interpolation function is more intuitive, the step function is easier to work with and so we only utilise the step function from now on. We now add a time scaling constant $c$ and consider 
+\noindent As it turns out for large values of $t$ both processes are equivalent, see \cite{Whitt2010} for more details. Although the interpolation function is more intuitive, the step function is easier to work with and so we only utilise the step function from now on. We now add a time scaling constant $c$ and consider 
 \begin{align}\label{fun:scaleStep}
 	S_{\lfloor ct \rfloor}=U_1+\cdots+U_{\lfloor ct \rfloor}  \quad\textrm{for all } t\geq0.
 \end{align}
@@ -712,18 +779,17 @@ Let $X\sim S(\alpha,\beta,\sigma,\mu)$ be a stable random variable. Then the cha
 \noindent There are over half a dozen parameterisations of a stable random variable, 
 but we use \cite[Def~1.1.6]{Samorodnitsky1994}. Definition \ref{def:stableChar} then implies that a stable distribution possesses four different parameters:
 \begin{itemize}
-	\item An index of stability $\beta \in (0,2]$ which determines heavy tailedness 
-	\item A skewness parameter $\alpha \in [-1,1]$
-% swapping around alpha and beta confuses me... stability should be alpha
-	\item A scale parameter $\gamma > 0$
-	\item A location parameter $\delta \in \R$\\
+	\item An index of stability $\alpha \in (0,2]$ which determines heavy tailedness 
+	\item A skewness parameter $\beta \in [-1,1]$
+	\item A scale parameter $\sigma > 0$
+	\item A location parameter $\mu \in \R$\\
 \end{itemize}
 
-\noindent As we are using the stable distribution to model bursty waiting times we need a completely right skewed distribution with a heavy tail (infinite mean). Thus we consider waiting times drawn from a stable distribution with:
+\noindent \textcolor{red}{Maybe move the part below to the simulation section} As we are using the stable distribution to model bursty waiting times we need a completely right skewed distribution with a heavy tail (infinite mean). Thus we consider waiting times drawn from a stable distribution with:
 \begin{itemize}
-	\item Index of stability $\beta \in (0,1)$ to ensure heavy tailedness
-	\item Skewness parameter $\alpha=1$ to ensure a right skewed distribution
-	\item Standard scale parameter $\gamma=1$ and standard location parameter $\delta=0$\\
+	\item Index of stability $\alpha \in (0,1)$ to ensure heavy tailedness
+	\item Skewness parameter $\beta=1$ to ensure a right skewed distribution
+	\item Standard scale parameter $\sigma=1$ and standard location parameter $\mu=0$\\
 % "Standard" in terms of Laplace transform means we have to take a scale
 % parameter gamma which is not equal to 1, see "simulateML.Rmd"!
 \end{itemize}
@@ -737,17 +803,13 @@ but we use \cite[Def~1.1.6]{Samorodnitsky1994}. Definition \ref{def:stableChar} 
 \[
 	C_\beta=\left(\int^\infty_0 x^{-\beta} \sin(x) dx  \right)^{-1}=\frac{2}{\pi}\Gamma(\beta)\sin\frac{\pi\beta}{2}.
 \]
-\noindent When $\alpha=1$ we have $\lim_{x\to\infty}\PP(X<-x)=0$, as one would expect. Since a Pareto random variable $T$ with parameter $\beta$ has a tail function $\PP(T>t)=ct^{-\beta}$ for some $c\in \R$ and $t>c^{1/\beta}$, we can then observe that the tails of a stable distribution are asymptotically equivalent to a Pareto distribution and thus exhibit power-law behaviour. \textcolor{red}{Thus if we show that a Pareto distribution with $\beta \in (0,1)$ has an infinite mean then the corresponding stable distribution also has an infinite mean.} Now if $p(t)$ is the density of $T$ we have that 
+\noindent When $\alpha=1$ we have $\lim_{x\to\infty}\PP(X<-x)=0$, as one would expect. Since a Pareto random variable $T$ with parameter $\beta$ has a tail function $\PP(T>t)=ct^{-\beta}$ for some $c\in \R$ and $t>c^{1/\beta}$, we can then observe that the tails of a stable distribution are asymptotically equivalent to a Pareto distribution and thus exhibit power-law behaviour. Thus if we show that a Pareto distribution with $\beta \in (0,1)$ has an infinite mean then the corresponding stable distribution also has an infinite mean. Now if $p(t)$ is the density of $T$ we have that 
 \[
 	\E[T]=\int^\infty_0 tp(t)dt = \int^\infty_0 t\frac{c\beta}{t^{\beta+1}}dt = c\beta\int^\infty_0 t^{-\beta}dt = c\beta \left[\frac{t^{1-\beta}}{1-\beta}\right]^\infty_0.
 \]
 The above expectation is clearly infinite if $0<\beta\leq1$, but if $\beta=1$ our initial stable distribution reduces to a Cauchy distribution and thus we exclude that case.\textcolor{red}{why ignore Cauchy?? also maybe talk about variance here}\\
 
-One of the reasons the stable distribution is so useful is that we can now generalise the classical Central Limit Theorem. Recall that the Central Limit Theorem says that the normalised sum of i.i.d. random variables with a finite variance converges to a normal distribution. To be more precise, let $\{X_i\}_{1\leq i \leq n}$ be i.i.d. random variables with mean $\mu$ and variance $\sigma^2$. Then the classical Central Limit Theorem states that
-\[
-	\frac{\bar{X}_n-\mu}{\sigma/\sqrt{n}} \overset{d}{\to}Z \sim N(0,1) \textrm{ as 				$n\to\infty$}
-\]
-where $\bar{X}_n=(\sum^n_{i=1}X_i)/n$. Rewriting the above to match the notation we will use from now on we have
+One of the reasons the stable distribution is so useful is that we can now generalise the classical Central Limit Theorem. Recall that the Central Limit Theorem says that the normalised sum of i.i.d. random variables with a finite variance converges to a normal distribution. Rewriting the above to match the notation we will use from now on we have
 \[
 	\frac{\sum^n_{i=1}X_i-a_n}{b_n} \overset{d}{\to}Z \sim N(0,1) \textrm{ as $n\to\infty$}
 \]
@@ -784,9 +846,9 @@ where $a_n=\sqrt{n}\sigma/\mu$ and $b_n=\sigma\sqrt{n}.$\\
 %the distribution of the sum of $W_k$ approaches 
 %a sum-stable distribution \cite{MeerschaertSikorskii}. 
 
-In order to introduce the necessary and sufficient conditions for the Generalised Central Theorem to hold we must first define the concept of regular variation.
+In order to introduce more useful necessary and sufficient conditions for the Generalised Central Theorem to hold we must first define the concept of regular variation.
 \begin{definition}\label{def:RV}
-	Suppose that $R:[A,\infty)\to(o,\infty)$ is Borel measurable, for some $A>0$. We say that R(x) \textbf{varies regularly} or is \textbf{regularly varying} with index $\rho$, and we write $R\in RV(\rho)$, if
+	Suppose that $R:[A,\infty)\to(0,\infty)$ is Borel measurable, for some $A>0$. We say that R(x) \textbf{varies regularly} or is \textbf{regularly varying} with index $\rho$, and we write $R\in RV(\rho)$, if
 	\begin{align*}
 	\lim_{x\to\infty}\frac{R(\lambda x)}{R(x)}=\lambda^\rho, 
 	\end{align*}
@@ -857,7 +919,7 @@ for any $t>0$ because $\frac{\Floor{nt}}{n}\to t$ as $n\to\infty$. Once again by
 	\phi_{Z_t}(s)=\phi_Y(s)^t=\exp[-ct\Gamma(1-\alpha)(-is)^\alpha].
 \]
 \end{proof}
-The i.i.d.\ nature of the $W_k$ allows for a more general, functional limit
+Furthermore if we assume The i.i.d.\ nature of the $W_k$ allows for a more general, functional limit
 theorem \cite[Ex.~11.2.18]{thebook}, \cite[Th.~4.5.3]{Whitt2010}:
 \begin{align}
 b(c)(W_1 + \ldots + W_{\lfloor cr \rfloor}) \Rightarrow D(cr), 
