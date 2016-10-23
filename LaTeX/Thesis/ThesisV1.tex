@@ -594,9 +594,7 @@ for which it can be shown that the processes $M(t)$ and
 $\tilde M(t)$ have the same limiting distributions at large times
 \cite{Hees2015}, and hence we focus on the CTRM $M(t)$. 
 
-
-
-However deriving the distribution of $M(t)$ is difficult for a number of reasons that will be explained in further detail in \ref{s-max} \textcolor{red}{not sure if this is true}. It is for this reason that we choose to make inference on the distribution of the following quantities.\\
+\textcolor{red}{expand}. It is for this reason that we choose to make inference on the distribution of the following quantities.\\
 \begin{definition}
 Let $M(t)$ be an uncoupled CTRM whose magnitudes $J_k$ are supported on the interval
 $[x_0, x_F]$.  Then the exceedance time of level $\ell \in [x_0,x_F]$ is
@@ -776,7 +774,7 @@ A random variable X is \textbf{sum-stable} if for $X_1$ and $X_2$ independent co
 for some positive c and some d $\in\R.$ We then say that X follows a \textbf{stable distribution}. Note that the symbol $\overset{d}{=}$ was defined in Definition \ref{def:equalDist}.\\
 \end{definition}
 \begin{remark}
-Note that other texts refer to what we have just defined as \textbf{sum-stable} as just \textbf{stable}. We make this modification in order to easily differentiate it from the term \textbf{max-stable} which we will define in section \ref{s-max}.\\
+Note that other texts refer to what we have just defined as \textbf{sum-stable} as just \textbf{stable}. We make this modification in order to easily differentiate it from the term \textbf{max-stable} which we will define in section \ref{s:max}.\\
 \end{remark}
 
 \noindent As a closed form for the density of a stable random variable cannot be found for all cases we instead choose to specify a stable random variable by its characteristic function.\\
@@ -900,7 +898,7 @@ stability parameter $\alpha$, which means the weak convergence \textcolor{red}{n
 \frac{W_1 + \ldots + W_n}{b(n)} \overset{d}{\longrightarrow} D, \quad n \to \infty.
 \end{align}
 
-\noindent We also have that $b(n)\in RV(1/\alpha)$ \cite[Prop~4.15]{MeerschaertSikorskii2012}. In fact if we specify $W_k$ to be Pareto distributed such that $\overline F_W(x)=Cx^{-\alpha}$ for some $C>0$, for all $x>C^{1/\alpha}$ and $0<\alpha<1$. Then $\overline F_W(x)$ is clearly regularly varying with index $-\alpha$ and by \cite[Th~3.37]{MeerschaertSikorskii2012} we have the more specific result
+\noindent Note that the translation scaling constant $a(n)$ is not required as when $\alpha\in(0,1)$ the mean of $W_k$ is infinite, see \cite{MeerschaertStoev08} for more details. We also have that $b(n)\in RV(1/\alpha)$ \cite[Prop~4.15]{MeerschaertSikorskii2012}. In fact if we specify $W_k$ to be Pareto distributed such that $\overline F_W(x)=Cx^{-\alpha}$ for some $C>0$, for all $x>C^{1/\alpha}$ and $0<\alpha<1$. Then $\overline F_W(x)$ is clearly regularly varying with index $-\alpha$ and by \cite[Th~3.37]{MeerschaertSikorskii2012} we have the more specific result
 
 \begin{align}\label{eq:paretoConv}
 	\frac{W_1 + \ldots + W_n}{n^{1/\alpha}} \overset{d}{\longrightarrow} Y, \quad n \to \infty.
@@ -980,7 +978,7 @@ where a $\sim$ symbol indicates that the quotient of both sides converges to
 $1$ as $c \to \infty$. 
 Note that $\tilde b(c) \in RV(\alpha)$ as $b(c) \in RV(1/\alpha)$ \cite[Prop~4.15]{MeerschaertSikorskii2012}. 
 
-A subordinator is a stochastic process that determines the evolution of time within another stochastic process, which is referred to as the subordinated stochastic process. The inverse stable subordinator, $E(t)$,is a subordinator itself (as the inverse of a nondecreasing function is nondecreasing) and it governs the temporal dynamics of
+A subordinator is a stochastic process that determines the evolution of time within another stochastic process, which is referred to as the subordinated stochastic process. The inverse stable subordinator, $E(t)$, is a subordinator itself (as the inverse of a nondecreasing function is nondecreasing) and it governs the temporal dynamics of
 the scaling limit of the CTRM process $M(t)$, see Theorem~\ref{th:AEt}. 
 It is self-similar with exponent $\beta$
 \cite{limitCTRW}, non-decreasing, and the (regenerative, random) set 
@@ -1001,18 +999,81 @@ Having only two parameters ($\alpha \in (0,1)$ and a scale parameter)
 the inverse stable subordinator hence models scaling limits of heavy-tailed 
 waiting times parsimoniously.
 
-\section{Scaling Limit of the Maximum of Event Magnitudes}\label{s-max}
+\section{Scaling Limit of the Maximum of Event Magnitudes}\label{s:max}
 
 Extreme value background goes here.
 
-\begin{theorem}\cite{Lamperti1964}
+\begin{theorem}\cite{ColesBook}
+	If there exists a sequence of constants $\{a_n\}>0$ and $\{d_n\}\in \R$ such that
+\begin{align*}
+\PP\left\{\frac{M_n-d_n}{a_n}\leq x\right\}=F^n(a_nx+d_n)\cd G(x)\quad\textrm{as $n\to\infty$,}
+\end{align*}	
+	where $G(x)$ is a non-degenerate distribution function, then G must follow one of three distributions:
+	\begin{center}Type I (Gumbel)\end{center}
+	\begin{align*}
+		G(x)=\exp\left\{-\exp\left[-\left(\frac{x-b}{a} \right) \right] \right\}, \forall x
+	\end{align*}
+	\begin{center}Type II (Fr\'{e}chet)\end{center}
+	\[
+		G(x)=\begin{cases}
+		0 &x\leq b\\
+			\exp\left\{-\left(\frac{x-b}{a}\right)^{-\alpha}\right\} &x>b
+			\end{cases}
+	\]
+	\begin{center}Type III (Weibull)\end{center}
+	\[
+		G(x)=\begin{cases}\exp\left\{-\left[-\left(\frac{x-b}{a}\right)^{\alpha}\right]\right\} &x<b\\
+		1 &x\geq b				
+			\end{cases}
+			\]
+\noindent for scale parameters $a>0$, location parameter $b$, and in the case of families II and III, shape parameter $\alpha>0$.
+\end{theorem}
+
+\begin{theorem}\cite{ColesBook}
+	If there exists a sequence of constants $\{a_n\}>0$ and $\{d_n\}\in \R$ such that
+	\begin{align*}
+	\PP\left\{\frac{M_n-d_n}{a_n}\leq x\right\}\cd G(x)\quad\textrm{as $n\to\infty$,}
+	\end{align*}	
+	where $G(x)$ is a non-degenerate distribution function, then $G(x)$ is a member of the GEV family
+	\[
+		G(x)=\exp\left\{-\left[1+\zeta\left(\frac{x-\mu}{\sigma}\right)\right]^{-1/\zeta}\right\}
+	\]
+	defined on $\{x:1+\zeta(x-\mu)/\sigma>0\}$, where $\mu$ is finite, $\sigma>0$ and $\zeta$ is finite.
+\end{theorem}
+
+\begin{definition}\cite{BalkemaResnickMaxInfiniteDivisibility}
+A distribution G(x) is said to be \textbf{max-stable} if for every $n\in\N$ there are constants $a_n>0$ and $d_n$ such that
+\[
+	G^n(a_n x + d_n)= G(x).
+\]
+\end{definition}
+
+Resnick and Davis were able to show a max equivalent to \ref{def:gclt} \cite{TailEstimatesMotivatedByEVT}. They proved that just as a distribution is sum-stable iff it is a stable distribution, a distribution is max-stable iff it is a GEV distribution.
+
+\begin{definition}
+	Let X(t) be a stochastic process. X(t) is an \textbf{extremal process} if for $d\geq1,$ $x_i\in\R$ and the times $0=t_0<t_1<\ldots<t_d$ we have
+	\[
+	\PP(X(t_i)\leq x_i,1\leq i \leq d) = F(\wedge_{i=1}^d x_i)^{t_1} F(\wedge_{i=2}^d x_i)^{t_2-t_1}\ldots F(x_d)^{t_d-t_{d-1}},
+	\]
+	where F(x) is a GEV distribution. We then say X(t) is an extremal process generated by F(x). Equivalently if $J_i$ are i.i.d. random variables then X(t) is an extremal process if
+	\[
+		X(t_1) ;X(t_2); \ldots X(t_d);
+	\]
+	has the same joint distribution as 
+	\[
+		J_1;max(J_1,J_2);\ldots ;max(J_1,J_2,\ldots,J_d),
+	\]
+	where $0\leq t_1<t_2<\ldots<t_d$, and $\PP(J_i<x)=\PP(X(J_i-J_{i-1})$ for $i=1,2,\ldots,d.$
+\end{definition}
+
+\begin{theorem}\cite[Th~3.2]{Lamperti1964}%th2resnick1974
 Let $F(x)$ be the CDF of $J_i$. Now suppose there exists constants $a(n)>0$ and $d(n)$ such that,
 \[
 	\PP\left(\bigvee_{i=1}^n J_i\leq \frac{x-d(n)}{a(n)}\right)=F^n\left(\frac{x-d(n)}{a(n)}\right) \xrightarrow[n\to \infty]{d} G(x).
 \]
-Then $G(x)$ must be a member of the GEV family. Now define the partial max-process as \textcolor{red}{notation}
+Then $G(x)$ must be a member of the GEV family. Now define the partial max-process as
 \[
-	M(t):=
+	M_\Floor{t}:=
 	\begin{cases}
 	      \bigvee_{i=1}^{\lfloor{t}\rfloor} J_i, &\textrm{$t\geq 1$}\\
 	         J_1, &\textrm{$0<t<1.$}
@@ -1020,13 +1081,27 @@ Then $G(x)$ must be a member of the GEV family. Now define the partial max-proce
 \]
 Then 
 \[
-\frac{M(ct)-d(c)}{a(c)} \xrightarrow[c\to \infty]{J_1} A(t),
+\frac{M_\Floor{ct}-d(c)}{a(c)} \xrightarrow[c\to \infty]{J_1} A(t),
 \]
 where $\{A(t)\}_{t\geq0}$ is an extremal process generated by G.
 \end{theorem}
-
+Whereas in the sum-stable case we required the waiting times to have regularly varying tails, an equivalent requirement is not needed in the max-stable case.
 \section{Scaling Limit of CTRM}
+In the previous two sections we outlined the necessary conditions for our waiting times $W_k$ to be in the domain of attraction of a sum-stable random variable and our event magnitudes $J_k$ to be in the domain of attraction of a max-stable (GEV) random variable. More precisely we needed $\overline F_W \in RV(-\alpha)$ and our event magnitudes to be i.i.d.. We also discussed how the same conditions then allowed for the partial sum-process $S_{\Floor{ct}}$ and partial max-process $M_{\Floor{ct}}$ (both scaled appropriately) to converge to a stable subordinator and extremal process respectively. Given that these conditions were fulfilled Meerschaert and Stoev were able to prove the following theorem in \cite{MeerschaertStoev08}.
 
+\begin{theorem}
+
+        Let $(W_i,J_i)$ be a sequence of i.i.d $\mathbb{R}^+\times\mathbb{R}$ random vectors such that
+        \[
+            \{(b(c)^{-1}S(ct),a(c)^{-1}(M_{\Floor{ct}}-d(c))\}_{t\geq0} \xrightarrow[c\to \infty]{J_1} \{(D(t),A(t))\}_{t\geq0}
+        \]
+        where the paths of $D(t))$ are non-decreasing almost surely. Then,
+        \[
+            (a(n)^{-1}(M(N(t))-d(n)) \xrightarrow[c\to \infty]{J_1} (A(E(t)),
+        \]
+where $E:=\inf \{u>0:D(u)>t\}$ is the inverse of $D$ and $n= \tilde{b}(c)$ where $\tilde{b}(c)$ is the asymptotic inverse of $b(c)$.
+\end{theorem}
+Recall that $M(N(t))=V(t)$ is our CTRM process. Now that we have its scaling limit we can results derived for the extremal process subordinated to the inverse stable subordinator to derive the distributions of the exceedances and their durations.
 \chapter{Distribution of CTRM}
 In this chapter we derive the distribution of a CTRM process if the inter arrival waiting times that drive the process exhibit a bursty nature.
 \section{Distribution of Exceedances}
@@ -1086,8 +1161,7 @@ As these random variables are the quantities of interest it is natural for us to
     \end{figure}
 
 
-Assume now a time series of magnitudes, and that interest lies in the
-estimation of the timings of the large magnitudes.
+Assume now a time series of magnitudes, and that interest lies in the estimation of the timings of the large magnitudes.
 Consider a minimum threshold $\ell_0$, e.g. at the 95\% quantile.
 Vary the threshold $\ell$ on the interval $[\ell_0, x_F]$, and consider
 the resulting sequences of exceedance sizes and exceedance times 
