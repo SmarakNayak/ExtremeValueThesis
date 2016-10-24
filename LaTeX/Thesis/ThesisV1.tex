@@ -545,7 +545,7 @@ where $\bar{X}_n=(\sum^n_{i=1}X_i)/n$.\\
 \end{definition}
 In this case we can see that the classical central limit theorem is a specific central limit theorem with the translation scaling constant $m=\mu$ and the space scaling sequence is $\{b_n=\sigma\sqrt{n}:n\geq1 \}$. It is hence obvious that the translation scaling constant and the space scaling sequence adjust for the drift and deviation of the partial sums to ensure convergence. We will look at the functional extension of the classical central limit theorem closely in Section \ref{s:background}.
 
-\chapter{Scaling Limit Theorems}
+\chapter{Limit Theorems}
 The aim of this chapter is to present a stochastic process limit of a bursty CTRM process. We will first rigorously define a bursty CTRM and then provide an analysis of some well known scaling limit theorems, eventually arriving at the stochastic process limit for a bursty CTRM process. We then use results for the stochastic process limit found in the literature (see \cite{MeerschaertStoev08}) to determine the distribution of a bursty CTRM.
 
 \section{Problem Formulation}
@@ -732,7 +732,7 @@ Suppose $Y\sim Y_k=U_k-\mu$ then
 
 \begin{align}
 	\E\left[\exp\left( -is\frac{S_{\lfloor ct\rfloor}-\lfloor ct \rfloor \mu}{\sqrt{c\sigma^2}}    \right)\right]
-	&=\hat{f}_{Y}\left(\frac{s}{\sqrt{c\sigma^2}}\right)^{\lfloor ct\rfloor}\\
+	&=\hat{f}_{Y}\left(\frac{s}{\sqrt{c\sigma^2}}\right)^{\lfloor ct\rfloor}\nonumber\\
 	&=\left(1-\frac{s^2}{2c}+o(c^{-1})\right)^{\lfloor ct\rfloor}\\
 	&=\Bigg[\left(1-\frac{s^2}{2c}+o(c^{-1})\right)^c\Bigg]^\frac{\lfloor ct\rfloor}{c}\\	
 	&\to e^{-ts^2/2} \quad\textrm{as $c\to\infty,$}
@@ -827,16 +827,14 @@ where $a_n=\sqrt{n}\sigma/\mu$ and $b_n=\sigma\sqrt{n}.$\\
 
 \noindent The Generalised Central Limit Theorem generalises the Central Limit Theorem by dropping the assumption that the variance, or even the mean, is finite. This theorem is important to us as we are assuming our waiting times $W_k$ have an infinite mean.\\
 
-\begin{theorem}\cite{Nolan2015}% CITATION!
-% Also, this is not really the GCLT, it's more a possible definition of a 
-% sum-stable random variable
-\textbf{Generalised Central Limit Theorem} A nondegenerate random variable Z is sum-stable if and only if there is an i.i.d. sequence of random variables $\{X_i\}_{1\leq i \leq n}$  and constants $a_n>0, b_n \in \R$ with 
+\begin{theorem}\cite{Nolan2015}\label{th:gclt}
+\textbf{Generalised Central Limit Theorem} A nondegenerate random variable Z follows a stable distribution if and only if there is an i.i.d. sequence of random variables $\{X_i\}_{1\leq i \leq n}$  and constants $a_n>0, b_n \in \R$ with 
 \[
 	\frac{\sum^n_{i=1}X_i-a_n}{b_n} \overset{d}{\longrightarrow}Z.
 \]
 \end{theorem}
 
-\noindent The Generalised Central Limit Theorem implies that the only possible non-trivial limit of the normalised sum of our waiting times is sum-stable. If a limit exists we can then extend this limit to stochastic process convergence as in \ref{s:background}. The theorem also naturally leads to the following definition.\\
+\noindent The Generalised Central Limit Theorem implies that the only possible non-trivial limit of the normalised sum of our waiting times is a stable distribution. If a limit exists we can then extend this limit to stochastic process convergence as in \ref{s:background}. The theorem also naturally leads to the following definition.\\
 
 \begin{definition}\cite{Nolan2015}\label{def:DOA}
 	A random variable X is in the \textbf{domain of attraction} of Z if there exists constants $a_n>0,b_n\in\R$ with
@@ -893,12 +891,12 @@ meaning that \cite{seneta,thebook},\ref{def:RV}
 Then by Theorem \ref{th:ECLT}
 this is equivalent to $W_k$ being in the 
 (sum-) domain of attraction of a positively skewed stable law $D$ with 
-stability parameter $\alpha$, which means the weak convergence \textcolor{red}{need reference for why a(n)=0}
+stability parameter $\alpha$, which means the weak convergence
 \begin{align}
 \frac{W_1 + \ldots + W_n}{b(n)} \overset{d}{\longrightarrow} D, \quad n \to \infty.
 \end{align}
 
-\noindent Note that the translation scaling constant $a(n)$ is not required as when $\alpha\in(0,1)$ the mean of $W_k$ is infinite, see \cite{MeerschaertStoev08} for more details. We also have that $b(n)\in RV(1/\alpha)$ \cite[Prop~4.15]{MeerschaertSikorskii2012}. In fact if we specify $W_k$ to be Pareto distributed such that $\overline F_W(x)=Cx^{-\alpha}$ for some $C>0$, for all $x>C^{1/\alpha}$ and $0<\alpha<1$. Then $\overline F_W(x)$ is clearly regularly varying with index $-\alpha$ and by \cite[Th~3.37]{MeerschaertSikorskii2012} we have the more specific result
+\noindent Note that the translation scaling constant $a(n)$ is not required when $\alpha\in(0,1)$ as the mean of $W_k$ is then infinite, see \cite{Whitt2010} for more details. We also have that $b(n)\in RV(1/\alpha)$ \cite[Prop~4.15]{MeerschaertSikorskii2012}. In fact if we specify $W_k$ to be Pareto distributed such that $\overline F_W(x)=Cx^{-\alpha}$ for some $C>0$, for all $x>C^{1/\alpha}$ and $0<\alpha<1$. Then $\overline F_W(x)$ is clearly regularly varying with index $-\alpha$ and by \cite[Th~3.37]{MeerschaertSikorskii2012} we have the more specific result
 
 \begin{align}\label{eq:paretoConv}
 	\frac{W_1 + \ldots + W_n}{n^{1/\alpha}} \overset{d}{\longrightarrow} Y, \quad n \to \infty.
@@ -932,44 +930,43 @@ for any $t>0$ because $\frac{\Floor{nt}}{n}\to t$ as $n\to\infty$. Once again by
 \end{proof}
 Furthermore if we drop the assumption that $W_k$ is Pareto distributed but retain the assumption that they strictly greater than zero then we get a more general, functional limit theorem. However before we do that we must introduce \emph{stable subordinators} which are a class of stochastic processes.
 \begin{definition}
-A \textbf{stable subordinator} $D(t)$ is a nondecreasing L\'{e}vy process such that the increments have stable laws, in particular
+A \textbf{stable subordinator} $D(t)$ is a nondecreasing L\'{e}vy process such that the increments have right skewed stable laws, in particular
 \[
-	D(t+s)-D(t)\overset{d}{=}t^{1/\alpha}S(\alpha,1,1,0))\overset{d}{=}S(\alpha,1,t^{1/\alpha},0).
+	D(t+s)-D(t)\overset{d}{=}t^{1/\alpha}S(\alpha,1,\sigma,0))\overset{d}{=}S(\alpha,1,t^{1/\alpha}\sigma,0).
 \]
-As they are only defined by one parameter, $\alpha$-stable subordinators are stable subordinators with stability parameter $\alpha$.
+$\alpha$-stable subordinators are stable subordinators with stability parameter $\alpha$.
 \end{definition}
 \begin{theorem}\cite[Th.~4.5.3]{Whitt2010}\label{th:sfclt} If $W_k$ obey a central limit theorem such that
 \begin{align}\label{eq:sclt}
 	\frac{W_1 + \ldots + W_n - a(n)}{b(n)} \overset{d}{\longrightarrow} D, \quad n \to \infty,
 \end{align}
-where $D\sim S(\alpha,1,\sigma,\mu)$. Then there is convergence in distribution for the associated normalised partial sum process
+where $D\sim S(\alpha,1,\sigma,0)$. Then there is convergence in distribution for the associated normalised partial sum process
 \begin{align}
-\frac{W_1 + \ldots + W_\Floor{ct} - a(c)t}{b(c)} \cd D(t), \quad c \to \infty,
+\frac{S_\Floor{ct} - a(c)t}{b(c)} \cd D(t), \quad c \to \infty,
 \end{align}
-in the Skorokhod space $\D$ with respect to the $J_1$ metric, where $D(t)$ is a $\alpha$-stable subordinator.
+in the Skorokhod space $\D$ with respect to the $J_1$ metric, where $D(t)$ is a $\alpha$-stable subordinator and $S_\Floor{ct}=W_1 + \ldots + W_\Floor{ct}$.
 \end{theorem}
 
-\textcolor{red}{OR (Fairly sure this is the specific case for our simulation)}
-where $\{D(r)\}_{t \ge 0}$ is a stable subordinator, defined via 
-\begin{align}
-\ex[e^{-\lambda D(r)}] = e^{-r \lambda^\beta}.
+Note that the translation scaling constant $a(c)$ is not required when $\alpha\in(0,1)$. We can also adjust $b(c)$ such that the stable subordinator limit is a \emph{unit} stable subordinator with respect to the Laplace transform, defined via 
+\begin{align}\label{eq:unitStable}
+\ex[e^{-\lambda D(t)}] = e^{-t \lambda^\alpha}.
 \end{align}
 % this type of convergence might be worth explaining in a separate paragraph,
 % maybe instead your derivation of the CLT above with Fourier transforms.
 
-This theorem in conjunction with the extended central limit theorem \ref{th:ECLT} thus ensures that we have an $\alpha$-stable subordinator as the stochastic process limit of the waiting times as long as $W_k$ are strictly positive and regularly varying with index $(-\alpha)$.
+This theorem in conjunction with the extended central limit theorem \ref{th:ECLT} thus ensures that we have an $\alpha$-stable subordinator as the stochastic process limit of the waiting times as long as $W_k$ are strictly positive and regularly varying with index $-\alpha$.
 
 Now that we have a stochastic limit process for the sum of the waiting times we can investigate the limiting behaviour of the renewal process in equation \ref{eq:renewal-process}. Recall that the renewal process is the process which counts the amount of waiting times that have occurred up until time $t$. If $W_k$ obeys the central limit theorem outlined in Equation~\ref{eq:sclt} then the scaling limit of the renewal process is then \cite{limitCTRW}
 \begin{align}
-N(ct) / \tilde b(c) \cd E(t), \quad c \to \infty
+\tilde b(c)^{-1}N(ct) \cd E(t), \quad c \to \infty
 \end{align}
 where $E(t)$ denotes the inverse stable subordinator \cite{invSubord}
-\begin{align}
+\begin{align}\label{eq:invStable}
 E(t) = \inf\{r: D(r) > t\}, \quad t \ge 0,
 \end{align}
 and where $\tilde b(c)$ is asymptotically inverse to $b(c)$, in the sense
 of \cite[p.20]{seneta}: 
-\begin{align}
+\begin{align}\label{eq:tildeb}
 b(\tilde b(c)) \sim c \sim \tilde b(b(c))
 \end{align}
 % I think it would be less confusing if _all_ norming sequences, i.e.
@@ -984,7 +981,7 @@ It is self-similar with exponent $\beta$
 \cite{limitCTRW}, non-decreasing, and the (regenerative, random) set 
 $\mathcal R$ of its points of increase is a fractal with dimension $\beta$ 
 \cite{Bertoin04}.
-$E(t)$ is a model for time series with intermittent, `bursty'
+$E(t)$ is then a model for time series with intermittent, `bursty'
 behaviour, for the following reasons:
 \begin{itemize}
 \item [i)]
@@ -1000,15 +997,35 @@ the inverse stable subordinator hence models scaling limits of heavy-tailed
 waiting times parsimoniously.
 
 \section{Scaling Limit of the Maximum of Event Magnitudes}\label{s:max}
+The aim of this section is to develop a stochastic process limit theorem for the partial maxima of our event magnitudes $J_k$. The partial maxima is defined as 
+\begin{align}
+	M_n:=\bigvee_{i=1}^n J_i.
+\end{align}
+Classical extreme value theory proves to be quite useful in solving this problem as a large portion of the extreme value literature focuses on the behaviour of the partial maxima $M_n$. Classical extreme value theory was first developed as a solution to a problem that arises when dealing with partial maxima. Assume our event magnitudes $J_k$ have common distribution function $F(x)$, then the distribution of the partial maxima can easily be calculated as
+\begin{align*}
+\PP(M_n\leq x)&=\PP\left(\bigvee_{i=1}^n J_i\leq x\right)\\
+			  &=\PP(J_1\leq x)\times\PP(J_2\leq x)\times\ldots\times\PP(J_n\leq x)\\
+			  &=[F(x)]^n.
+\end{align*}
+However when when you consider the limit as $n\to\infty$ the distribution of $M_n$ converges to a degenerate distribution. That is 
+\[
+	\PP(M_n\leq x)=\begin{cases} 1 \quad \textrm{if $x\geq x^+$}\\
+								  0 \quad \textrm{if $x < x^+$}					
+					\end{cases}
+\]
+where $x^+$ is the smallest value such that $F(x)=1$. This result is clearly of little use in describing the behaviour of $M_n$. This problem was overcome by considering the normalised partial sum 
+\[
+	M^*_n:=\frac{M_n-d_n}{a_n},
+\]
+where $a_n$ is a sequence of positive constants and $d_n\in\R$. These constants could then be picked such that the location and scale of $M^*_n$ stabilise as $n\to\infty$. This idea was then encapsulated in the following theorem.\\
 
-Extreme value background goes here.
 
 \begin{theorem}\cite{ColesBook}
-	If there exists a sequence of constants $\{a_n\}>0$ and $\{d_n\}\in \R$ such that
+	 \textbf{Fisher-Tippet-Gnendenko Theorem} Let $J_1,J_2,\ldots ,J_n$ be i.i.d. random variables with distribution function $F(x)$ and partial maxima $M_n$. If there exists a sequence of positive constants $a_n$ and $d_n\in \R$ such that
 \begin{align*}
 \PP\left\{\frac{M_n-d_n}{a_n}\leq x\right\}=F^n(a_nx+d_n)\cd G(x)\quad\textrm{as $n\to\infty$,}
 \end{align*}	
-	where $G(x)$ is a non-degenerate distribution function, then G must follow one of three distributions:
+	where $G(x)$ is a non-degenerate distribution function, then G must follow one of three distributions:\newpage
 	\begin{center}Type I (Gumbel)\end{center}
 	\begin{align*}
 		G(x)=\exp\left\{-\exp\left[-\left(\frac{x-b}{a} \right) \right] \right\}, \forall x
@@ -1028,34 +1045,38 @@ Extreme value background goes here.
 			\]
 \noindent for scale parameters $a>0$, location parameter $b$, and in the case of families II and III, shape parameter $\alpha>0$.
 \end{theorem}
+The Fisher-Tippet-Gnendenko Theorem was first introduced by Fisher and Tippet \cite{FisherTippet} and was extended by Gnedenko \cite{Gnedenko}. It implies that the only possible non-trivial limit of the normalised partial maxima of our event magnitudes is either a Gumbel, Fr\'{e}chet or Weibull distribution. Despite the fact that this theorem is expressed in terms of the distribution functions rather than random variable one can see how it is an analogue of the classical central limit theorem in a max sense as opposed to a sum sense.
+
+It turns out that all three distributions can be expressed in terms of a single parameterisation. This parameterisation is known as the generalized extreme value (GEV) family of distributions. It is thus more convenient to express the above central limit theorem in terms of the GEV family of distributions.
+
 
 \begin{theorem}\cite{ColesBook}
-	If there exists a sequence of constants $\{a_n\}>0$ and $\{d_n\}\in \R$ such that
+	Let $J_1,J_2,\ldots ,J_n$ be i.i.d. random variables with distribution function $F(x)$ and partial maxima $M_n$. If there exists a sequence of constants $a_n>0$ and $d_n\in \R$ such that
 	\begin{align*}
 	\PP\left\{\frac{M_n-d_n}{a_n}\leq x\right\}\cd G(x)\quad\textrm{as $n\to\infty$,}
 	\end{align*}	
 	where $G(x)$ is a non-degenerate distribution function, then $G(x)$ is a member of the GEV family
-	\[
+	\begin{align}\label{eq:GEV}
 		G(x)=\exp\left\{-\left[1+\zeta\left(\frac{x-\mu}{\sigma}\right)\right]^{-1/\zeta}\right\}
-	\]
-	defined on $\{x:1+\zeta(x-\mu)/\sigma>0\}$, where $\mu$ is finite, $\sigma>0$ and $\zeta$ is finite.
+	\end{align}	
+	defined on $\{x:1+\zeta(x-\mu)/\sigma>0\}$, where $\mu$ is finite, $\sigma>0$ and $\zeta$ is finite. We can then say $F(x)$ lies in the \textbf{max-domain of attraction} of $G(x)$.
 \end{theorem}
-
-\begin{definition}\cite{BalkemaResnickMaxInfiniteDivisibility}
+In the above parameterisation the Gumbel family is achieved when $\zeta \to 0$, the Fr\'echet family corresponds to the case when $\zeta>0$ and the Weibull family corresponds to the case when $\zeta<0$. We will now use the following definition to refer to distributions which remain as the same distribution (up to location and scale constants) after taking the maximum of multiple i.i.d. copies.
+\begin{definition}\cite{BalkemaResnick1977}
 A distribution G(x) is said to be \textbf{max-stable} if for every $n\in\N$ there are constants $a_n>0$ and $d_n$ such that
 \[
 	G^n(a_n x + d_n)= G(x).
 \]
 \end{definition}
 
-Resnick and Davis were able to show a max equivalent to \ref{def:gclt} \cite{TailEstimatesMotivatedByEVT}. They proved that just as a distribution is sum-stable iff it is a stable distribution, a distribution is max-stable iff it is a GEV distribution.
+Resnick and Davis in \cite{DavisResnick1984} were able to show that this definition is an equivalent characterisation of a GEV random variable. They proved a distribution is max-stable iff it is a GEV distribution. Note that this result can be seen as a max counterpart of Theorem \ref{th:gclt}. Now that we have stated the max analogue of the central limit theorem and its associated terminology we attempt to seek a more general functional limit theorem. But before we do that we must provide the definition of an \emph{extremal process} which is the stochastic process extension of a GEV random variable.
 
 \begin{definition}
 	Let X(t) be a stochastic process. X(t) is an \textbf{extremal process} if for $d\geq1,$ $x_i\in\R$ and the times $0=t_0<t_1<\ldots<t_d$ we have
 	\[
 	\PP(X(t_i)\leq x_i,1\leq i \leq d) = F(\wedge_{i=1}^d x_i)^{t_1} F(\wedge_{i=2}^d x_i)^{t_2-t_1}\ldots F(x_d)^{t_d-t_{d-1}},
 	\]
-	where F(x) is a GEV distribution. We then say X(t) is an extremal process generated by F(x). Equivalently if $J_i$ are i.i.d. random variables then X(t) is an extremal process if
+	where F(x) is a GEV distribution. We then say X(t) is an extremal process \textbf{generated} by F(x). Equivalently if $J_i$ are i.i.d. random variables then X(t) is an extremal process if
 	\[
 		X(t_1) ;X(t_2); \ldots X(t_d);
 	\]
@@ -1065,13 +1086,13 @@ Resnick and Davis were able to show a max equivalent to \ref{def:gclt} \cite{Tai
 	\]
 	where $0\leq t_1<t_2<\ldots<t_d$, and $\PP(J_i<x)=\PP(X(J_i-J_{i-1})$ for $i=1,2,\ldots,d.$
 \end{definition}
-
-\begin{theorem}\cite[Th~3.2]{Lamperti1964}%th2resnick1974
+In 1964 Lamperti \cite{Lamperti1964} was able to show that the same conditions that are required for a partial maxima to be nondegenerate can be used to show that the partial maxima-process will converge to an extremal process.
+\begin{theorem}\cite[Th~3.2]{Lamperti1964}\label{th:extclt} (see also \cite[Th~2]{Resnick1974})
 Let $F(x)$ be the CDF of $J_i$. Now suppose there exists constants $a(n)>0$ and $d(n)$ such that,
 \[
-	\PP\left(\bigvee_{i=1}^n J_i\leq \frac{x-d(n)}{a(n)}\right)=F^n\left(\frac{x-d(n)}{a(n)}\right) \xrightarrow[n\to \infty]{d} G(x).
+	\PP\left(\frac{M_n -d_n}{a_n} \leq x \right)=F^n\left(a_nx+d_n\right) \cd G(x) .
 \]
-Then $G(x)$ must be a member of the GEV family. Now define the partial max-process as
+Then $G(x)$ must be a member of the GEV family. Now define the partial maxima-process as
 \[
 	M_\Floor{t}:=
 	\begin{cases}
@@ -1085,23 +1106,33 @@ Then
 \]
 where $\{A(t)\}_{t\geq0}$ is an extremal process generated by G.
 \end{theorem}
-Whereas in the sum-stable case we required the waiting times to have regularly varying tails, an equivalent requirement is not needed in the max-stable case.
+
+Just as we sought random variables that remained nondegenerate after addition to model our waiting times, we now seek random variables that remain nondegenerate after taking the maximum to model our event magnitudes. By Theorem \ref{th:extclt} this will ensure that the normalised partial maxima-process will converge to an extremal process. From \cite{beirlant06Book} we know that any probability distribution with a continuous distribution $F(x)$ on $\R$ lies in the max-domain of attraction of a GEV distribution $G(x)$. Furthermore the distribution of the largest magnitudes is well approximated by a GEV distribution $G(x)$ if the number of events is large \cite{ColesBook}. Thus we simply require the event magnitudes to be drawn from a continuous distribution, whereas in the sum-stable case we required the waiting times to have regularly varying tails.
 \section{Scaling Limit of CTRM}
-In the previous two sections we outlined the necessary conditions for our waiting times $W_k$ to be in the domain of attraction of a sum-stable random variable and our event magnitudes $J_k$ to be in the domain of attraction of a max-stable (GEV) random variable. More precisely we needed $\overline F_W \in RV(-\alpha)$ and our event magnitudes to be i.i.d.. We also discussed how the same conditions then allowed for the partial sum-process $S_{\Floor{ct}}$ and partial max-process $M_{\Floor{ct}}$ (both scaled appropriately) to converge to a stable subordinator and extremal process respectively. Given that these conditions were fulfilled Meerschaert and Stoev were able to prove the following theorem in \cite{MeerschaertStoev08}.
+In the previous two sections we outlined the necessary conditions for our waiting times $W_k$ to be in the domain of attraction of a sum-stable random variable and our event magnitudes $J_k$ to be in the domain of attraction of a max-stable (GEV) random variable. We also discussed how the same conditions then allowed for the partial sum-process $S_{\Floor{ct}}$ and partial max-process $M_{\Floor{ct}}$ (both normalised appropriately) to converge to a stable subordinator and extremal process respectively. More precisely if our waiting times $W_k$ have tail function $\overline F_W \in RV(-\alpha)$ for $\alpha\in(0,1),$ and if our event magnitudes $J_k$ are i.i.d. and drawn from a continuous probability distribution $F(x)$ in the max-domain of attraction of $G(x)$, then we have a limit theorem for our partial sum-process,
+\begin{align}\label{eq:partialSumLimit}
+	b(c)^{-1}S_\Floor{ct} \cd D(t), \quad c \to \infty,
+\end{align}
+a limit theorem for our renewal process,
+\begin{align}\label{eq:renewalLimit}
+	N(ct) / \tilde b(c) \cd E(t), \quad c \to \infty,
+\end{align}
+and a limit theorem for our partial maxima-process,
+\begin{align}\label{eq:partialMaximaLimit}
+	\frac{M_\Floor{ct}-d(c)}{a(c)} \cd A(t), \quad c \to \infty.
+\end{align}
+Recall that $b(c)\in RV(1/\alpha)$ could be chosen such that $D(t)$ was a unit stable subordinator with Laplace transform $\E[e^{-\lambda D(t)}] = e^{-t \lambda^\alpha}$ (\ref{eq:unitStable}), $\tilde b(c) \in RV(\alpha)$ was the asymptotic inverse of $b(c)$ (\ref{eq:tildeb}), $E(t) = \inf\{r: D(r) > t\}$ is an inverse stable subordinator (\ref{eq:invStable}), and $A(t)$ is the extremal process generated by $G(x)$ (\ref{th:extclt}).
 
-\begin{theorem}
+Now that we have summarised all the limit theorems presented so far we are in a position to outline the functional limit theorem for the CTRM process that Meerschaert and Stoev were able to prove in 2008.
 
-        Let $(W_i,J_i)$ be a sequence of i.i.d $\mathbb{R}^+\times\mathbb{R}$ random vectors such that
+\begin{theorem}\label{th:AEt} \cite{MeerschaertStoev08}
+Let $(W_i,J_i)$ be a sequence of i.i.d $\mathbb{R}^+\times\mathbb{R}$ random vectors such that the limits in equations \ref{eq:partialSumLimit},\ref{eq:renewalLimit} and \ref{eq:partialMaximaLimit} hold. Then,
         \[
-            \{(b(c)^{-1}S(ct),a(c)^{-1}(M_{\Floor{ct}}-d(c))\}_{t\geq0} \xrightarrow[c\to \infty]{J_1} \{(D(t),A(t))\}_{t\geq0}
+            \frac{M(N(ct))-d(\tilde{b}(c))}{a(\tilde{b}(c))} \cd A(E(t)), \quad c\to\infty,
         \]
-        where the paths of $D(t))$ are non-decreasing almost surely. Then,
-        \[
-            (a(n)^{-1}(M(N(t))-d(n)) \xrightarrow[c\to \infty]{J_1} (A(E(t)),
-        \]
-where $E:=\inf \{u>0:D(u)>t\}$ is the inverse of $D$ and $n= \tilde{b}(c)$ where $\tilde{b}(c)$ is the asymptotic inverse of $b(c)$.
+where $A(E(t))$ is a subordination of the extremal process $A(t)$ by the inverse stable subordinator process $E(t)$.
 \end{theorem}
-Recall that $M(N(t))=V(t)$ is our CTRM process. Now that we have its scaling limit we can results derived for the extremal process subordinated to the inverse stable subordinator to derive the distributions of the exceedances and their durations.
+Recall that $M(N(t))=V(t)$ is our CTRM process. Now that we have its scaling limit we can use results derived for the extremal process subordinated to the inverse stable subordinator to derive the distributions of the exceedances and their durations.
 \chapter{Distribution of CTRM}
 In this chapter we derive the distribution of a CTRM process if the inter arrival waiting times that drive the process exhibit a bursty nature.
 \section{Distribution of Exceedances}
