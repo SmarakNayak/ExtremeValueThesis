@@ -11,7 +11,7 @@
 %  things automatically
 %
  
-\documentclass[honours,12pt]{UNSWthesis}
+\documentclass[honours,12pt]{unswthesis}
 \linespread{1.3}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -149,24 +149,23 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{conjecture}[theorem]{Conjecture}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{example}[theorem]{Example}
-\newtheorem{remark}[theorem]{Remark}
-\newtheorem{question}[theorem]{Question}
-\newtheorem{notation}[theorem]{Notation}
+\newtheorem{theorem}[equation]{Theorem}
+\newtheorem{lemma}[equation]{Lemma}
+\newtheorem{proposition}[equation]{Proposition}
+\newtheorem{corollary}[equation]{Corollary}
+\newtheorem{definition}[equation]{Definition}
+\newtheorem{example}[equation]{Example}
+\newtheorem{remark}[equation]{Remark}
+\newtheorem{question}[equation]{Question}
+\newtheorem{notation}[equation]{Notation}
 \numberwithin{equation}{section}
 
 %Peter's Environments
-\newtheorem{cor}[theorem]{Corollary}
+\newtheorem{cor}[equation]{Corollary}
 \theoremstyle{definition}
-\newtheorem{defi}[theorem]{Definition}
+\newtheorem{defi}[equation]{Definition}
 \theoremstyle{remark}
-%\newtheorem{remark}[theorem]{Remark}
+%\newtheorem{remark}[equation]{Remark}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -266,8 +265,10 @@ behaviour is becoming significant in areas as far reaching as the
 control of disease spread, resource allocation, and emergency
 response.  Classical methods in extreme value theory fail to recognise
 that most human created events do not occur uniformly, but in bursts.
-In this thesis, we aim to design statistical methods for the inference
-and prediction of Continuous Time Random Maxima (CTRM).
+In this thesis, 
+extremes of bursty events are modelled via Continuous Time Random Maxima
+(CTRM) with heavy-tailed waiting times.  Methods for Statistical Inference
+are developed. 
 \afterpage{\blankpage}
 
 
@@ -300,7 +301,7 @@ A heavy-tailed distribution of waiting times
 \cite{Vasquez2006,Karsai2012,Vajna2013}. 
 A simple renewal process with heavy-tailed waiting times captures these
 dynamics. For many systems, the renewal property is appropriate, as can be
-checked by a simple test: the dynamics do not change significantly if the
+checked by a simple test: the dynamics do not change visibly if the
 waiting times are randomly reshuffled \cite{Karsai2012}.
 
 When a magnitude can be assigned to each event in the renewal process, 
@@ -478,10 +479,10 @@ Let $X_1:\Omega\to E$ be a  random variable with a corresponding probability mea
 \section{The Skorokhod Space}
 The stochastic processes we will be discussing in this thesis will not necessarily be continuous as they may contain jumps. Thus it is necessary to consider the Skorokhod space, which is the space of such processes, and its associated theory in order to examine the convergence of stochastic processes with jumps.\\
 \begin{definition}
-	The \textbf{Skorokhod Space} $\D(\mathcal{I},\R^d)$ is the space of all $\R^d$-valued c\`{a}dl\`{a}g functions defined on a subinterval $\mathcal{I}$ of the real line.\\
+	The \textbf{Skorokhod Space} $\D(\mathcal{I},\R^d)$ is the set of all $\R^d$-valued c\`{a}dl\`{a}g functions defined on a subinterval $\mathcal{I}$ of the real line.\\
 \end{definition}
 
-\noindent In order to properly discuss convergence in the Skorokhod space we will assign it a metric. Let us first consider the simplest case of the Skorokhod space, $\D([0,1],\R)$, and two functions $f_1(t)$ and $f_2(t)$ which have jumps of size one at $t=1/2$ and $t=1/2+\epsilon$ respectively, but are identical otherwise. If we consider the limit as $\epsilon\to0$, the traditional uniform metric $||x_1-x_2||$ defined in terms of the uniform norm $||x||:=\sup_{0\leq t\leq1}\{|x(t)|\}$ will always equal 1. Despite the two functions becoming more similar as $\epsilon$ gets closer to 0 the metric gives no indication of the increased similarity between the two functions. The uniform metric essentially allows for functions with small differences in space to be considered close but not small differences in timing. This shortcoming of the uniform metric in the Skorokhod space motivates the use of the $J_1$ metric.\\
+\noindent In order to properly discuss convergence in Skorokhod space we will assign it a metric. Let us first consider the simplest case of Skorokhod space, $\D([0,1],\R)$, and two functions $f_1(t)$ and $f_2(t)$ which have jumps of size one at $t=1/2$ and $t=1/2+\epsilon$ respectively, but are identical otherwise. If we consider the limit as $\epsilon\to0$, the traditional uniform metric $||x_1-x_2||$ defined in terms of the uniform norm $||x||:=\sup_{0\leq t\leq1}\{|x(t)|\}$ will always equal 1. Despite the two functions becoming more similar as $\epsilon$ gets closer to 0 the metric gives no indication of the increased similarity between the two functions. The uniform metric essentially allows for functions with small differences in space to be considered close but not small differences in timing. This shortcoming of the uniform metric in the Skorokhod space motivates the use of the $J_1$ metric.\\
 \begin{definition}
 	Let $\Lambda$ be the set of strictly increasing functions $\lambda$ mapping the domain $[0,1]$ onto itself, such that both $\lambda$ and its inverse $\lambda^{-1}$ are continuous. Furthermore, let $\lambda(0)=0$ and $\lambda(1)=1$. Then, for $x_1,x_2\in\D$, the standard \textbf{$\boldsymbol{J_1}$ metric} on $\D([0,1],\R)$ is 
 	\begin{align*}
@@ -495,9 +496,11 @@ The stochastic processes we will be discussing in this thesis will not necessari
 
 For the rest of this thesis, we will always assume that the domain is the interval
 $[0,\infty)$ and the range is $\R$ as the stochastic processes we are concerned with are in this form. Thus we will simply write $\D$ to be the Skorokhod space of $\R$ valued functions defined on $\Rp$.
-\textcolor{red}{do i need to talk about the equivalent metric which makes $\D$ complete}
+% \textcolor{red}{do i need to talk about the equivalent metric which makes $\D$ complete}
+% NO I don't think your readers will care
+
 \section{Central Limit Theorems}
-In the classical setting the Central Limit Theorem refers to the convergence of a sum of independent and identically distributed (i.i.d.) random variables with finite second moments towards a normal distribution. However in this thesis we will be operating in a more general setting and it is thus imperative that we define the terminology we will use throughout this thesis to avoid confusion.\\
+In the classical setting the Central Limit Theorem refers to the convergence of a rescaled and centered sum of independent and identically distributed (i.i.d.) random variables with finite second moments towards a normally distributed random variable. However in this thesis we will be operating in a more general setting and it is thus imperative that we define the terminology we will use throughout this thesis to avoid confusion.\\
 
 \begin{definition}
 	Consider a sequence $\{X_n:n\geq1\}$ of $\R$ valued random variables and form the associated \textbf{partial sums}
@@ -536,6 +539,8 @@ We then call $m$ the \textbf{translation scaling constant} and $\{b_n\}$ the \te
 	with respect to a metric on $\D$. We then call \textbf{S} the \textbf{stochastic process limit} of $\boldsymbol{S_n}$.\\
 \end{definition}
 
+% Good
+
 \begin{definition}
 Let $\{X_n:n\geq1\}$ be a sequence of $\R$ valued i.i.d. random variables with mean $\mu$ and finite variance $\sigma^2$. Then the \textbf{Classical Central Limit Theorem} states that
 \begin{align*}
@@ -566,14 +571,16 @@ $J_k \in \R$ the corresponding event magnitudes. Now write
 \end{align}
 as the sum of the first $n$ inter-arrival times. Also write
 \begin{align} \label{eq:renewal-process}
-N(t) = \max\{n \in \mathbb N: S(n) \le t\}
+N(t) = \max\{n \in \mathbb N \cup \{0\}: S(n) \le t\}
 \end{align}
 for the renewal process associated with the $W_k$. Then the process
 \begin{align}
 V(t)=M(N(t)) = \bigvee_{k=1}^{N(t)} J_k
 = \max\{J_k: k = 1, \ldots, N(t)\}, \quad t \ge 0.
 \end{align}
-is called a CTRM (Continuous Time Random Maxima process), where the maximum of the empty set is set to $0$.\\
+is called a CTRM (Continuous Time Random Maxima process), where the maximum of 
+the empty set is set to $x_0$, the left end-point of the support of the distribution
+of $J_k$.\\
 \end{definition}
 
 It is clear that the sample paths of $N(t)$ and $M(t)$ are right-continuous
@@ -665,6 +672,7 @@ conditional distribution of a magnitude $J_k$ given $J_k > \ell$. We will look a
 
 \section{Brownian Motion as a Stochastic Process Limit}\label{s:background}
 A stochastic process limit is the limit of a sequence of stochastic processes. Before we examine the stochastic process limits that we will utilise in this thesis it will be illustrative to analyse one of the most well known examples of a stochastic process limit - Brownian Motion. One of the methods used to derive Brownian motion is devised by trying to seek a continuous time representation of the discrete time random walk. Recall that a discrete time random walk is defined in the following manner.\\
+% It's weird to have positive steps only... can you change to U(-1,1) values easily?
 \begin{definition}
 Let $\{U_i\}_{1\leq i \leq n}$ be i.i.d. U(0,1) random variables. Write the partial sums at time k as
 \[
@@ -673,7 +681,7 @@ Let $\{U_i\}_{1\leq i \leq n}$ be i.i.d. U(0,1) random variables. Write the part
 then successive partial sums form a \textbf{random walk} with $S_n$ being the position after n steps.
 \\
 \end{definition}
-\noindent The general method of achieving a continuous limit of a discrete function is to consider a continuous analogue of the sum $S_n$ as $n\to\infty$ and then rescaling to ensure the continuous analogue remains finite. We can then appeal to the Classical Central Limit Theorem which gives us the discrete limit
+\noindent The general method of achieving a continuous limit of a discrete function is to consider a continuous analogue of the sum $S_n$ as $n\to\infty$ and then rescaling to ensure the continuous analogue remains finite. We can then appeal to the Classical Central Limit Theorem for real-valued random variables: % discrete is not the right word here
 \begin{align}\label{eq:clt}
 \frac{S_n-n\mu}{\sqrt{n\sigma^2}}\overset{d}{\longrightarrow}Z\sim N(0,1)\textrm{ as $n\to\infty$}
 \end{align}
@@ -699,7 +707,7 @@ Whereas in \ref{fun:step} a step can only occur at the end of every time period,
 	\frac{S_{\lfloor ct\rfloor}-\lfloor ct \rfloor \mu}{\sqrt{c\sigma^2}}\overset{d}{\longrightarrow}B_t\sim N(0,t)\textrm{ as $c\to\infty$},
 \end{align}
 
-\noindent where $B_t$ is the standard Brownian Motion. An easy way to check that the above weak convergence is correct is to consider the Fourier transforms of both sides.\\
+\noindent where $B_t$ is standard Brownian Motion. An easy way to check that the above weak convergence is correct is to consider the Fourier transforms of both sides.\\
 \begin{definition}
 	Let $Y:\Omega\to E$ be a random variable with probability density function $f_Y(x)$. Then the \textbf{Fourier Transform}  of $f_Y(x)$ is
 	\[
@@ -804,7 +812,7 @@ but we use \cite[Def~1.1.6]{Samorodnitsky1994}. Definition \ref{def:stableChar} 
 	\item Unspecified scale and location parameters $\sigma$ and $\mu$
 \end{itemize}
 
-\noindent To check that the mean is infinite when $\beta \in (0,1)$ we first see from \cite{JanickiWeron1994} that if a Central Limit Theorem type argument is used we have
+\noindent To check that the mean is infinite when $\beta \in (0,1)$ we first see from \cite{JanickiWeron1994} that 
 \begin{align}
 \lim_{x\to\infty} x^\beta\PP(X>x)=C_\beta\frac{1+\alpha}{2}\gamma^\beta,\\
 \lim_{x\to\infty} x^\beta\PP(X<-x)=C_\beta\frac{1-\alpha}{2}\gamma^\beta,
@@ -813,11 +821,15 @@ but we use \cite[Def~1.1.6]{Samorodnitsky1994}. Definition \ref{def:stableChar} 
 \[
 	C_\beta=\left(\int^\infty_0 x^{-\beta} \sin(x) dx  \right)^{-1}=\frac{2}{\pi}\Gamma(\beta)\sin\frac{\pi\beta}{2}.
 \]
-\noindent When $\alpha=1$ we have $\lim_{x\to\infty}\PP(X<-x)=0$, as one would expect. Since a Pareto random variable $T$ with parameter $\beta$ has a tail function $\PP(T>t)=ct^{-\beta}$ for some $c\in \R$ and $t>c^{1/\beta}$, we can then observe that the tails of a stable distribution are asymptotically equivalent to a Pareto distribution and thus exhibit power-law behaviour. Thus if we show that a Pareto distribution with $\beta \in (0,1)$ has an infinite mean then the corresponding stable distribution also has an infinite mean. Now if $p(t)$ is the density of $T$ we have that 
+\noindent When $\alpha=1$ we have $\lim_{x\to\infty}\PP(X<-x)=0$, as one would expect. Since a Pareto random variable $T$ with parameter $\beta$ has a tail function $\PP(T>t)=ct^{-\beta}$ for some $c\in \R$ and $t>c^{1/\beta}$, we can then observe that the tails of a stable distribution are asymptotically equivalent to a Pareto distribution and thus exhibit power-law behaviour. 
+% Good
+Thus if we show that a Pareto distribution with $\beta \in (0,1)$ has an infinite mean then the corresponding stable distribution also has an infinite mean. Now if $p(t)$ is the density of $T$ we have that 
 \[
 	\E[T]=\int^\infty_0 tp(t)dt = \int^\infty_0 t\frac{c\beta}{t^{\beta+1}}dt = c\beta\int^\infty_0 t^{-\beta}dt = c\beta \left[\frac{t^{1-\beta}}{1-\beta}\right]^\infty_0.
 \]
-The above expectation is clearly infinite if $0<\beta\leq1$, but if $\beta=1$ our initial stable distribution reduces to a Cauchy distribution and thus we exclude that case.\textcolor{red}{why ignore Cauchy?? also maybe talk about variance here}\\
+The above expectation is clearly infinite if $0<\beta\leq1$, but if $\beta=1$ our initial stable distribution reduces to a Cauchy distribution, which we exclude here to avoid technicalities.
+Similarly, if $\beta \in (1,2)$, the mean is finite, but the variance is infinite.
+
 
 One of the reasons the stable distribution is so useful is that we can now generalise the classical Central Limit Theorem. Recall that the Central Limit Theorem says that the normalised sum of i.i.d. random variables with a finite variance converges to a normal distribution. Rewriting the above to match the notation we will use from now on we have
 \[
@@ -935,6 +947,7 @@ A \textbf{stable subordinator} $D(t)$ is a nondecreasing L\'{e}vy process such t
 	D(t+s)-D(t)\overset{d}{=}t^{1/\alpha}S(\alpha,1,\sigma,0))\overset{d}{=}S(\alpha,1,t^{1/\alpha}\sigma,0).
 \]
 $\alpha$-stable subordinators are stable subordinators with stability parameter $\alpha$.
+Since the increments are required to be non-negative, one needs $\alpha \in (0,1)$. 
 \end{definition}
 \begin{theorem}\cite[Th.~4.5.3]{Whitt2010}\label{th:sfclt} If $W_k$ obey a central limit theorem such that
 \begin{align}\label{eq:sclt}
@@ -944,10 +957,12 @@ where $D\sim S(\alpha,1,\sigma,0)$. Then there is convergence in distribution fo
 \begin{align}
 \frac{S_\Floor{ct} - a(c)t}{b(c)} \cd D(t), \quad c \to \infty,
 \end{align}
-in the Skorokhod space $\D$ with respect to the $J_1$ metric, where $D(t)$ is a $\alpha$-stable subordinator and $S_\Floor{ct}=W_1 + \ldots + W_\Floor{ct}$.
+in the Skorokhod space $\D$ with respect to the $J_1$ metric, where $D(t)$ is an 
+$\alpha$-stable L\'evy process and $S_\Floor{ct}=W_1 + \ldots + W_\Floor{ct}$.
 \end{theorem}
 
-Note that the translation scaling constant $a(c)$ is not required when $\alpha\in(0,1)$. We can also adjust $b(c)$ such that the stable subordinator limit is a \emph{unit} stable subordinator with respect to the Laplace transform, defined via 
+The translation scaling constant $a(c)$ can be set to $0$ when $\alpha\in(0,1)$,
+in which case $D(t)$ is a subordinator. We can also adjust $b(c)$ such that the stable subordinator limit is a ``unit'' stable subordinator, in the sense that its Laplace transform has the succinct form
 \begin{align}\label{eq:unitStable}
 \ex[e^{-\lambda D(t)}] = e^{-t \lambda^\alpha}.
 \end{align}
@@ -975,7 +990,10 @@ where a $\sim$ symbol indicates that the quotient of both sides converges to
 $1$ as $c \to \infty$. 
 Note that $\tilde b(c) \in RV(\alpha)$ as $b(c) \in RV(1/\alpha)$ \cite[Prop~4.15]{MeerschaertSikorskii2012}. 
 
-A subordinator is a stochastic process that determines the evolution of time within another stochastic process, which is referred to as the subordinated stochastic process. The inverse stable subordinator, $E(t)$, is a subordinator itself (as the inverse of a nondecreasing function is nondecreasing) and it governs the temporal dynamics of
+A subordinator is a stochastic process that is typically used to determine the evolution of time within another stochastic process, which is referred to as the subordinated stochastic process. 
+The inverse stable subordinator, $E(t)$, is an increasing process, but by definition
+it is not a subordinator itself, since it is not a L\'evy process. 
+However, it governs the temporal dynamics of
 the scaling limit of the CTRM process $M(t)$, see Theorem~\ref{th:AEt}. 
 It is self-similar with exponent $\beta$
 \cite{limitCTRW}, non-decreasing, and the (regenerative, random) set 
@@ -996,7 +1014,7 @@ Having only two parameters ($\alpha \in (0,1)$ and a scale parameter)
 the inverse stable subordinator hence models scaling limits of heavy-tailed 
 waiting times parsimoniously.
 
-\section{Scaling Limit of the Maximum of Event Magnitudes}\label{s:max}
+\section{Scaling Limit of the Maximum Event Magnitudes}\label{s:max}
 The aim of this section is to develop a stochastic process limit theorem for the partial maxima of our event magnitudes $J_k$. The partial maxima is defined as 
 \begin{align}
 	M_n:=\bigvee_{i=1}^n J_i.
@@ -1076,13 +1094,13 @@ Resnick and Davis in \cite{DavisResnick1984} were able to show that this definit
 	\[
 	\PP(X(t_i)\leq x_i,1\leq i \leq d) = F(\wedge_{i=1}^d x_i)^{t_1} F(\wedge_{i=2}^d x_i)^{t_2-t_1}\ldots F(x_d)^{t_d-t_{d-1}},
 	\]
-	where F(x) is a GEV distribution. We then say X(t) is an extremal process \textbf{generated} by F(x). Equivalently if $J_i$ are i.i.d. random variables then X(t) is an extremal process if
+	where F(x) is a GEV distribution. We then say X(t) is an extremal process \textbf{generated} by F(x). Equivalently if $J_i$ are i.i.d. random variables then X(t) is an extremal process if the random vector
 	\[
-		X(t_1) ;X(t_2); \ldots X(t_d);
+		\left( X(t_1), X(t_2), \ldots X(t_d)\right)
 	\]
 	has the same joint distribution as 
 	\[
-		J_1;max(J_1,J_2);\ldots ;max(J_1,J_2,\ldots,J_d),
+		\left(J_1, \max(J_1,J_2), \ldots, \max(J_1,J_2,\ldots,J_d) \right),
 	\]
 	where $0\leq t_1<t_2<\ldots<t_d$, and $\PP(J_i<x)=\PP(X(J_i-J_{i-1})$ for $i=1,2,\ldots,d.$
 \end{definition}
