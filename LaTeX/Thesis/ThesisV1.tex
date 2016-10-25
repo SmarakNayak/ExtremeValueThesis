@@ -29,7 +29,7 @@
 \usepackage{doi}
 
 \usepackage{float}
-
+\usepackage{bbm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %  The following are some simple LaTeX macros to give some
@@ -75,6 +75,8 @@
 \newcommand{\Floor}[1]{{\lfloor {#1} \rfloor}}
 \newcommand{\cd}{\overset{d}{\longrightarrow}}
 \newcommand{\D}{\mathbb{D}}
+\newcommand{\ppartial}[2]{\dfrac{\partial {#1}}{\partial {#2} }}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -318,7 +320,7 @@ This model has been studied under the names
 ``Max-Renewal process'' \cite{Silvestrov2002a,ST04,Basrak2014}, 
 and ``Shock process'' 
 \cite{Esary1973,Sumita1983,Sumita1984,Sumita1985,Anderson1987,Gut1999}.
-This article aims to develop concrete statistical inference methods for this model, 
+This thesis aims to develop concrete statistical inference methods for this model, 
 a problem which has seemingly received little attention by the statistical 
 community.
 
@@ -496,8 +498,6 @@ The stochastic processes we will be discussing in this thesis will not necessari
 
 For the rest of this thesis, we will always assume that the domain is the interval
 $[0,\infty)$ and the range is $\R$ as the stochastic processes we are concerned with are in this form. Thus we will simply write $\D$ to be the Skorokhod space of $\R$ valued functions defined on $\Rp$.
-% \textcolor{red}{do i need to talk about the equivalent metric which makes $\D$ complete}
-% NO I don't think your readers will care
 
 \section{Central Limit Theorems}
 In the classical setting the Central Limit Theorem refers to the convergence of a rescaled and centered sum of independent and identically distributed (i.i.d.) random variables with finite second moments towards a normally distributed random variable. However in this thesis we will be operating in a more general setting and it is thus imperative that we define the terminology we will use throughout this thesis to avoid confusion.\\
@@ -560,7 +560,7 @@ model for anomalous diffusion in the past two decades
 properties. The stochastic process we study in this thesis is conceptually very close
 to the CTRW, since essentially the jumps $J_k$ are reinterpreted as 
 magnitudes, and instead of the cumulative sum, one tracks the cumulative 
-maximum. Similarly tractable scaling properties apply to the CTRM, and many of the results we present for the CTRM have been derived as extensions to similar results for the CTRW.
+maximum. Similarly tractable scaling properties apply to the CTRM, and many of the results we present for the CTRM have been derived as extensions to similar results for the CTRW.\\
 
 \begin{definition}
 Assume identically and independently distributed (i.i.d.) pairs of random variables $(J_k, W_k)$, $k = 1, 2, \ldots$
@@ -583,39 +583,37 @@ the empty set is set to $x_0$, the left end-point of the support of the distribu
 of $J_k$.\\
 \end{definition}
 
-It is clear that the sample paths of $N(t)$ and $M(t)$ are right-continuous
+It is clear that the sample paths of $N(t)$ and $V(t)$ are right-continuous
 with left-hand limits. 
 If $W_k$ is interpreted as the time \emph{leading up} to the event with magnitude
-$J_k$, then $M(t)$ is the largest magnitude observed until time $t$.
+$J_k$, then $V(t)$ is the largest magnitude observed until time $t$.
 The alternative case where $W_k$ represents the inter-arrival time 
 \textit{following} $J_k$ 
 is termed ``second type'' (in the shock model literature) or OCTRM
 (overshooting CTRM), and the largest magnitude up to time $t$ is then
 given by
 \begin{align}
-\tilde M(t) = \bigvee_{k=1}^{N(t)+1} J_k, \quad t \ge 0.
+\tilde V(t) = \bigvee_{k=1}^{N(t)+1} J_k, \quad t \ge 0.
 \end{align}
 Finally, the model is called \emph{coupled} when $W_k$ and $J_k$ are not independent.
 In this thesis we focus on the uncoupled case,  
-for which it can be shown that the processes $M(t)$ and
-$\tilde M(t)$ have the same limiting distributions at large times
-\cite{Hees2015}, and hence we focus on the CTRM $M(t)$. 
-
-\textcolor{red}{expand}. It is for this reason that we choose to make inference on the distribution of the following quantities.\\
+for which it can be shown that the processes $V(t)$ and
+$\tilde V(t)$ have the same limiting distributions at large times
+\cite{Hees2015}, and hence we focus on the CTRM $V(t)$. When drawing inference on $V(t)$ it is natural to be concerned with both the timing and magnitude of extreme events. By definition extreme events are those of large magnitude and therefore must exceed a threshold level $\ell$. Thus we seek the distribution of the following quantities.\\
 \begin{definition}
-Let $M(t)$ be an uncoupled CTRM whose magnitudes $J_k$ are supported on the interval
+Let $V(t)$ be an uncoupled CTRM whose magnitudes $J_k$ are supported on the interval
 $[x_0, x_F]$.  Then the exceedance time of level $\ell \in [x_0,x_F]$ is
 the random variable
 \begin{align*}
-T_\ell = \inf\{t: M(t) > \ell\}
+T_\ell = \inf\{t: V(t) > \ell\}
 \end{align*}
 and the exceedance is 
 \begin{align*}
-X_\ell = M(T_\ell) - \ell.
+X_\ell = V(T_\ell) - \ell.
 \end{align*}
 \end{definition}
-These quantities are chosen as it is natural to be concerned with both the size and the timing of events of large magnitude. Possessing a strong understanding of these large events will aid in managing the consequences associated with extreme natural phenomena, financial loss and human behaviour. \textcolor{red}{reword this}
-\begin{lemma}
+Calculating the distributions of the above quantities is paramount in developing a strong understanding of possible future events. Although we are assuming that the inter-arrival waiting times and event magnitudes are independent the exceedances and the exceedance times might not necessarily be independent. If their independence can be determined we can then consider their distributions separately.
+\begin{lemma}\label{lem:independence}
 Given a level $\ell \in [x_0,x_F]$, exceedance $X_\ell$ and exceedance time
 $T_\ell$ are independent. Moreover, 
 % might want to leave out the formula for P(T_\ell > t)
@@ -667,8 +665,8 @@ Letting $t \downarrow 0$, we see
 and letting $x \downarrow 0$, one gets $\pr[T_\ell > t]$. 
 One checks that $\pr[T_\ell > t, X_\ell > x] = \pr[T_\ell > t] \pr[X_\ell > x]$, implying independence.
 \end{proof}
-The distribution of the exceedance is hence, as expected, simply the
-conditional distribution of a magnitude $J_k$ given $J_k > \ell$. We will look at the distributions of exceedances and exceedance times in further detail in the next few sections.
+\noindent The distribution of the exceedance is hence, as expected, simply the
+conditional distribution of a magnitude $J_k$ given $J_k > \ell$. We will look at the distributions of exceedances and exceedance times in further detail in Chapter \ref{distributions}.
 
 \section{Brownian Motion as a Stochastic Process Limit}\label{s:background}
 A stochastic process limit is the limit of a sequence of stochastic processes. Before we examine the stochastic process limits that we will utilise in this thesis it will be illustrative to analyse one of the most well known examples of a stochastic process limit - Brownian Motion. One of the methods used to derive Brownian motion is devised by trying to seek a continuous time representation of the discrete time random walk. Recall that a discrete time random walk is defined in the following manner.\\
@@ -771,7 +769,7 @@ Now that we have shown how one can derive Brownian Motion as a stochastic proces
 
 
 \section{Stable Distributions}
-In order for our inter-arrival waiting times $W_k$ to be modelled correctly they should be heavy tailed and completely right skewed so as not to violate our initial bursty assumption.
+In order for our inter-arrival waiting times $W_k$ to be modelled correctly they should be heavy tailed and completely right skewed so as to model bursty data.
 % what bursty assumption?
 Stable distributions are an extensive class of probability distributions that allow for both skew and heavy tails and are thus a perfect distribution to describe our waiting times with. As we will find out later in this section they also have many useful properties. The class was first defined by Paul L\'{e}vy in the early 20th century but was under utilised due to the lack of closed formulas for densities and distribution functions for all but a few stable distributions (Gaussian, Cauchy and L\'{e}vy). However its use has increased since advances in computing methods \textcolor{red}{expand} now allow for the computation of stable densities, distribution functions and quantiles.\\
 \begin{definition}\cite{Nolan2015}
@@ -814,14 +812,14 @@ but we use \cite[Def~1.1.6]{Samorodnitsky1994}. Definition \ref{def:stableChar} 
 
 \noindent To check that the mean is infinite when $\beta \in (0,1)$ we first see from \cite{JanickiWeron1994} that 
 \begin{align}
-\lim_{x\to\infty} x^\beta\PP(X>x)=C_\beta\frac{1+\alpha}{2}\gamma^\beta,\\
-\lim_{x\to\infty} x^\beta\PP(X<-x)=C_\beta\frac{1-\alpha}{2}\gamma^\beta,
+\lim_{x\to\infty} x^\alpha\PP(X>x)=C_\alpha\frac{1+\beta}{2}\gamma^\alpha,\\
+\lim_{x\to\infty} x^\alpha\PP(X<-x)=C_\alpha\frac{1-\beta}{2}\gamma^\alpha,
 \end{align}
 \noindent where
 \[
-	C_\beta=\left(\int^\infty_0 x^{-\beta} \sin(x) dx  \right)^{-1}=\frac{2}{\pi}\Gamma(\beta)\sin\frac{\pi\beta}{2}.
+	C_\alpha=\left(\int^\infty_0 x^{-\alpha} \sin(x) dx  \right)^{-1}=\frac{2}{\pi}\Gamma(\alpha)\sin\frac{\pi\alpha}{2}.
 \]
-\noindent When $\alpha=1$ we have $\lim_{x\to\infty}\PP(X<-x)=0$, as one would expect. Since a Pareto random variable $T$ with parameter $\beta$ has a tail function $\PP(T>t)=ct^{-\beta}$ for some $c\in \R$ and $t>c^{1/\beta}$, we can then observe that the tails of a stable distribution are asymptotically equivalent to a Pareto distribution and thus exhibit power-law behaviour. 
+\noindent When $\beta=1$ we have $\lim_{x\to\infty}\PP(X<-x)=0$, as one would expect. Since a Pareto random variable $T$ with parameter $\alpha$ has a tail function $\PP(T>t)=ct^{-\alpha}$ for some $c\in \R$ and $t>c^{1/\alpha}$, we can then observe that the tails of a stable distribution are asymptotically equivalent to a Pareto distribution and thus exhibit power-law behaviour. 
 % Good
 Thus if we show that a Pareto distribution with $\beta \in (0,1)$ has an infinite mean then the corresponding stable distribution also has an infinite mean. Now if $p(t)$ is the density of $T$ we have that 
 \[
@@ -938,7 +936,6 @@ for any $t>0$ because $\frac{\Floor{nt}}{n}\to t$ as $n\to\infty$. Once again by
 \[
 	\phi_{Z_t}(s)=\phi_Y(s)^t=\exp[-Ct\Gamma(1-\alpha)(-is)^\alpha].
 \]
-\textcolor{red}{Notation issue switching from n to c when considering stochastic process limit}
 \end{proof}
 Furthermore if we drop the assumption that $W_k$ is Pareto distributed but retain the assumption that they strictly greater than zero then we get a more general, functional limit theorem. However before we do that we must introduce \emph{stable subordinators} which are a class of stochastic processes.
 \begin{definition}
@@ -964,7 +961,7 @@ $\alpha$-stable L\'evy process and $S_\Floor{ct}=W_1 + \ldots + W_\Floor{ct}$.
 The translation scaling constant $a(c)$ can be set to $0$ when $\alpha\in(0,1)$,
 in which case $D(t)$ is a subordinator. We can also adjust $b(c)$ such that the stable subordinator limit is a ``unit'' stable subordinator, in the sense that its Laplace transform has the succinct form
 \begin{align}\label{eq:unitStable}
-\ex[e^{-\lambda D(t)}] = e^{-t \lambda^\alpha}.
+\E[e^{-\lambda D(t)}] = e^{-t \lambda^\alpha}.
 \end{align}
 % this type of convergence might be worth explaining in a separate paragraph,
 % maybe instead your derivation of the CLT above with Fourier transforms.
@@ -1043,7 +1040,7 @@ where $a_n$ is a sequence of positive constants and $d_n\in\R$. These constants 
 \begin{align*}
 \PP\left\{\frac{M_n-d_n}{a_n}\leq x\right\}=F^n(a_nx+d_n)\cd G(x)\quad\textrm{as $n\to\infty$,}
 \end{align*}	
-	where $G(x)$ is a non-degenerate distribution function, then G must follow one of three distributions:\newpage
+	where $G(x)$ is a non-degenerate distribution function, then G must follow one of three distributions:
 	\begin{center}Type I (Gumbel)\end{center}
 	\begin{align*}
 		G(x)=\exp\left\{-\exp\left[-\left(\frac{x-b}{a} \right) \right] \right\}, \forall x
@@ -1061,11 +1058,11 @@ where $a_n$ is a sequence of positive constants and $d_n\in\R$. These constants 
 		1 &x\geq b				
 			\end{cases}
 			\]
-\noindent for scale parameters $a>0$, location parameter $b$, and in the case of families II and III, shape parameter $\alpha>0$.
+\noindent for scale parameters $a>0$, location parameter $b$, and in the case of families II and III, shape parameter $\alpha>0$.\\
 \end{theorem}
 The Fisher-Tippet-Gnendenko Theorem was first introduced by Fisher and Tippet \cite{FisherTippet} and was extended by Gnedenko \cite{Gnedenko}. It implies that the only possible non-trivial limit of the normalised partial maxima of our event magnitudes is either a Gumbel, Fr\'{e}chet or Weibull distribution. Despite the fact that this theorem is expressed in terms of the distribution functions rather than random variable one can see how it is an analogue of the classical central limit theorem in a max sense as opposed to a sum sense.
 
-It turns out that all three distributions can be expressed in terms of a single parameterisation. This parameterisation is known as the generalized extreme value (GEV) family of distributions. It is thus more convenient to express the above central limit theorem in terms of the GEV family of distributions.
+It turns out that all three distributions can be expressed in terms of a single parameterisation. This parameterisation is known as the generalized extreme value (GEV) family of distributions. It is thus more convenient to express the above central limit theorem in terms of the GEV family of distributions.\\
 
 
 \begin{theorem}\cite{ColesBook}
@@ -1075,11 +1072,11 @@ It turns out that all three distributions can be expressed in terms of a single 
 	\end{align*}	
 	where $G(x)$ is a non-degenerate distribution function, then $G(x)$ is a member of the GEV family
 	\begin{align}\label{eq:GEV}
-		G(x)=\exp\left\{-\left[1+\zeta\left(\frac{x-\mu}{\sigma}\right)\right]^{-1/\zeta}\right\}
+		G(x)=\exp\left\{-\left[1+\xi\left(\frac{x-\mu}{\sigma}\right)\right]^{-1/\xi}\right\}
 	\end{align}	
-	defined on $\{x:1+\zeta(x-\mu)/\sigma>0\}$, where $\mu$ is finite, $\sigma>0$ and $\zeta$ is finite. We can then say $F(x)$ lies in the \textbf{max-domain of attraction} of $G(x)$.
+	defined on $\{x:1+\xi(x-\mu)/\sigma>0\}$, where $\mu$ is finite, $\sigma>0$ and $\xi$ is finite. We can then say $F(x)$ lies in the \textbf{max-domain of attraction} of $G(x)$.
 \end{theorem}
-In the above parameterisation the Gumbel family is achieved when $\zeta \to 0$, the Fr\'echet family corresponds to the case when $\zeta>0$ and the Weibull family corresponds to the case when $\zeta<0$. We will now use the following definition to refer to distributions which remain as the same distribution (up to location and scale constants) after taking the maximum of multiple i.i.d. copies.
+In the above parameterisation the Gumbel family is achieved when $\xi \to 0$, the Fr\'echet family corresponds to the case when $\xi>0$ and the Weibull family corresponds to the case when $\xi<0$. We will now use the following definition to refer to distributions which remain as the same distribution (up to location and scale constants) after taking the maximum of multiple i.i.d. copies.\\
 \begin{definition}\cite{BalkemaResnick1977}
 A distribution G(x) is said to be \textbf{max-stable} if for every $n\in\N$ there are constants $a_n>0$ and $d_n$ such that
 \[
@@ -1087,7 +1084,7 @@ A distribution G(x) is said to be \textbf{max-stable} if for every $n\in\N$ ther
 \]
 \end{definition}
 
-Resnick and Davis in \cite{DavisResnick1984} were able to show that this definition is an equivalent characterisation of a GEV random variable. They proved a distribution is max-stable iff it is a GEV distribution. Note that this result can be seen as a max counterpart of Theorem \ref{th:gclt}. Now that we have stated the max analogue of the central limit theorem and its associated terminology we attempt to seek a more general functional limit theorem. But before we do that we must provide the definition of an \emph{extremal process} which is the stochastic process extension of a GEV random variable.
+\noindent Resnick and Davis in \cite{DavisResnick1984} were able to show that this definition is an equivalent characterisation of a GEV random variable. They proved a distribution is max-stable iff it is a GEV distribution. Note that this result can be seen as a max counterpart of Theorem \ref{th:gclt}. Now that we have stated the max analogue of the central limit theorem and its associated terminology we attempt to seek a more general functional limit theorem. But before we do that we must provide the definition of an \emph{extremal process} which is the stochastic process extension of a GEV random variable.\\
 
 \begin{definition}
 	Let X(t) be a stochastic process. X(t) is an \textbf{extremal process} if for $d\geq1,$ $x_i\in\R$ and the times $0=t_0<t_1<\ldots<t_d$ we have
@@ -1102,9 +1099,9 @@ Resnick and Davis in \cite{DavisResnick1984} were able to show that this definit
 	\[
 		\left(J_1, \max(J_1,J_2), \ldots, \max(J_1,J_2,\ldots,J_d) \right),
 	\]
-	where $0\leq t_1<t_2<\ldots<t_d$, and $\PP(J_i<x)=\PP(X(J_i-J_{i-1})$ for $i=1,2,\ldots,d.$
+	where $0\leq t_1<t_2<\ldots<t_d$, and $\PP(J_i<x)=\PP(X(J_i-J_{i-1})$ for $i=1,2,\ldots,d.$\\
 \end{definition}
-In 1964 Lamperti \cite{Lamperti1964} was able to show that the same conditions that are required for a partial maxima to be nondegenerate can be used to show that the partial maxima-process will converge to an extremal process.
+\noindent In 1964 Lamperti \cite{Lamperti1964} was able to show that the same conditions that are required for a partial maxima to be nondegenerate can be used to show that the partial maxima-process will converge to an extremal process.\\
 \begin{theorem}\cite[Th~3.2]{Lamperti1964}\label{th:extclt} (see also \cite[Th~2]{Resnick1974})
 Let $F(x)$ be the CDF of $J_i$. Now suppose there exists constants $a(n)>0$ and $d(n)$ such that,
 \[
@@ -1122,10 +1119,9 @@ Then
 \[
 \frac{M_\Floor{ct}-d(c)}{a(c)} \xrightarrow[c\to \infty]{J_1} A(t),
 \]
-where $\{A(t)\}_{t\geq0}$ is an extremal process generated by G.
+where $\{A(t)\}_{t\geq0}$ is an extremal process generated by G.\\
 \end{theorem}
-
-Just as we sought random variables that remained nondegenerate after addition to model our waiting times, we now seek random variables that remain nondegenerate after taking the maximum to model our event magnitudes. By Theorem \ref{th:extclt} this will ensure that the normalised partial maxima-process will converge to an extremal process. From \cite{beirlant06Book} we know that any probability distribution with a continuous distribution $F(x)$ on $\R$ lies in the max-domain of attraction of a GEV distribution $G(x)$. Furthermore the distribution of the largest magnitudes is well approximated by a GEV distribution $G(x)$ if the number of events is large \cite{ColesBook}. Thus we simply require the event magnitudes to be drawn from a continuous distribution, whereas in the sum-stable case we required the waiting times to have regularly varying tails.
+\noindent Just as we sought random variables that remained nondegenerate after addition to model our waiting times, we now seek random variables that remain nondegenerate after taking the maximum to model our event magnitudes. By Theorem \ref{th:extclt} this will ensure that the normalised partial maxima-process will converge to an extremal process. From \cite{beirlant06Book} we know that any probability distribution with a continuous distribution $F(x)$ on $\R$ lies in the max-domain of attraction of a GEV distribution $G(x)$. Furthermore the distribution of the largest magnitudes is well approximated by a GEV distribution $G(x)$ if the number of events is large \cite{ColesBook}. Thus we simply require the event magnitudes to be drawn from a continuous distribution, whereas in the sum-stable case we required the waiting times to have regularly varying tails.
 \section{Scaling Limit of CTRM}
 In the previous two sections we outlined the necessary conditions for our waiting times $W_k$ to be in the domain of attraction of a sum-stable random variable and our event magnitudes $J_k$ to be in the domain of attraction of a max-stable (GEV) random variable. We also discussed how the same conditions then allowed for the partial sum-process $S_{\Floor{ct}}$ and partial max-process $M_{\Floor{ct}}$ (both normalised appropriately) to converge to a stable subordinator and extremal process respectively. More precisely if our waiting times $W_k$ have tail function $\overline F_W \in RV(-\alpha)$ for $\alpha\in(0,1),$ and if our event magnitudes $J_k$ are i.i.d. and drawn from a continuous probability distribution $F(x)$ in the max-domain of attraction of $G(x)$, then we have a limit theorem for our partial sum-process,
 \begin{align}\label{eq:partialSumLimit}
@@ -1148,22 +1144,295 @@ Let $(W_i,J_i)$ be a sequence of i.i.d $\mathbb{R}^+\times\mathbb{R}$ random vec
         \[
             \frac{M(N(ct))-d(\tilde{b}(c))}{a(\tilde{b}(c))} \cd A(E(t)), \quad c\to\infty,
         \]
-where $A(E(t))$ is a subordination of the extremal process $A(t)$ by the inverse stable subordinator process $E(t)$.
+where $A(E(t))$ is a subordination of the extremal process $A(t)$ by the inverse stable subordinator process $E(t)$.\\
 \end{theorem}
-Recall that $M(N(t))=V(t)$ is our CTRM process. Now that we have its scaling limit we can use results derived for the extremal process subordinated to the inverse stable subordinator to derive the distributions of the exceedances and their durations.
-\chapter{Distribution of CTRM}
-In this chapter we derive the distribution of a CTRM process if the inter arrival waiting times that drive the process exhibit a bursty nature.
+
+\noindent Recall that $M(N(t))=V(t)$ is our CTRM process. Now that we have its scaling limit we can use results derived for the extremal process subordinated to the inverse stable subordinator to derive the distributions of the exceedances and their durations.
+\chapter{Distribution of CTRM}\label{distributions}
+In this chapter we derive the distribution of a CTRM process' exceedances and exceedance timings if the inter arrival waiting times that drive the underlying renewal process exhibit a bursty nature.
 \section{Distribution of Exceedances}
+In Lemma \ref{lem:independence} we showed that the exceedances had tail probability
+\[
+\PP[X_\ell > x]= \frac{\overline F_J(\ell + x)}{\overline F_J(\ell)}, \quad x > 0.
+\] 
+However in our model we make no distributional assumptions on $F_J$ apart from it belonging to the domain of attraction of a max-stable distribution. Thus determining the distribution of the exceedances in the above manner is infeasible. But assuming that $F_J$ is in the domain of attraction of a max-stable distribution allows us to use the following theorem.
+\begin{theorem}\cite{ColesBook}\label{th:GP}
+Let $J_1,J_2,...$ be a sequence of independent random variables with common distribution $F(x)$, and let
+\[
+	M_n=\bigvee_{i=1}^n J_i.
+\]
+Denote an arbitrary term in the $J_i$ sequence as J, and suppose that $F(x)$ satisfies \ref{th:extclt}, so that for large $n$,
+\[
+	\PP(M_n\leq z)\approx G(z),
+\]
+where
+\[
+	G(z)=\exp\left\{-\left[1+\xi\left(\frac{z-\mu}{\sigma}\right)\right]^{-1/\xi}\right\}
+\]
+for some $\mu,\sigma>0,\xi$. Then, for large enough $\ell$, the distribution function of $(J-\ell)$, conditional on $J>\ell$, is approximately
+\begin{align}\label{eq:GPfamily}
+	H(y)=1-\left(1+\frac{\xi y}{\tilde \sigma}\right)^{-1/\xi}
+\end{align}
+defined on $\{y:y>0$ and $(1+\xi y/\tilde \sigma)>0 \},$ where
+\begin{align*}
+	\tilde \sigma =\sigma + \xi(\ell-\mu).
+\end{align*}
+\end{theorem}
+\begin{proof}\cite{Leadbetter1983}
+Let $J$ have distribution function $F(x)$. Assume $F(x)$ is in the domain of attraction of a max-stable distribution. Then for large $n$
+\[
+	F^n(z)\approx\exp\left\{-\left[1+\xi\left(\frac{z-\mu}{\sigma}\right)\right]^{-1/\xi}\right\}.
+\]
+Taking the logarithm of both sides
+\begin{align}\label{eq:GPproof}
+	n \log F(z) = -\left[1+\xi\left(\frac{z-\mu}{\sigma}\right)\right]^{-1/\xi}.
+\end{align}
+But for large values of $z$, we have the following Taylor series expansion
+\[
+	\log F(z)\approx -(1-F(z)).
+\]
+Substituting into \ref{eq:GPproof} gives
+\[
+	1-F(\ell) \approx \frac{1}{n}\left[1+\xi\left(\frac{\ell-\mu}{\sigma}\right)\right]^{-1/\xi}
+\]
+for large $\ell$. Similarly for $y>0$,
+\[
+	1-F(\ell+y) \approx \frac{1}{n}\left[1+\xi\left(\frac{\ell+y-\mu}{\sigma}\right)\right]^{-1/\xi}.
+\]
+Thus,
+\begin{align*}
+	\PP(J>\ell+y|J>\ell) &\approx \frac{n^{-1}[1+\xi(\ell+y-\mu)/\sigma]^{-1/\xi}}{n^{-1}[1+\xi(\ell-\mu)/\sigma]^{-1/\xi}}\\
+	&=\left[\frac{1+\xi(\ell+y-\mu)/\sigma}{1+\xi(\ell-\mu)/\sigma}\right]^{-1/\xi}\\
+	&=\left[1+\frac{\xi y/\sigma}{1+\xi(\ell-\mu)/\sigma}\right]^{-1/\xi}\\
+	&=\left[1+\frac{\xi y}{\tilde \sigma}\right]^{-1/\xi}
+\end{align*}
+where $\tilde\sigma=\sigma+\xi(\ell-\mu)$.
+\end{proof}
+
+\begin{definition}
+The family of distributions defined by Equation \ref{eq:GPfamily} is called the \textbf{Generalised Pareto family}. If a random variable $X$ is Generalised Pareto we write $X\sim GP(\xi,\sigma)$.\\
+\end{definition}
+\noindent As $V(T_\ell)$ is the size of the first event magnitude larger than $\ell$, we have that
+\begin{align*}
+	X_\ell&=V(T_\ell)-\ell\\
+		  &\sim J-\ell, \quad \textrm{conditional on $J>\ell$}.
+\end{align*}
+Recall that we assumed that the distribution of the event magnitudes, $F_J$, is in the domain of attraction of a GEV distribution such that $M_n \sim GEV(\xi,\sigma,\mu)$. Then by Theorem \ref{th:GP} we have that 
+\begin{align}
+X_\ell\sim GP(\xi,\tilde \sigma).
+\end{align}
+We have thus shown that our exceedances can be modelled by Generalised Pareto random variables.
+
+\section{The Mittag-Leffler Distribution}
+The Mittag-Leffler distribution plays a major role in the next section in which we derive the distribution of the exceedance durations. As a result we provide a brief overview of the distribution in this section.
+\begin{definition}\cite{Lin1998}
+	The \textbf{Mittag-Leffler function} is defined as the series
+	\begin{align*}
+		E_\alpha(z):=\sum_{n=0}^\infty \frac{z^n}{\Gamma(1+\alpha n)}
+	\end{align*}
+	for any complex $\alpha$ with a positive real part.
+\end{definition}
+The Mittag-Leffler function was first introduced by Mittag-Leffler in 1903 as a fractional extension to the exponential function. This can easily be deduced from the fact that the gamma function is continuous extension of the factorial function. In fact, when $\alpha=1$, the Mittag-Leffler function reduces to the exponential.
+
+If we consider the function $E_\alpha(z^\alpha)$ we can see that $E_\alpha(0)=1$ and for $\alpha \in (0,1]$ we have $E_\alpha(z^\alpha)\to0$ as $z\to-\infty$ \cite{Pillai1990} and that $E_\alpha(z^\alpha)$ is increasing on the real line \cite[Th~1]{Lin1998}. Thus we can form a probability distribution defined by its cumulative distribution function
+\begin{align}
+	F_\alpha(x)=1-E_\alpha(-x^\alpha),\quad x\geq0.
+\end{align}
+If a random variable $Y$ has a distribution function $F_\alpha(x)$ then it is clear that we can form a distribution for $\delta Y$ for $\delta>0$ as
+\begin{align}\label{eq:MLdistribution}
+	F_{\alpha,\delta}(x)=1-\frac{E_\alpha(-x^\alpha)}{\delta},\quad x\geq0.
+\end{align}
+\begin{definition}\label{def:MLlaplace}
+	If a random variable $Y$ has a distribution function $F_{\alpha,\delta}(x)$ as in \ref{eq:MLdistribution} then it is a \textbf{Mittag-Leffler} random variable and has Laplace transform
+	\[
+		\E[e^{-\lambda Y}]=\frac{1}{1+(\delta\lambda)^\alpha},
+	\]
+	we then write $Y\sim ML(\alpha,\delta).$
+\end{definition}
+\noindent By inspection of the Laplace transform it can be noted that 
+\begin{align}\label{eq:MLscale}
+ cY\sim ML(\alpha,c\delta)\textrm{ if }Y\sim ML(\alpha,\delta).
+\end{align}
+%An Overview of Generalized Gamma Mittag–Leffler Model and Its Applications 
+
 \section{Distribution of Exceedance Durations}
+Note that in the last section we did not make use of the final limit theorem presented in \ref{th:AEt} to derive the distribution of our exceedances. We will, however, use it to derive the distribution of our exceedance durations. In the same paper that Meerschaert and Stoev proved the limit theorem for a CTRM process they managed to derive a subsequent result for durations.
+\begin{proposition}\cite{MeerschaertStoev08}\label{prop:extremalDuration}
+Let $a>0$ and let 
+\begin{align}
+	\xi_a:=\sup\{t:A(E(t))\leq a \} =\int^\infty_0 \mathbb{I}_{\{A(E(t))\leq a\}}dt,
+\end{align}
+where $A(E(t))$ is the subordinated extremal process defined in Theorem \ref{th:AEt}. Then we have
+\begin{align}
+	\xi_a \overset{d}{=} (-\log F_A(a))^{-1/\alpha}X^{1/\alpha}D(1)
+\end{align}
+where $D(1)$ is the stable subordinator defined in \ref{eq:unitStable}, evaluated at time 1, and where X is an Exponential random variable with mean one, independent of $D(t)$.
+\end{proposition}
+The random variable $\xi_a$ is the duration the process $A(E(t))$ spends below the threshold $a$. It can also be interpreted as the first hitting time of threshold $a$ for the process. It is thus clear that a relationship between this random variable and the exceedance duration
+\[
+T_\ell = \inf\{t: V(t) > \ell\}
+\]
+should be able to be found via Theorem \ref{th:AEt}. But before we find this relationship we will use our knowledge of the Mittag-Leffler distribution in order to simplify Proposition \ref{prop:extremalDuration}.\\
+\begin{lemma}\cite{Anderson1987}
+If X is an Exponential random variable with mean one, and D is a stable random variable with Laplace transform $\E[e^{-\lambda D}] = e^{-\lambda^\alpha}$, then
+\[
+	X^{1/\alpha}D\overset{d}{=}Y
+\]
+where $Y\sim ML(\alpha,1)$.
+\end{lemma}
+\begin{proof}
+We begin the proof by looking at the Laplace transform of $X^{1/\alpha}D$, we then get
+\begin{align*}
+\mathcal{L}_{X^{1/\alpha}D}(\lambda)&=\E[\exp(-\lambda X^{1/\alpha}D)]\\
+									 &=\E[\E[\exp(-\lambda X^{1/\alpha}D)|X]]
+\end{align*}
+by the tower property. Noting that the inner conditional expectation is just the Laplace transform of $D$ evaluated at $\lambda X^{1/\alpha}$, we then have
+\begin{align*}
+\mathcal{L}_{X^{1/\alpha}D}(\lambda)&=\E[\mathcal{L}_D(\lambda X^{1/\alpha})]\\
+									 &=\E[\exp(-\lambda^\alpha X)]\\
+									 &=\mathcal{L}_X(\lambda^\alpha)\\
+									 &=\frac{1}{1+\lambda^\alpha}\\
+									 &=\mathcal{L}_Y(\lambda)
+\end{align*}
+where $\mathcal{L}_X(\lambda)=(1+\lambda)^{-1}$ is the Laplace of an Exponential with mean one and $Y\sim ML(\alpha,1)$ by comparison with Definition \ref{def:MLlaplace}.
+\end{proof}
+\noindent Applying this lemma to \ref{prop:extremalDuration} we get
+\[
+	\xi_a \overset{d}{=} (-\log F_A(a))^{-1/\alpha}Y
+\]
+where $T\sim ML(\alpha,1)$. Furthermore we can use \ref{eq:MLscale} to arrive at
+\begin{align}\label{eq:extremalDurationFinal}
+ 	\xi_a \sim ML\left(\alpha,(-\log F_A(a))^{-1/\alpha}\right).
+\end{align}
+Now that we have simplified Proposition \ref{prop:extremalDuration}, we can find the distribution of the exceedance durations.
+\begin{theorem}
+	Suppose $V(t)=M(N(t))$ obeys the functional limit theorem in \ref{th:AEt}. If  $T_\ell=\inf\{t: V(t) > \ell\}$ we then have
+	\[
+		T_\ell\overset{a}{\sim}ML\left(\alpha, b(n)(-\log F_A(\ell^*))^{-1/\alpha}\right)
+	\]
+	where the $\overset{a}{\sim}$ symbol means approximately equal in distribution.
+\end{theorem}
+\begin{proof}
+From Theorem \ref{th:AEt} we have
+\[
+	\frac{V(ct)-d(\tilde{b}(c))}{a(\tilde{b}(c))} \cd A(E(t)), \quad c\to\infty.
+\]
+For large $c$ and $t$ comparable to $c$, we may make the following approximation
+\[
+	V(t) \approx a(\tilde b(c)) A(E(t/c)) + d(\tilde b(c)). 
+\]
+Recalling that $c \sim b(\tilde b(c))$, we set $n = \tilde b(c)$
+to get
 
-
-An Overview of Generalized Gamma Mittag–Leffler Model and Its Applications 
-
+\begin{align}\label{eq:VtApprox}
+	V(t) \approx a(n) A(E(t/b(n))) + d(n). 
+\end{align}
+Since $T_\ell=\inf\{t: V(t) > \ell\}=\sup\{t: V(t) \leq \ell\}$, after suppressing $\omega$ in our notation, we have that $\{T_\ell>t\}=\{V(t) \leq \ell\}$. It then follows from \ref{eq:VtApprox} that 
+\[
+	\{V(t) \leq \ell\} \stackrel{\approx}{\Longleftrightarrow} \left\{A(E(t/b(n))) \leq \frac{\ell - d(n)}{a(n)}\right\}.
+\]
+Now define  $\ell^* := \frac{\ell - d(n)}{a(n)}$, we then get
+\begin{align}\label{eq:durationProofFinalLine}
+\left\{A(E(t/b(n))) \leq \frac{\ell - d(n)}{a(n)}\right\}=\left\{\xi_{\ell^*} > t/b(n)\right\}=\left\{b(n)\xi_{\ell^*} > t\right\},
+\end{align}
+as $\xi_{\ell^*}$ is the first hitting time of threshold level $\ell^*$ for $A(E(t))$. Equation \ref{eq:durationProofFinalLine} then implies that
+\[
+	\PP(T_\ell>t)\approx\PP(b(n)\xi_{\ell^*} > t).
+\]
+Noting from \ref{eq:extremalDurationFinal} that $\xi_{\ell^*} \sim ML\left(\alpha,(-\log F_A({\ell^*}))^{-1/\alpha}\right)$ we then refer to \ref{eq:MLscale} to get
+\[
+	T_\ell\overset{a}{\sim}ML\left(\alpha, b(n)(-\log F_A(\ell^*))^{-1/\alpha}\right),
+\]
+as required.
+\end{proof}
+We have now shown that a Mittag-Leffler distribution is appropriate to model the exceedance durations of both the CTRM and its extremal process limit.
 
 \chapter{Statistical Inference}
 \section{Log Moment Estimator for Mittag-Leffler Random Variables}
+CAHOY
 \section{Maximum Likelihood Estimator for Generalised Pareto Random Variables}
+FIND REFERENCE
 \section{Stability of Parameter Estimates}
+From \cite{Cahoy2013} we know that
+\[
+\delta=\exp(\mu +\gamma)
+\]
+and
+\[
+\alpha=\sqrt{\frac{2\pi^2}{6\sigma^2+\pi^2}},
+\]
+where $\mu$ and $\sigma^2$ is the mean and variance of a log transformed Mittag-Leffler random variable. $\gamma=0.57721566490...$ is Euler's constant. We know that our space scaling constant can be defined in terms of the Mittag-Leffler parameters, that is
+\[ 
+b:=b(n)=\delta(-\log(F(\ell)))^{1/\alpha}.
+\]
+So we let $H(\delta,\alpha)=\delta(-\log(F(\ell)))^{1/\alpha}$ and then apply an appropriate Delta method to get a confidence interval for $b$. In 1996 Ferguson was able to show that \cite{Ferguson1996}
+\begin{align*}
+	\sqrt{n}\begin{pmatrix}
+				\hat{\mu}-\mu\\
+				\hat{\sigma^2}-\sigma^2\\				
+			\end{pmatrix}
+			\cd
+			N\left(\begin{pmatrix}0\\0\\ \end{pmatrix},\Sigma	\right)
+\end{align*}
+where
+\begin{align*}
+	\Sigma=\begin{bmatrix}
+		\sigma^2	& \mu_3\\
+		\mu_3		& \mu_4-\sigma^4
+	\end{bmatrix}.
+\end{align*}
+Note that $\mu_3$ and $\mu_4$ are the third and fourth central moments of the log transformed Mittag-Leffler random variable. Cahoy showed in \cite{Cahoy2013} that
+\[
+\mu_3=-2\zeta(3),
+\]
+where $\zeta(3)$ is the Riemann zeta function evaluated at 3, and
+\[
+\mu_4=\frac{\pi^4(\alpha^4-20\alpha^2+28)}{60\alpha^4}.
+\] 
+An application of the multivariate delta method gives
+\begin{align*}
+\sqrt{n}(\hat{b}-b)\cd N(0,\sigma^2_b)
+\end{align*}
+where
+\begin{align*}
+\sigma^2_b=(\nabla H)^T \Sigma (\nabla H)
+\end{align*}
+with
+\begin{align*}
+	\nabla H &=\begin{pmatrix}
+		\ppartial{H}{\mu}\\
+		\ppartial{H}{\sigma^2}\\
+	\end{pmatrix}
+	=\begin{pmatrix}
+		\ppartial{H}{\delta}\times\ppartial{\delta}{\mu}\\
+		\ppartial{H}{\alpha}\times\ppartial{\alpha}{\sigma^2}\\
+	\end{pmatrix}.
+\end{align*}
+Now our partial derivatives are
+\begin{align*}
+\ppartial{H}{\delta}&=(-\log(F(\ell)))^{1/\alpha},\\ 
+\ppartial{\delta}{\mu}&=\delta,\\
+ \ppartial{H}{\alpha}&=-\frac{\delta}{\alpha^2}\log(-\log(F(\ell)))(-\log(F(\ell)))^{1/\alpha},\\ 
+ \ppartial{\alpha}{\sigma^2}&=\frac{-3\sqrt{2}\pi}{(6\sigma^2+\pi^2)^{3/2}},
+\end{align*}
+so
+\begin{align*}
+	\nabla H &=\begin{pmatrix}
+		b\\
+		\dfrac{3\sqrt{2}\pi b \log(-\log(F(\ell)))}{\alpha^2(6\sigma^2+\pi^2)^{3/2}} \\
+	\end{pmatrix},
+\end{align*}
+and it follows that
+\begin{align*}
+ \sigma^2_b= b^2\sigma^2 +\frac{b^2}{\alpha^2}\log(-\log(F(\ell)))
+ \left[
+ \frac{-12\sqrt{2}\pi\zeta(3)}{(6\sigma^2+\pi^2)^{3/2}} + \log(-\log(F(\ell)))\frac{32-20\alpha^2-\alpha^4}{40}
+ \right].
+\end{align*}
+We have therefore shown that the log-moment estimate of $b$ is normally distributed for large $n$. Thus we can approximate the $(1-\epsilon)100\%$ confidence interval of $b$ as
+\[
+	\hat{b}\pm z_{\epsilon/2}\sqrt{\sigma^2_b}.
+\]
 \section{Goodness of Fit}%%If there is time
 We will test Goodness of Fit as Mainardi et al with the reduced chi squared test
 \chapter{Model Fitting}
@@ -1193,11 +1462,11 @@ with shape parameter $\xi = 0.7$.
 Recall that we have defined the exceedance duration of level $\ell \in [x_0,x_F]$ as
 the random variable
 \begin{align*}
-T_\ell = \inf\{t: M(t) > \ell\}
+T_\ell = \inf\{t: V(t) > \ell\}
 \end{align*}
 and the exceedance as 
 \begin{align*}
-X_\ell = M(T_\ell) - \ell.
+X_\ell = V(T_\ell) - \ell.
 \end{align*}
 
 As these random variables are the quantities of interest it is natural for us to then consider the (simulated) sample exceedances and their corresponding durations over the threshold level $\ell$.
