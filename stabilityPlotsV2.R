@@ -5,13 +5,13 @@ require(POT) ##install.packages("POT", repos="http://R-Forge.R-project.org")
 # number of observations
 n = 100000
 # tail parameter of waiting times
-beta = 0.4
+alpha = 0.4
 # scaling constant for "unit" stable under parametrisation pm = 1 below
-sigma = (cos(beta * pi / 2))^(1 / beta)
+sigma = (cos(alpha * pi / 2))^(1 / alpha)
 # norming sequence
-b.n=n^(-1/beta)
+b.n=n^(-1/alpha)
 # times of events:
-TT = cumsum(rstable(n = n, alpha = beta, beta = 1, 
+TT = cumsum(rstable(n = n, alpha = alpha, beta = 1, 
                     gamma = sigma, delta = 0, pm = 1)) * b.n
 # magnitudes of events (distribution irrelevant)
 JJ = rgev(n, xi = 0.3, mu = 0, beta = 1)
@@ -37,19 +37,19 @@ estimates <- ldply(.data = seq(50,m), function(k){
   est <- ml.par.est.delta(Tell(TT,idxJ,k),0.05,1-k/n)
   return(c(est$nu, est$CInu, est$delta, est$CIdelta, est$b,est$CIb, k))
 })
-# beta = shape; sigma = scale; topk = number of values used in estimate
-names(estimates) <- c("beta","betaL","betaH","delta","deltaL","deltaH","b","bL","bH" ,"topk")
+# alpha = shape; sigma = scale; topk = number of values used in estimate
+names(estimates) <- c("alpha","alphaL","alphaH","delta","deltaL","deltaH","b","bL","bH" ,"topk")
 
 par(mfrow=c(2,3))
-# plot estimates of tail parameter beta
-plot(estimates$topk,estimates$beta, type="l",ylab= "beta", xlab = "k", ylim = c(0,1), main="ML tail parameter")
-lines(estimates$topk,estimates$betaH, type="l", lty =2)
-lines(estimates$topk,estimates$betaL, type="l", lty =2)
-abline(h = beta, lty = 3)
+# plot estimates of tail parameter alpha
+plot(estimates$topk,estimates$alpha, type="l",ylab= "alpha", xlab = "k", ylim = c(0,1), main="ML tail parameter")
+lines(estimates$topk,estimates$alphaH, type="l", lty =2)
+lines(estimates$topk,estimates$alphaL, type="l", lty =2)
+abline(h = alpha, lty = 3)
 
 # eps := fraction of magnitudes above threshold
 estimates$eps <- estimates$topk / n
-estimates$truedelta <- (-log(1-estimates$eps))^-(1/beta)*b.n
+estimates$truedelta <- (-log(1-estimates$eps))^-(1/alpha)*b.n
 #plot estimates of scale parameter delta
 plot(estimates$topk,estimates$delta, type="l",ylab= "delta", xlab = "k", 
      main="ML scale parameter")
@@ -59,20 +59,20 @@ lines(estimates$topk,estimates$truedelta,type="l",lty=3)
 
 
 
-## plot with known beta:
-estimates$bKnown<-estimates$delta * (-log(1-estimates$eps))^(1/beta)
-estimates$bKnownH<-estimates$bKnown+(estimates$deltaH-estimates$delta)*(-log(1-estimates$eps))^(1/beta)
-estimates$bKnownL<-estimates$bKnown-(estimates$delta-estimates$deltaL)*(-log(1-estimates$eps))^(1/beta)
+## plot with known alpha:
+estimates$bKnown<-estimates$delta * (-log(1-estimates$eps))^(1/alpha)
+estimates$bKnownH<-estimates$bKnown+(estimates$deltaH-estimates$delta)*(-log(1-estimates$eps))^(1/alpha)
+estimates$bKnownL<-estimates$bKnown-(estimates$delta-estimates$deltaL)*(-log(1-estimates$eps))^(1/alpha)
 
-plot(estimates$eps, estimates$bKnown, type="l", ylim=c(0,2*b.n), xlab = "eps", ylab = "b(n) (beta known)", main="b(n)")
+plot(estimates$eps, estimates$bKnown, type="l", ylim=c(0,2*b.n), xlab = "eps", ylab = "b(n) (alpha known)", main="b(n)")
 lines(estimates$eps,estimates$bKnownH, type="l", lty =2)
 lines(estimates$eps,estimates$bKnownL, type="l", lty =2)
 abline(h = b.n, lty = 3)
 
-## plot with estimated beta:
-#plot(estimates$eps, estimates$delta * (-log(1-estimates$eps))^(1/estimates$beta), type="l", ylim=c(0,10), xlab = "eps", ylab = "b(n) (beta unknown)", main="b(n)")
+## plot with estimated alpha:
+#plot(estimates$eps, estimates$delta * (-log(1-estimates$eps))^(1/estimates$alpha), type="l", ylim=c(0,10), xlab = "eps", ylab = "b(n) (alpha unknown)", main="b(n)")
 
-plot(estimates$eps, estimates$b, type="l", ylim=c(0,2*b.n), xlab = "eps", ylab = "b(n) (beta unknown)", main="b(n)")
+plot(estimates$eps, estimates$b, type="l", ylim=c(0,2*b.n), xlab = "eps", ylab = "b(n) (alpha unknown)", main="b(n)")
 lines(estimates$eps,estimates$bH, type="l", lty =2)
 lines(estimates$eps,estimates$bL, type="l", lty =2)
 abline(h = b.n, lty = 3)

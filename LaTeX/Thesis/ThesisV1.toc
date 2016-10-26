@@ -17,12 +17,9 @@
 \contentsline {section}{\numberline {4.2}The Mittag-Leffler Distribution}{32}{section.4.2}
 \contentsline {section}{\numberline {4.3}Distribution of Exceedance Durations}{33}{section.4.3}
 \contentsline {chapter}{\numberline {Chapter 5}Statistical Inference}{37}{chapter.5}
-\contentsline {section}{\numberline {5.1}Log Moment Estimator for Mittag-Leffler Random Variables}{37}{section.5.1}
-\contentsline {section}{\numberline {5.2}Maximum Likelihood Estimator for Generalised Pareto Random Variables}{37}{section.5.2}
-\contentsline {section}{\numberline {5.3}Stability of Parameter Estimates}{37}{section.5.3}
-\contentsline {section}{\numberline {5.4}Goodness of Fit}{39}{section.5.4}
-\contentsline {chapter}{\numberline {Chapter 6}Model Fitting}{40}{chapter.6}
-\contentsline {section}{\numberline {6.1}Model Fit of Simulated Data}{40}{section.6.1}
-\contentsline {section}{\numberline {6.2}Model Fit of Real Data}{42}{section.6.2}
-\contentsline {chapter}{\numberline {Chapter 7}Conclusion}{43}{chapter.7}
-\contentsline {chapter}{References}{44}{chapter.7}
+\contentsline {section}{\numberline {5.1}Choice of Estimators}{37}{section.5.1}
+\contentsline {section}{\numberline {5.2}Threshold Choice}{38}{section.5.2}
+\contentsline {section}{\numberline {5.3}Model Fit of Simulated Data}{40}{section.5.3}
+\contentsline {chapter}{\numberline {Chapter 6}Conclusion}{46}{chapter.6}
+\contentsline {chapter}{\numberline {Chapter 7}Appendix}{47}{chapter.7}
+\contentsline {chapter}{References}{50}{chapter.7}

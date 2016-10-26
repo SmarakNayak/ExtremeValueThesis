@@ -811,9 +811,9 @@ but we use \cite[Def~1.1.6]{Samorodnitsky1994}. Definition \ref{def:stableChar} 
 \end{itemize}
 
 \noindent To check that the mean is infinite when $\beta \in (0,1)$ we first see from \cite{JanickiWeron1994} that 
-\begin{align}
-\lim_{x\to\infty} x^\alpha\PP(X>x)=C_\alpha\frac{1+\beta}{2}\gamma^\alpha,\\
-\lim_{x\to\infty} x^\alpha\PP(X<-x)=C_\alpha\frac{1-\beta}{2}\gamma^\alpha,
+\begin{align}\label{eq:asymptoticPareto}
+\lim_{x\to\infty} x^\alpha\PP(X>x)&=C_\alpha\frac{1+\beta}{2}\gamma^\alpha,\\
+\lim_{x\to\infty} x^\alpha\PP(X<-x)&=C_\alpha\frac{1-\beta}{2}\gamma^\alpha,
 \end{align}
 \noindent where
 \[
@@ -1218,7 +1218,7 @@ The family of distributions defined by Equation \ref{eq:GPfamily} is called the 
 		  &\sim J-\ell, \quad \textrm{conditional on $J>\ell$}.
 \end{align*}
 Recall that we assumed that the distribution of the event magnitudes, $F_J$, is in the domain of attraction of a GEV distribution such that $M_n \sim GEV(\xi,\sigma,\mu)$. Then by Theorem \ref{th:GP} we have that 
-\begin{align}
+\begin{align}\label{eq:GPdist}
 X_\ell\sim GP(\xi,\tilde \sigma).
 \end{align}
 We have thus shown that our exceedances can be modelled by Generalised Pareto random variables.
@@ -1305,7 +1305,7 @@ where $T\sim ML(\alpha,1)$. Furthermore we can use \ref{eq:MLscale} to arrive at
  	\xi_a \sim ML\left(\alpha,(-\log F_A(a))^{-1/\alpha}\right).
 \end{align}
 Now that we have simplified Proposition \ref{prop:extremalDuration}, we can find the distribution of the exceedance durations.
-\begin{theorem}
+\begin{theorem}\label{th:MLdist}
 	Suppose $V(t)=M(N(t))$ obeys the functional limit theorem in \ref{th:AEt}. If  $T_\ell=\inf\{t: V(t) > \ell\}$ we then have
 	\[
 		T_\ell\overset{a}{\sim}ML\left(\alpha, b(n)(-\log F_A(\ell^*))^{-1/\alpha}\right)
@@ -1345,14 +1345,176 @@ Noting from \ref{eq:extremalDurationFinal} that $\xi_{\ell^*} \sim ML\left(\alph
 \]
 as required.
 \end{proof}
-We have now shown that a Mittag-Leffler distribution is appropriate to model the exceedance durations of both the CTRM and its extremal process limit.
+We have now shown that a Mittag-Leffler distribution is appropriate to model the exceedance durations of both the CTRM and its extremal process limit. Thus the process formed by the exceedances and their corresponding durations form a \emph{fractional} Poisson process \cite{Laskin2003}.
 
 \chapter{Statistical Inference}
-\section{Log Moment Estimator for Mittag-Leffler Random Variables}
-CAHOY
-\section{Maximum Likelihood Estimator for Generalised Pareto Random Variables}
-FIND REFERENCE
-\section{Stability of Parameter Estimates}
+This chapter is concerned with developing parameter estimation methods for the exceedances and their corresponding durations. Inference consists of fitting a generalised Pareto distribution to observed threshold exceedances, fitting a Mittag-Leffler distribution to observed exceedance durations, selecting an appropriate threshold and finally model verification.
+\section{Choice of Estimators}
+In the previous chapter we showed that the exceedance durations are Mittag-Leffler (ML) distributed, and that the exceedances are Generalised Pareto (GP). For the ML distribution we choose to use the method of log moments estimator introduced by Cahoy in 2013. This estimator is chosen as it performs better than the only other estimator available in the literature, the fractional moments estimator \cite{Kozubowski2001}, with respect to both Root Mean Square Error and Bias \cite{Cahoy2013}.
+
+
+Our choice of a GP estimator is slightly more complicated. Several estimators have been proposed which include the threshold, $\ell$, into the parameter estimation and thus remove the subjectivity in the choice of threshold. However these methods do not illustrate whether the fitted models are valid when used to extrapolate outside the range of observations. As we are concerned with extreme events it is important that our model is valid beyond the range of observations. For this reason we will
+consider methods that estimate the shape and scale parameters only. We can then make estimates for a range of thresholds and examine the variation of certain statistics with
+the threshold in order to choose $\ell$.
+
+Recall that all three limit theorems required for Theorem \ref{th:AEt} are only true for large $n$. Theorem \ref{th:AEt}, in turn, is a necessary condition for Theorem \ref{th:MLdist} to hold. If we pick a small $\ell$, then the threshold level will be exceeded after a comparatively small number of event magnitudes, which then implies that none of three limit theorems hold. Thus we need to pay close attention to the threshold level when estimating both GP and ML parameters to ensure our model is valid.
+
+
+It then follows that picking a GP estimator that doesn't estimate $\ell$ has the added benefit in that it will enable the concurrent analysis of statistics which describe the fit of both estimated distributions with respect to threshold choice. This will then allow us to choose a threshold level $\ell$ that is valid for the exceedances as well as their durations. Mackay et. al. \cite{Mackay2011} provided a comprehensive overview of all such GP estimators. They concluded that a hybrid between likelihood and moment estimators, the likelihood-moment estimator, introduced by Zhang in 2007 \cite{Zhang2007} was the best overall estimator. The likelihood-moment estimator had the lowest bias and variance over the widest range of scenarios, and was only beaten in speed by the NEW estimator \cite{Zhang2009} for large sample sizes. We therefore use the likelihood-moment estimator to estimate the GP parameters.
+
+\section{Threshold Choice}
+Selecting a threshold is a balance between bias and variance. Too low a threshold will likely violate the asymptotic basis of our model, leading to bias; while too high a threshold will lead to a small sample size and high variance. Standard methodology for similar problems is to pick the lowest threshold such that the limit theorems still provide reasonable approximations. We will use a similar approach to select a threshold. 
+
+Suppose there exists a threshold $\ell_0$ with corresponding tail quantile $\epsilon_0$ above which the exceedances are GP and the durations are ML. We have shown in (\ref{eq:GPdist}) that
+\begin{align*}
+X_\ell\sim GP(\xi,\sigma+\xi(\ell-\mu)),
+\end{align*}
+and from Theorem \ref{th:MLdist} we have
+\[
+	T_\ell\overset{a}{\sim}ML\left(\alpha, b(n)(-\log F_A(\ell^*))^{-1/\alpha}\right).
+\]
+Notice that the GP shape parameter $\xi$ and the ML tail parameter $\alpha$ are both constants and independent of $\ell$. The GP scale parameter $\tilde \sigma = \sigma+\xi(\ell-\mu)$ is dependent on $\ell$ so we instead consider
+\begin{align}\label{eq:sigmaStar}
+	\sigma^{*}:=\tilde \sigma -\xi\ell= \sigma-\xi\mu.
+\end{align}  
+It is evident from \ref{th:GP} that the three GEV parameters $\xi,\sigma,$ and $\mu$ are independent of $\ell$. The ML scale parameter $\delta=b(n)(-\log F_A(\ell^*))^{-1/\alpha}$ is also dependent on $\ell$, so we consider
+\begin{align}\label{eq:deltaStar}
+	\delta^{*}:=\delta(-\log F_A(\ell^*))^{1/\alpha}=b(n)
+\end{align}  
+which is independent of $\ell$. Thus the estimates $\hat\alpha,$ $\hat\xi,$ $\hat\sigma^{*}$, and $\hat\delta^{*}$ should remain constant with respect to parameter estimations at different values of $\ell$ above $\ell_0$.
+
+Coles suggests in \cite{ColesBook} that the stability of estimates can be assessed by plotting the estimates against $\ell$. However plotting against $\ell$ distorts the stability plots as estimates are sparsely plotted at high levels and densely plotted at low levels. We thus propose to plot the estimates against $\epsilon$, the tail quantile of $\ell$, as estimates are then plotted evenly across the length of the graph.
+
+
+	\begin{figure}[h]
+        \centering
+        \includegraphics[width=\textwidth]{Figures/ThresholdVsEpsilon}
+        \label{fig:comparison}
+        \caption{Parameter estimates plotted against threshold levels on the left and tail quantiles on the right.}
+    \end{figure}
+
+The estimates for $\sigma^{*}$ used to plot both graphs in Figure \ref{fig:comparison} are exactly the same, yet one could draw opposite conclusions relating to stability when presented with both. It is clear that visually assessing stability is not feasible when the majority of estimate points are shifted to the right.
+
+As our estimates are also independent of $\epsilon$ we can thus assess stability by fitting both distributions at a range of thresholds and then plotting all four estimates along with their confidence intervals against $\epsilon$. We can then select $\ell_0$ as the corresponding threshold level for the largest $\epsilon$ for which the four estimates remain constant up to minor sampling errors.
+
+The confidence intervals for $\hat\alpha$, $\hat\xi$ and $\hat\sigma^{*}$ can be found in \cite{Cahoy2013}, \cite{Zhang2007} and \cite{ColesBook} respectively. A derivation of the confidence interval for $\hat\delta^{*}$ is provided in the appendix.
+
+\section{Model Fit of Simulated Data}
+In order to verify that our model is correct we will simulate bursty data such that we can theoretically calculate the true parameters of the ML and GP distributions. We will then apply our estimation method and compare our estimated parameters with the true parameters.
+
+We wish to generate inter-arrival waiting times $W_k$ with the Laplace transform
+
+$$\mathcal L_W(\lambda) = \E [e^{-\lambda W}] = e^{-\lambda^\alpha}$$ 
+where $\alpha \in (0,1)$. 
+The package R stabledist with option pm=1 runs with the parametrisation
+as in Samorodnitsky \& Taqqu: (see Definition \ref{def:stableChar} for the full definition)
+\begin{align*}
+\phi_X (\theta) = \E[ e^{i\theta X}] = \exp \left\lbrace -\sigma^\alpha |\theta|^\alpha \left(1 - i\beta({\rm sign} \theta) \tan \frac{\alpha \pi}{2}\right) + i \mu \theta \right\rbrace.
+\end{align*}
+Hence we aim to find $\alpha, \beta, \sigma, \mu$ such that 
+$$\mathcal L_W(-i\theta) = \phi_X(\theta), \quad \theta > 0.$$
+Now see that 
+\begin{align*}
+e^{-(-i\theta)^\alpha}
+&= \exp\left(-(\theta e^{-i \pi / 2})^\alpha\right)\\
+&= \exp\left(-\left(\theta^\alpha e^{-i\alpha \pi/2}\right)\right)\\
+&= \exp\left(-\theta^\alpha\left(\cos \frac{\alpha\pi}{2} - i \sin\frac{\alpha\pi}{2}\right)\right)
+\\
+&= \exp\left(-\theta^\alpha \cos\frac{\alpha\pi}{2}\left(1 - i \tan \frac{\alpha\pi}{2}\right)\right)\\
+&=  \phi_X(\theta), \quad \theta > 0
+\end{align*}
+whenever $\sigma^\alpha = \cos\frac{\alpha\pi}{2}, \beta = 1, \mu = 0$. Thus we generate $W\sim S(\alpha,1,(\cos\frac{\alpha\pi}{2})^{1/\alpha},0)$ in order to get unit stable random variables. From \ref{eq:asymptoticPareto} we know that any stable law with stability parameter $\alpha$ has tails that are asymptotically equivalent to Pareto tails also with parameter $\alpha$. Thus $W\in RV(-\alpha)$, which implies that both the limit theorems (\ref{eq:partialSumLimit}) and (\ref{eq:renewalLimit}) hold. Moreover, recall from (\ref{eq:unitStable}) that we can pick $b(n)$ such that the stable subordinator $D(t)$ has Laplace transform $\E[e^{-\lambda D(t)}] = e^{-t \lambda^\alpha}$. Now in order for that to hold we need 
+\[
+	\frac{W_1 + \ldots + W_n}{b(n)} \overset{d}{\longrightarrow} D, \quad n \to \infty,
+\]
+where $D$ has Laplace transform $\E[e^{-\lambda D}] = e^{- \lambda^\alpha}$. Thus we need the following equality of Laplace transforms
+\begin{align*}
+	\E\left[\exp\left(-\lambda\left(\frac{W_1+\ldots+W_n}{b(n)}\right)\right)\right]&=\E\left[\exp\left(-\left(\frac{\lambda}{b(n)}W\right)\right)\right]^n\\
+	&=\exp\left(-\left(\frac{\lambda}{b(n)}\right)^\alpha\right)^n\\
+	&=\exp\left(-\lambda^\alpha\frac{n}{b(n)^\alpha}\right)\\
+	&=e^{- \lambda^\alpha}
+\end{align*}
+whenever $b(n)=n^{1/\alpha}\in RV(1/\alpha)$ as expected.
+
+For the event magnitudes we simply generate $J_k\sim GEV(\xi,\sigma,\mu)$ so that we can easily calculate the GP parameters of the exceedances. The sequence of i.i.d $\mathbb{R}^+\times\mathbb{R}$ random vectors $(W_k,J_k)$ then defines a heavy tailed renewal process, at whose renewal times GEV event magnitudes occurs as in Figure \ref{fig:bursty}.
+	
+	\begin{figure}[h]
+        \centering
+        \caption{Simulated bursty data}\label{fig:bursty}
+% GENERAL REMARK: It's more accurate to call this process a max-renewal
+% process (with heavy-tailed waiting times). Bursty process could also be a
+% Hawkes process. You might want to update the title as well... happy to discuss.
+        %\includegraphics[width=\textwidth]{Figures/unitCTRMprocessNoTitle.png}
+        \includegraphics[width=\textwidth]{Figures/unitCTRMprocessNoTitle.png}
+        %\label{fig:my_label}
+    \end{figure}
+
+Recall that we have defined the exceedance duration of level $\ell \in [x_0,x_F]$ as
+the random variable
+\begin{align*}
+T_\ell = \inf\{t: V(t) > \ell\}
+\end{align*}
+and the exceedance as 
+\begin{align*}
+X_\ell = V(T_\ell) - \ell.
+\end{align*}
+
+Consider a minimum threshold $\ell_0$, e.g. at the 95\% quantile.
+Vary the threshold $\ell$ on the interval $[\ell_0, x_F]$, and consider
+the resulting sequences of exceedances and exceedance durations 
+$\{(X_{\ell,i}, T_{\ell,i})\}$ as in Figure \ref{fig:thresholdedBursty}. 
+Due to the renewal property every random variable in each sequence is i.i.d.. Thus $T_{\ell,1}, T_{\ell,2}, \ldots$ forms a simulated sample of exceedance durations and $J_{\ell,1}, J_{\ell,2}, \ldots$ forms a simulated sample of exceedances.
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{Figures/Exceedances.png}
+    \caption{Exceedance durations (blue circles) and Exceedances (red lines).}\label{fig:thresholdedBursty}
+    %\label{fig:my_label}
+\end{figure}
+
+We can now use the ML log moment estimator on the sample of exceedance durations and the GP likelihood moment estimator on the sample of exceedances to estimate all four parameters. Once we have parameter estimates for all thresholds $\ell$ on the interval $[\ell_0, x_F]$, we can graph our stability plots of $\hat \alpha$, $\hat\xi,$ $\hat\sigma^{*}$, and $\hat\delta^{*}$. Since we simulated data such that we could theoretically calculate the values of the adjusted parameters we know that $\delta^{*}=n^{1/\alpha}$ from (\ref{eq:deltaStar}) and $\sigma^{*}=\sigma-\xi\mu$ from (\ref{eq:sigmaStar}). 
+
+%\begin{figure}[h]
+%    \centering
+%    \includegraphics[width=\textwidth]{Figures/alphaUnknownFixed}
+%    \caption{Exceedance durations (blue circles) and Exceedances (red lines).}\label{fig:thresholdedBursty}
+%    %\label{fig:my_label}
+%\end{figure}
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{Figures/MLtail01}
+    \includegraphics[width=\textwidth]{Figures/MLscale01}
+    \caption{Mittag Leffler Stability Plots ($\alpha=0.4$, $n=50,000$)}\label{fig:MLstability}
+    %n=50,000
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{Figures/GPshape01}
+    \includegraphics[width=\textwidth]{Figures/GPscale01}
+    \caption{Generalised Pareto Stability Plots ($\xi=0.3$, $\sigma=1$)}\label{fig:MLstability}
+\end{figure}
+Both sets of plots look rather stable for the entire length of the plot, so using our threshold selection method we set $\ell$ as the threshold associated with $\epsilon=0.01$. This results in the following estimates
+\begin{align*}
+\hat \alpha &= 0.3935573\\
+\hat \delta &= 1.957352\times10^{-7}\\
+\hat \xi &= 0.3\\
+\hat {\tilde \sigma} &= 3.682074.
+\end{align*} 
+Where the true values are \textcolor{red}{SOMETHING WRONG WITH b(n) HERE}
+\begin{align*}
+ \alpha &= 0.4\\
+ \delta &= !!!??? \\
+ \xi &= 0.3\\
+ {\tilde \sigma} &= 1+\xi\ell =1+0.3\times 10.14632 = 4.043896
+\end{align*} 
+\chapter{Conclusion}
+
+
+\chapter{Appendix}
 From \cite{Cahoy2013} we know that
 \[
 \delta=\exp(\mu +\gamma)
@@ -1433,61 +1595,6 @@ We have therefore shown that the log-moment estimate of $b$ is normally distribu
 \[
 	\hat{b}\pm z_{\epsilon/2}\sqrt{\sigma^2_b}.
 \]
-\section{Goodness of Fit}%%If there is time
-We will test Goodness of Fit as Mainardi et al with the reduced chi squared test
-\chapter{Model Fitting}
-The accuracy of the Mittag-Leffler log moment estimator and the Generalised Pareto MLE has been studied 
-% not very great properties... e.g. not unbiased. MLE is probably better
-in \cite{Cahoy2013} and \cite{GPaccuracyCitation} respectively. However it is yet to be confirmed that these estimation methods work for exceedances and exceedance durations. Thus before we apply our inference methods to actual data, we will check that we can correctly estimate the theoretical Mittag-Leffler and Generalised Pareto parameters derived from a simulated bursty process. If we are able to accurately estimate these parameters we can then proceed to apply the estimation methods to actual data, confident in knowing that the actual parameters will be estimated.
-
-\section{Model Fit of Simulated Data}
-We assume $n$ i.i.d. waiting times are drawn from the positively skewed stable
-distribution with stability parameter $\beta=0.8$, scaled with 
-$n^{-1/\beta}$ to ensure convergence to a stable subordinator. This defines a renewal process, at whose renewal times we assume $n$ i.i.d. magnitudes are drawn from a Generalized Extreme Value Distribution
-with shape parameter $\xi = 0.7$.
-% the distribution of magnitudes is irrelevant, and we have just picked something
-% for the sake of concreteness.
-	
-	\begin{figure}[H]
-        \centering
-        \caption{A simulated bursty process}
-% GENERAL REMARK: It's more accurate to call this process a max-renewal
-% process (with heavy-tailed waiting times). Bursty process could also be a
-% Hawkes process. You might want to update the title as well... happy to discuss.
-        %\includegraphics[width=\textwidth]{Figures/unitCTRMprocessNoTitle.png}
-        \includegraphics[scale=0.45]{Figures/unitCTRMprocessNoTitle.png}
-        %\label{fig:my_label}
-    \end{figure}
-
-Recall that we have defined the exceedance duration of level $\ell \in [x_0,x_F]$ as
-the random variable
-\begin{align*}
-T_\ell = \inf\{t: V(t) > \ell\}
-\end{align*}
-and the exceedance as 
-\begin{align*}
-X_\ell = V(T_\ell) - \ell.
-\end{align*}
-
-As these random variables are the quantities of interest it is natural for us to then consider the (simulated) sample exceedances and their corresponding durations over the threshold level $\ell$.
-	
-	\begin{figure}[H]
-        \centering
-        \includegraphics[width=\textwidth]{Figures/Exceedances.png}
-        \caption{Exceedance durations (blue circles) and Exceedance sizes (red lines).}
-        %\label{fig:my_label}
-    \end{figure}
-
-
-Assume now a time series of magnitudes, and that interest lies in the estimation of the timings of the large magnitudes.
-Consider a minimum threshold $\ell_0$, e.g. at the 95\% quantile.
-Vary the threshold $\ell$ on the interval $[\ell_0, x_F]$, and consider
-the resulting sequences of exceedance sizes and exceedance times 
-$\{(X_{\ell,i}, T_{\ell,i})\}$. 
-Due to the renewal property each sequence is i.i.d.. Now $T_{\ell,1}, T_{\ell,2}, \ldots$ can be modelled by a Mittag-Leffler distribution and $J_{\ell,1}, J_{\ell,2}, \ldots$ can be modelled by a Generalised Pareto distribution as shown in chapter \ref{dist}.
-\section{Model Fit of Real Data}
-
-\chapter{Conclusion}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
