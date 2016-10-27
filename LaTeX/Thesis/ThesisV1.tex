@@ -1035,7 +1035,7 @@ where $x^+$ is the smallest value such that $F(x)=1$. This result is clearly of 
 where $a_n$ is a sequence of positive constants and $d_n\in\R$. These constants could then be picked such that the location and scale of $M^*_n$ stabilise as $n\to\infty$. This idea was then encapsulated in the following theorem.\\
 
 
-\begin{theorem}\cite{ColesBook}
+\begin{theorem}\cite{ColesBook}\label{th:FTG}
 	 \textbf{Fisher-Tippet-Gnendenko Theorem} Let $J_1,J_2,\ldots ,J_n$ be i.i.d. random variables with distribution function $F(x)$ and partial maxima $M_n$. If there exists a sequence of positive constants $a_n$ and $d_n\in \R$ such that
 \begin{align*}
 \PP\left\{\frac{M_n-d_n}{a_n}\leq x\right\}=F^n(a_nx+d_n)\cd G(x)\quad\textrm{as $n\to\infty$,}
@@ -1305,13 +1305,21 @@ where $T\sim ML(\alpha,1)$. Furthermore we can use \ref{eq:MLscale} to arrive at
  	\xi_a \sim ML\left(\alpha,(-\log F_A(a))^{-1/\alpha}\right).
 \end{align}
 Now that we have simplified Proposition \ref{prop:extremalDuration}, we can find the distribution of the exceedance durations.
-\begin{theorem}\label{th:MLdist}
-	Suppose $V(t)=M(N(t))$ obeys the functional limit theorem in \ref{th:AEt}. If  $T_\ell=\inf\{t: V(t) > \ell\}$ we then have
-	\[
+
+\begin{proposition}\label{th:MLdist}
+Suppose $V(t)=M(N(t))$ obeys the functional limit theorem in \ref{th:AEt}, and let 
+$T_\ell=\inf\{t: V(t) > \ell\}$, 
+$n \in \mathbb N$, 
+and $\ell^* := (\ell - d(n))/ a(n)$. 
+Then the distribution of $T_\ell$ may be approximated as follows: 
+	\[ \label{eq:distT}
 		T_\ell\overset{a}{\sim}ML\left(\alpha, b(n)(-\log F_A(\ell^*))^{-1/\alpha}\right)
 	\]
-	where the $\overset{a}{\sim}$ symbol means approximately equal in distribution.
-\end{theorem}
+\end{proposition}
+
+The quality of this approximation depends on $n$ and is discussed after 
+the proof; the proof itself explains the nature of the approximation.
+
 \begin{proof}
 From Theorem \ref{th:AEt} we have
 \[
@@ -1345,7 +1353,35 @@ Noting from \ref{eq:extremalDurationFinal} that $\xi_{\ell^*} \sim ML\left(\alph
 \]
 as required.
 \end{proof}
-We have now shown that a Mittag-Leffler distribution is appropriate to model the exceedance durations of both the CTRM and its extremal process limit. Thus the process formed by the exceedances and their corresponding durations form a \emph{fractional} Poisson process \cite{Laskin2003}.
+
+Result \eqref{eq:distT} is, at first, seemingly independent of $n$; but
+different choices will yield approximations of varying quality. Writing
+$\epsilon := 1 - F_J(\ell)$ for the tail probability given a threshold
+$\ell$, we have
+
+\begin{align*}
+1 - n \epsilon \approx (1 - \epsilon)^n
+= [F_J(\ell)]^n
+= \left[F_J(a(n) \ell^* + d(n))\right]^n
+\approx F_A(\ell^*),
+\end{align*}
+where in the first approximation $n \epsilon$ needs to be small, 
+and in the second approximation $n$ needs to be large enough for
+Theorem~\ref{th:FTG} to yield a good approximation.
+Hence $n$ can be viewed as a tuning parameter, which has to be chosen
+from an appropriate range. 
+If the magnitudes $J_k$ are already drawn from a GEV distribution,
+which we assume in the following chapter,
+then one may chose $n = 1$, which means $b(n) = 1$.
+The further away the distribution of $J$ is from a GEV distribution, 
+the larger $n$ will have to be chosen in general.
+Finally, a natural estimator for $\epsilon$ is $\#\{k: J_k > \ell\}/N$,
+where $N$ is the total number of observations. 
+
+To sum up, we have now shown that a Mittag-Leffler distribution is appropriate to model the exceedance durations of both the CTRM and its extremal process limit, and we have derived its parameters. 
+The next chapter discusses inference on these parameters, as well
+as on the parameters of the GEV distribution.
+%Thus the process formed by the exceedances and their corresponding durations form a \emph{fractional} Poisson process \cite{Laskin2003}.
 
 \chapter{Statistical Inference}
 This chapter is concerned with developing parameter estimation methods for the exceedances and their corresponding durations. Inference consists of fitting a generalised Pareto distribution to observed threshold exceedances, fitting a Mittag-Leffler distribution to observed exceedance durations, selecting an appropriate threshold and finally model verification.
