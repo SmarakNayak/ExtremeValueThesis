@@ -8,11 +8,14 @@ n = 100000
 alpha = 0.4
 # scaling constant for "unit" stable under parametrisation pm = 1 below
 sigma = (cos(alpha * pi / 2))^(1 / alpha)
+# block number; maximum of this many observations results in good approximation
+# by GEV distribution
+B = 1
 # norming sequence
-b.n=n^(-1/alpha)
+b.n=B^(1/alpha)
 # times of events:
 TT = cumsum(rstable(n = n, alpha = alpha, beta = 1, 
-                    gamma = sigma, delta = 0, pm = 1)) * b.n
+                    gamma = sigma, delta = 0, pm = 1))
 # magnitudes of events (distribution irrelevant)
 JJ = rgev(n, xi = 0.3, mu = 0, beta = 1)
 #Restrict attention to unit interval
@@ -48,7 +51,7 @@ lines(estimates$topk,estimates$alphaL, type="l", lty =2)
 abline(h = alpha, lty = 3)
 
 # eps := fraction of magnitudes above threshold
-estimates$eps <- estimates$topk / n
+estimates$eps <- B * estimates$topk / n
 estimates$truedelta <- (-log(1-estimates$eps))^-(1/alpha)*b.n
 #plot estimates of scale parameter delta
 plot(estimates$topk,estimates$delta, type="l",ylab= "delta", xlab = "k", 
