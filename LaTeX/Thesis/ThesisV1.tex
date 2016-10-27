@@ -30,6 +30,13 @@
 
 \usepackage{float}
 \usepackage{bbm}
+\usepackage[toc]{appendix}
+\usepackage{listings}
+\lstset{
+		basicstyle=\small\ttfamily,
+		columns=flexible,
+		breaklines=true
+		}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %  The following are some simple LaTeX macros to give some
@@ -183,7 +190,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\title{Statistics of Bursty Events}
+\title{Inference on Heavy-Tailed\\ Max-Renewal Processes}
 
 \authornameonly{Smarak Nayak}
 
@@ -270,7 +277,8 @@ that most human created events do not occur uniformly, but in bursts.
 In this thesis, 
 extremes of bursty events are modelled via Continuous Time Random Maxima
 (CTRM) with heavy-tailed waiting times.  Methods for Statistical Inference
-are developed. 
+are also developed. 
+
 \afterpage{\blankpage}
 
 
@@ -291,7 +299,7 @@ the recent statistical physics literature,
 \cite{Barabasi2005,Oliveira2005,Vasquez2006,Vazquez2007,Omi2011,
 Min2010,Karsai2011,Bagrow2013},
 and have been observed in the context of earthquakes, sunspots, neuronal
-activity, human communication etc., see \cite{Karsai2012,Vajna2013} for a 
+activity and human communication, see \cite{Karsai2012,Vajna2013} for a 
 list of references.
 Such time series exhibit high activity in some `bursty' intervals, which 
 alternate with other, quiet intervals.  Although several mechanisms are 
@@ -299,30 +307,30 @@ plausible explanations for bursty behaviour
 (most prominently self-exciting point processes \cite{hawkes1971point}),
 there seems to be one salient
 feature which very typically indicates the departure from temporal homogeneity: 
-A heavy-tailed distribution of waiting times
+a heavy-tailed distribution of waiting times
 \cite{Vasquez2006,Karsai2012,Vajna2013}. 
 A simple renewal process with heavy-tailed waiting times captures these
-dynamics. For many systems, the renewal property is appropriate, as can be
-checked by a simple test: the dynamics do not change visibly if the
+dynamics. For many systems, the renewal property is appropriate, as the dynamics do not change visibly if the
 waiting times are randomly reshuffled \cite{Karsai2012}.
 
 When a magnitude can be assigned to each event in the renewal process, 
-such as for earthquakes, sun flares, neuron voltages or the impact of an email,
-two natural and basic questions to ask are: 
-What is the distribution of the largest event up to a given time $t$?
-What is the probability that an event exceeds a given level $\ell$ within the
-next $t$ units of time?
-A probabilistic extreme value model which assumes that the events form a 
-renewal process is available in the literature. 
-This model has been studied under the names
+such as for earthquakes, sun flares, neuron voltages or the impact of an email, it is natural to consider the consequences of \emph{extreme} events. Thus two questions that arise are: 
+When will the next extreme event occur? And, how large will it be?
+%two natural and basic questions to ask are: 
+%What is the distribution of the largest event up to a given time $t$?
+%What is the probability that an event exceeds a given level $\ell$ within the
+%next $t$ units of time?
+A probabilistic extreme value model which assumes the renewal property can be used to answer these questions. One such model has been studied under the names
 ``Continuous Time Random Maxima process'' (CTRM) 
-\cite{Benson2007,Meerschaert2009,Hees16,Hees2015}, 
+\cite{Benson2007,Meerschaert2009,Hees16,Heesa}, 
 ``Max-Renewal process'' \cite{Silvestrov2002a,ST04,Basrak2014}, 
 and ``Shock process'' 
 \cite{Esary1973,Sumita1983,Sumita1984,Sumita1985,Anderson1987,Gut1999}.
 This thesis aims to develop concrete statistical inference methods for this model, 
 a problem which has seemingly received little attention by the statistical 
 community.
+
+
 
 \chapter{Preliminaries}\label{prelim}
 In this chapter, we introduce the notation and review the background theory of probability and stochastic processes that are necessary in developing the statistical methods outlined in this thesis.
@@ -550,8 +558,8 @@ where $\bar{X}_n=(\sum^n_{i=1}X_i)/n$.\\
 \end{definition}
 In this case we can see that the classical central limit theorem is a specific central limit theorem with the translation scaling constant $m=\mu$ and the space scaling sequence is $\{b_n=\sigma\sqrt{n}:n\geq1 \}$. It is hence obvious that the translation scaling constant and the space scaling sequence adjust for the drift and deviation of the partial sums to ensure convergence. We will look at the functional extension of the classical central limit theorem closely in Section \ref{s:background}.
 
-\chapter{Limit Theorems}
-The aim of this chapter is to present a stochastic process limit of a bursty CTRM process. We will first rigorously define a bursty CTRM and then provide an analysis of some well known scaling limit theorems, eventually arriving at the stochastic process limit for a bursty CTRM process. We then use results for the stochastic process limit found in the literature (see \cite{MeerschaertStoev08}) to determine the distribution of a bursty CTRM.
+\chapter{Scaling Limit Theorems}\label{ScalingLimits}
+The aim of this chapter is to present a stochastic process limit of a heavy tailed CTRM process. We will first rigorously define a heavy tailed CTRM and then provide an analysis of some well known scaling limit theorems, eventually arriving at the stochastic process limit for a bursty CTRM process. We then use results for the stochastic process limit found in the literature (see \cite{MeerschaertStoev08}) to determine the distribution of a bursty CTRM.
 
 \section{Problem Formulation}
 The Continuous Time Random \emph{Walk} (CTRW) has been a highly successful 
@@ -1383,7 +1391,7 @@ The next chapter discusses inference on these parameters, as well
 as on the parameters of the GEV distribution.
 %Thus the process formed by the exceedances and their corresponding durations form a \emph{fractional} Poisson process \cite{Laskin2003}.
 
-\chapter{Statistical Inference}
+\chapter{Statistical Inference}\label{inference}
 This chapter is concerned with developing parameter estimation methods for the exceedances and their corresponding durations. Inference consists of fitting a generalised Pareto distribution to observed threshold exceedances, fitting a Mittag-Leffler distribution to observed exceedance durations, selecting an appropriate threshold and finally model verification.
 \section{Choice of Estimators}
 In the previous chapter we showed that the exceedance durations are Mittag-Leffler (ML) distributed, and that the exceedances are Generalised Pareto (GP). For the ML distribution we choose to use the method of log moments estimator introduced by Cahoy in 2013. This estimator is chosen as it performs better than the only other estimator available in the literature, the fractional moments estimator \cite{Kozubowski2001}, with respect to both Root Mean Square Error and Bias \cite{Cahoy2013}.
@@ -1509,7 +1517,7 @@ Due to the renewal property every random variable in each sequence is i.i.d.. Th
     %\label{fig:my_label}
 \end{figure}
 
-We can now use the ML log moment estimator on the sample of exceedance durations and the GP likelihood moment estimator on the sample of exceedances to estimate all four parameters. Once we have parameter estimates for all thresholds $\ell$ on the interval $[\ell_0, x_F]$, we can graph our stability plots of $\hat \alpha$, $\hat\xi,$ $\hat\sigma^{*}$, and $\hat\delta^{*}$. Since we simulated data such that we could theoretically calculate the values of the adjusted parameters we know that $\delta^{*}=n^{1/\alpha}$ from (\ref{eq:deltaStar}) and $\sigma^{*}=\sigma-\xi\mu$ from (\ref{eq:sigmaStar}). 
+We can now use the ML log moment estimator on the sample of exceedance durations and the GP likelihood moment estimator on the sample of exceedances to estimate all four parameters. Once we have parameter estimates for all thresholds $\ell$ on the interval $[\ell_0, x_F]$, we can graph our stability plots of $\hat \alpha$, $\hat\xi,$ $\hat\sigma^{*}$, and $\hat\delta^{*}$. Since we simulated data such that we could theoretically calculate the values of the adjusted parameters we know that $\delta^{*}=n^{1/\alpha}$ from (\ref{eq:deltaStar}) and $\sigma^{*}=\sigma-\xi\mu$ from (\ref{eq:sigmaStar}). See Appendix B for a detailed look at the code utilised in the ensuing model verification.
 
 %\begin{figure}[h]
 %    \centering
@@ -1522,8 +1530,8 @@ We can now use the ML log moment estimator on the sample of exceedance durations
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{Figures/MLtail01}
-    \includegraphics[width=\textwidth]{Figures/MLscale01}
-    \caption{Mittag Leffler Stability Plots ($\alpha=0.4$, $n=50,000$)}\label{fig:MLstability}
+    \includegraphics[width=\textwidth]{Figures/MLscale01Fix}
+    \caption{Mittag Leffler Stability Plots ($\alpha=0.4$, $N=50,000$)}\label{fig:MLstability}
     %n=50,000
 \end{figure}
 
@@ -1531,26 +1539,39 @@ We can now use the ML log moment estimator on the sample of exceedance durations
     \centering
     \includegraphics[width=\textwidth]{Figures/GPshape01}
     \includegraphics[width=\textwidth]{Figures/GPscale01}
-    \caption{Generalised Pareto Stability Plots ($\xi=0.3$, $\sigma=1$)}\label{fig:MLstability}
+    \caption{Generalised Pareto Stability Plots ($\xi=0.3$, $\sigma=1$, N=50,000)}\label{fig:GPstability}
 \end{figure}
-Both sets of plots look rather stable for the entire length of the plot, so using our threshold selection method we set $\ell$ as the threshold associated with $\epsilon=0.01$. This results in the following estimates
-\begin{align*}
+Both sets of plots look rather stable for the entire length of the plot, so using our threshold selection method we set $\ell=10.14632$ as the threshold associated with $\epsilon=0.01$. This results in the following estimates
+\begin{align}
+\begin{split}\label{eq:parameterEstimates}
 \hat \alpha &= 0.3935573\\
-\hat \delta &= 1.957352\times10^{-7}\\
-\hat \xi &= 0.3\\
+\hat \delta &= 88879.44\\ 
+\hat \xi &=    0.3047289\\ 
 \hat {\tilde \sigma} &= 3.682074.
-\end{align*} 
-Where the true values are \textcolor{red}{SOMETHING WRONG WITH b(n) HERE}
-\begin{align*}
+\end{split}
+\end{align}
+Where the true values of the parameters are
+\begin{align}
+\begin{split}\label{eq:trueValues}
  \alpha &= 0.4\\
- \delta &= !!!??? \\
+ \delta &= b(n)(-\log(1-\epsilon))^{-1/\alpha}=98752.61 \\
  \xi &= 0.3\\
- {\tilde \sigma} &= 1+\xi\ell =1+0.3\times 10.14632 = 4.043896
-\end{align*} 
+ {\tilde \sigma} &= 1+\xi\ell =1+0.3\times 10.14632 = 4.043896.
+ \end{split}
+\end{align} 
+Repeating the procedure described above for simulated data with different parameters produced estimates with similar stability plots and error margins as in (\ref{eq:parameterEstimates}) and (\ref{eq:trueValues}). As the true values lie within the $95\%$ level confidence intervals of all four of our estimates we can confirm that the inference methods described in the previous two sections are valid. Furthermore the stability of all four parameter estimates, with respect to the tail quantile level $\epsilon$, verifies that the asymptotic theoretical distributions derived in Chapter \ref{distributions} are conceptually sound. Thus we conclude that the model developed in this thesis is an appropriate tool for describing the extremes of bursty events.
 \chapter{Conclusion}
+In this thesis we undertook the task of providing a mathematically well-founded statistical method for predicting extremes of bursty events. %It is understood that a reliable method for predicting such extreme events would have significant impact on our society: it will improve the way emergency response is provided in case of calamities, help better formulate the state financial policies in order to protect customers in case of market meltdown, and help fight spread of epidemics more effectively, to name but a few.
+After providing the necessary mathematical preliminaries in Chapter~\ref{prelim}, we showed in Chapters~\ref{ScalingLimits} and~\ref{distributions}, that the distributions of extreme events can be derived by first finding the scaling limit of a heavy-tailed max-renewal process. This result is significant, since without it, any statistical method developed to model bursty data would lack any theoretical basis.
 
+Finally, in Chapter~\ref{inference}, we developed the statistical methodology for fitting bursty data to a heavy-tailed max-renewal process. We also discovered that the methodology worked well on simulated data, further supporting the results obtained in Chapter~\ref{distributions}. In summary, we developed a statistical method that is theoretically well founded for predicting extreme events based on historical data, and demonstrated its efficacy using synthetic data. Nonetheless, it suffers from certain limitations.
 
-\chapter{Appendix}
+Intuitively, there is a causal dependence between the inter-arrival waiting times and the size of the events. However this dependence makes the analysis of the problem very complex. In this thesis, we made the simplifying assumption that the waiting times are independent of the event magnitudes. A future direction that could be taken is to develop a more general approach by relaxing the independence assumption. 
+
+Finally, we tested our method against simulated, synthetic data. The robustness of our method can only be fully established after its performance against real data is carefully studied. Potential datasets that have already been shown to be heavy-tailed can be found in \cite{Karsai2012}, \cite{Resnick1995} and \cite{Mainardi2000}. Although the performance of our method against synthetic data lends us some confidence that it will do well against real data, it is difficult to state in advance how our method will perform.
+
+\begin{appendices}
+\chapter{Confidence Intervals}
 From \cite{Cahoy2013} we know that
 \[
 \delta=\exp(\mu +\gamma)
@@ -1631,7 +1652,205 @@ We have therefore shown that the log-moment estimate of $b$ is normally distribu
 \[
 	\hat{b}\pm z_{\epsilon/2}\sqrt{\sigma^2_b}.
 \]
+\chapter{Simulation Code}
+\section{StabilityPlots.R}
+\begin{lstlisting}
+##############################
+#
+#	StabilityPlots.R
+#
+##############################
+require(stabledist)
+require(fExtremes)
+require(plyr)
+require(POT) ##install.packages("POT", repos="http://R-Forge.R-project.org") 
+# number of observations
+n = 50000
+# tail parameter of waiting times
+alpha = 0.4
+# scaling constant for "unit" stable under parametrisation pm = 1 below
+sigma = (cos(alpha * pi / 2))^(1 / alpha)
+# block number; maximum of this many observations results in good approximation
+# by GEV distribution
+B = 1
+# norming sequence
+b.n=B^(1/alpha)
+# times of events:
+TT = cumsum(rstable(n = n, alpha = alpha, beta = 1, gamma = sigma, delta = 0, pm = 1))/b.n
+# magnitudes of events (distribution irrelevant)
+xi=0.3
+sigmaGEV=1
+JJ = rgev(n, xi = xi, mu = 0, beta = sigmaGEV)
 
+## Estimate tail index of inter-arrival times, where data are thinned
+## out at different cutoffs
+source("MittagLefflerDeltaEstimation.R")
+
+# consider the cutoff at the top epsMax values:
+epsMax <- 0.01
+# this cutoff translates to this many magnitudes:
+m <- ceiling(epsMax * n)
+# indices of the largest jumps:
+idxJ <- order(JJ, decreasing = T)[1:m]
+source("extractDurations.R")
+# creates a dataframe with point estimates and confidence intervals
+# of the Mittag-Leffler parameters mu and nu:
+estimates <- ldply(.data = seq(50,m), function(k){
+  est <- ml.par.est.delta(Tell(TT,idxJ,k),0.05,1-k/n)
+  return(c(est$nu, est$CInu, est$delta, est$CIdelta, est$b,est$CIb, k))
+})
+# alpha = shape; sigma = scale; topk = number of values used in estimate
+names(estimates) <- c("alpha","alphaL","alphaH","delta","deltaL","deltaH","b","bL","bH" ,"topk")
+
+par(mfrow=c(1,1))
+estimates$eps <- B * estimates$topk / n
+# plot estimates of tail parameter alpha
+plot(estimates$eps,estimates$alpha, type="l",ylab= "alpha", xlab = "epsilon", ylim = c(0.3,0.5), main="ML tail parameter")
+lines(estimates$eps,estimates$alphaH, type="l", lty =2)
+lines(estimates$eps,estimates$alphaL, type="l", lty =2)
+abline(h = alpha, lty = 3,col="red")
+
+# eps := fraction of magnitudes above threshold
+estimates$truedelta <- (-log(1-estimates$eps))^-(1/alpha)*b.n
+#plot estimates of scale parameter delta
+plot(estimates$eps,estimates$delta, type="l",ylab= "delta", xlab = "epsilon", main="ML scale parameter")
+lines(estimates$eps,estimates$deltaH, type="l", lty =2)
+lines(estimates$eps,estimates$deltaL, type="l", lty =2)
+lines(estimates$eps,estimates$truedelta,type="l",lty=3,col="red")
+
+
+
+## plot with known alpha:
+estimates$bKnown<-estimates$delta * (-log(1-estimates$eps))^(1/alpha)
+estimates$bKnownH<-estimates$bKnown+(estimates$deltaH-estimates$delta)*(-log(1-estimates$eps))^(1/alpha)
+estimates$bKnownL<-estimates$bKnown-(estimates$delta-estimates$deltaL)*(-log(1-estimates$eps))^(1/alpha)
+
+plot(estimates$eps, estimates$bKnown, type="l", ylim=c(0,2*b.n), xlab = "epsilon", ylab = "delta* (alpha known)", main="ML scale parameter")
+lines(estimates$eps,estimates$bKnownH, type="l", lty =2)
+lines(estimates$eps,estimates$bKnownL, type="l", lty =2)
+abline(h = b.n, lty = 3,col="red")
+
+## plot with estimated alpha:
+#plot(estimates$eps, estimates$delta * (-log(1-estimates$eps))^(1/estimates$alpha), type="l", ylim=c(0,10), xlab = "eps", ylab = "b(n) (alpha unknown)", main="b(n)")
+
+plot(estimates$eps, estimates$b, type="l", ylim=c(0,2*b.n), xlab = "eps", ylab = "b(n) (alpha unknown)", main="b(n)")
+lines(estimates$eps,estimates$bH, type="l", lty =2)
+lines(estimates$eps,estimates$bL, type="l", lty =2)
+abline(h = b.n, lty = 3,col="red")
+
+#Generalised Pareto Estimate
+
+GPestimates <- ldply(.data = seq(50,m), function(k){
+  l=JJ[idxJ[k]]
+  theoreticalScale=sigmaGEV+xi*(l)
+  est <- fitgpd(JJ[idxJ],l,est = "mle")
+  sigmaStar=est$fitted.values[[1]]-xi*l
+  scaleCI=gpd.fiscale(est,0.95)
+  shapeCI=gpd.fishape(est,0.95)
+  return(c(est$fitted.values[[1]], scaleCI,theoreticalScale, est$fitted.values[[2]], shapeCI,sigmaStar,k))
+})
+names(GPestimates) <- c("scaleEst","scaleL","scaleH","theoreticalScale","shapeEst","shapeL","shapeH","sigmaStar","topk")
+
+GPestimates$eps <- B * GPestimates$topk / n
+
+plot(GPestimates$eps,GPestimates$scaleEst, type="l",ylab= "sigma", xlab = "epsilon", 
+     ylim = c(0,10), main="GP scale parameter")
+lines(GPestimates$eps,GPestimates$scaleH, type="l", lty =2)
+lines(GPestimates$eps,GPestimates$scaleL, type="l", lty =2)
+lines(GPestimates$eps,GPestimates$theoreticalScale, type="l", lty =3,col="red")
+
+plot(GPestimates$eps,GPestimates$shapeEst, type="l",ylab= "xi", xlab = "epsilon", ylim = c(0,1), main="GP shape parameter")
+lines(GPestimates$eps,GPestimates$shapeH, type="l", lty =2)
+lines(GPestimates$eps,GPestimates$shapeL, type="l", lty =2)
+abline(h = xi, lty = 3, col="red")
+
+plot(GPestimates$eps,GPestimates$sigmaStar,type="l",ylab= "sigma*", xlab = "epsilon", ylim = c(0,3), main="GP scale parameter")
+lines(GPestimates$eps,GPestimates$sigmaStar+(GPestimates$scaleH-GPestimates$scaleEst), type="l", lty =2)
+lines(GPestimates$eps,GPestimates$sigmaStar-(GPestimates$scaleEst-GPestimates$scaleL), type="l", lty =2)
+abline(h = 1, lty = 3, col="red")
+\end{lstlisting}
+\section{MittagLefflerDeltaEstimation.R}
+\begin{lstlisting}
+###########################################
+#
+#	MittagLefflerDeltaEstimation.R
+#
+###########################################
+
+
+# From Dexter Cahoy, http://www2.latech.edu/~dcahoy/
+#######################
+#Random number generation and  estimation for the Mittag-Leffler distribution  
+#and fractional Poisson process
+#SOURCE: (1) Parameter estimation for fractional Poisson processes (with V Uchaikin and W Woyczynski). 
+#Journal of Statistical Planning and Inference, 140(11), 3106-3120, Nov 2010.
+#(2)Estimation of Mittag-Leffler parameters. Communications in Statistics-Simulation and Computation, 42(2), 303-315, 2013
+#Updated last 02/03/2016.
+#Email me at dcahoy@latech.edu if you have questions, suggestions, etc.
+########################
+
+EULER.C = 0.57721566490153286;
+
+# n - number of data needed
+# nu, mu - the parameters of Mittag-Leffler dist.
+mittag.leffler = function(n, nu, mu){
+  U.1 = runif(n)
+  U.2 = runif(n)
+  U.3 = runif(n)
+  T = ( (abs(log(U.1))/mu)^(1/nu) )*( ( sin(nu*pi*U.2)*sin((1-nu)*pi*U.2)^(1/nu-1) )/ (  ( sin(pi*U.2)^(1/nu) )*abs(log(U.3))^(1/nu-1))  )
+  return(T)
+}
+
+
+# T = data, 1-a= 1- alpha =confidence level/coefficient, F.l = cumulative prob of threshold level
+ml.par.est.delta = function (T, a, F.l) {
+  log.T = log(T)
+  m = mean(log.T)
+  s.2 = var(log.T)
+  nu = pi/sqrt(3*(s.2 + pi^2/6))
+  delta = exp(m + EULER.C)
+  n=length(T)
+  
+  se.nu=sqrt( (nu^2)*(32-20*nu^2-nu^4)/(40*n)  )
+  zcv=qnorm(1-a/2,0,1)  
+  l.nu= nu -zcv*se.nu
+  u.nu =  nu + zcv*se.nu
+  
+  se.delta = sqrt(((pi^2*delta^2)/(6*n))*((2/nu^2) - 1)) #delta
+  l.delta= delta -zcv*se.delta
+  u.delta =  delta + zcv*se.delta
+  
+  b=delta*(-log(F.l))^(1/nu)
+  var.b=(b^2*s.2 + (b^2/nu^2)*log(-log(F.l)) * (6*sqrt(2)*pi/(6*s.2+pi^2)^(3/2) + se.nu^2/(nu^2)*log(-log(F.l))))/n
+  se.b=sqrt(var.b)
+  l.b=b-zcv*se.b
+  u.b=b+zcv*se.b
+  
+  
+  return(list(nu = nu, delta = delta, b=b, CInu=c(l.nu, u.nu), CIdelta=c(l.delta, u.delta), CIb=c(l.b,u.b)) )      
+}
+
+#Generate Mittag-Leffler distributed data 
+#or inter-event or  inter-jump times of a fractional Poisson process
+# dat=mittag.leffler(n=500,nu=0.2, mu=2)
+
+#Point and interval estimates of  nu and mu. 
+# ml.par.est(dat, a=0.05)
+\end{lstlisting}
+\section{extractDurations.R}
+\begin{lstlisting}
+####################
+#extractDurations.R#
+####################
+# extracts (preceding) durations of the m largest exceedances
+Tell <- function(TT,idxJ,m){
+  m=ceiling(m)
+  thinT <- sort(TT[idxJ[1:m]])
+  diff(c(0,thinT))
+}
+\end{lstlisting}
+
+\end{appendices}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \clearpage

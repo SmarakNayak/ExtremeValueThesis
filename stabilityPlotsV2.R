@@ -3,7 +3,7 @@ require(fExtremes)
 require(plyr)
 require(POT) ##install.packages("POT", repos="http://R-Forge.R-project.org") 
 # number of observations
-n = 100000
+n = 50000
 # tail parameter of waiting times
 alpha = 0.4
 # scaling constant for "unit" stable under parametrisation pm = 1 below
@@ -14,17 +14,14 @@ B = 1
 # norming sequence
 b.n=B^(1/alpha)
 # times of events:
-TT = cumsum(rstable(n = n, alpha = alpha, beta = 1, 
-                    gamma = sigma, delta = 0, pm = 1))
+TT = cumsum(rstable(n = n, alpha = alpha, beta = 1, gamma = sigma, delta = 0, pm = 1))/b.n
 # magnitudes of events (distribution irrelevant)
-JJ = rgev(n, xi = 0.3, mu = 0, beta = 1)
-#Restrict attention to unit interval
-# JJ <- JJ[TT < 1]
-# TT <- TT[TT < 1]
+xi=0.3
+sigmaGEV=1
+JJ = rgev(n, xi = xi, mu = 0, beta = sigmaGEV)
 
 ## Estimate tail index of inter-arrival times, where data are thinned
 ## out at different cutoffs
-source("MittagLefflerEstimation.R")
 source("MittagLefflerDeltaEstimation.R")
 
 # consider the cutoff at the top epsMax values:
@@ -43,22 +40,21 @@ estimates <- ldply(.data = seq(50,m), function(k){
 # alpha = shape; sigma = scale; topk = number of values used in estimate
 names(estimates) <- c("alpha","alphaL","alphaH","delta","deltaL","deltaH","b","bL","bH" ,"topk")
 
-par(mfrow=c(2,3))
+par(mfrow=c(1,1))
+estimates$eps <- B * estimates$topk / n
 # plot estimates of tail parameter alpha
-plot(estimates$topk,estimates$alpha, type="l",ylab= "alpha", xlab = "k", ylim = c(0,1), main="ML tail parameter")
-lines(estimates$topk,estimates$alphaH, type="l", lty =2)
-lines(estimates$topk,estimates$alphaL, type="l", lty =2)
-abline(h = alpha, lty = 3)
+plot(estimates$eps,estimates$alpha, type="l",ylab= "alpha", xlab = "epsilon", ylim = c(0.3,0.5), main="ML tail parameter")
+lines(estimates$eps,estimates$alphaH, type="l", lty =2)
+lines(estimates$eps,estimates$alphaL, type="l", lty =2)
+abline(h = alpha, lty = 3,col="red")
 
 # eps := fraction of magnitudes above threshold
-estimates$eps <- B * estimates$topk / n
 estimates$truedelta <- (-log(1-estimates$eps))^-(1/alpha)*b.n
 #plot estimates of scale parameter delta
-plot(estimates$topk,estimates$delta, type="l",ylab= "delta", xlab = "k", 
-     main="ML scale parameter")
-lines(estimates$topk,estimates$deltaH, type="l", lty =2)
-lines(estimates$topk,estimates$deltaL, type="l", lty =2)
-lines(estimates$topk,estimates$truedelta,type="l",lty=3)
+plot(estimates$eps,estimates$delta, type="l",ylab= "delta", xlab = "epsilon", main="ML scale parameter")
+lines(estimates$eps,estimates$deltaH, type="l", lty =2)
+lines(estimates$eps,estimates$deltaL, type="l", lty =2)
+lines(estimates$eps,estimates$truedelta,type="l",lty=3,col="red")
 
 
 
@@ -67,10 +63,10 @@ estimates$bKnown<-estimates$delta * (-log(1-estimates$eps))^(1/alpha)
 estimates$bKnownH<-estimates$bKnown+(estimates$deltaH-estimates$delta)*(-log(1-estimates$eps))^(1/alpha)
 estimates$bKnownL<-estimates$bKnown-(estimates$delta-estimates$deltaL)*(-log(1-estimates$eps))^(1/alpha)
 
-plot(estimates$eps, estimates$bKnown, type="l", ylim=c(0,2*b.n), xlab = "eps", ylab = "b(n) (alpha known)", main="b(n)")
+plot(estimates$eps, estimates$bKnown, type="l", ylim=c(0,2*b.n), xlab = "epsilon", ylab = "delta* (alpha known)", main="ML scale parameter")
 lines(estimates$eps,estimates$bKnownH, type="l", lty =2)
 lines(estimates$eps,estimates$bKnownL, type="l", lty =2)
-abline(h = b.n, lty = 3)
+abline(h = b.n, lty = 3,col="red")
 
 ## plot with estimated alpha:
 #plot(estimates$eps, estimates$delta * (-log(1-estimates$eps))^(1/estimates$alpha), type="l", ylim=c(0,10), xlab = "eps", ylab = "b(n) (alpha unknown)", main="b(n)")
@@ -78,36 +74,35 @@ abline(h = b.n, lty = 3)
 plot(estimates$eps, estimates$b, type="l", ylim=c(0,2*b.n), xlab = "eps", ylab = "b(n) (alpha unknown)", main="b(n)")
 lines(estimates$eps,estimates$bH, type="l", lty =2)
 lines(estimates$eps,estimates$bL, type="l", lty =2)
-abline(h = b.n, lty = 3)
+abline(h = b.n, lty = 3,col="red")
 
 #Generalised Pareto Estimate
-#GPmleEst <- fitgpd(JJ[idxJ], l, est = "mle")
-#mom <- fitgpd(x, 1, est = "moments")
-#pwmb <- fitgpd(x, 1, est = "pwmb")
-#pwmu <- fitgpd(x, 1, est = "pwmu")
-#gpd.fiscale(GPmleEst, conf = 0.95)
-#gpd.fishape(GPmleEst,conf=0.95)
-#gpd.pfscale(GPmleEst, conf = 0.95)
-#gpd.pfshape(GPmleEst,conf=0.95)
 
 GPestimates <- ldply(.data = seq(50,m), function(k){
   l=JJ[idxJ[k]]
-  theoreticalScale=1+0.3*(l)
+  theoreticalScale=sigmaGEV+xi*(l)
   est <- fitgpd(JJ[idxJ],l,est = "mle")
+  sigmaStar=est$fitted.values[[1]]-xi*l
   scaleCI=gpd.fiscale(est,0.95)
   shapeCI=gpd.fishape(est,0.95)
-  return(c(est$fitted.values[[1]], scaleCI,theoreticalScale, est$fitted.values[[2]], shapeCI, k))
+  return(c(est$fitted.values[[1]], scaleCI,theoreticalScale, est$fitted.values[[2]], shapeCI,sigmaStar,k))
 })
-names(GPestimates) <- c("scaleEst","scaleL","scaleH","theoreticalScale","shapeEst","shapeL","shapeH","topk")
+names(GPestimates) <- c("scaleEst","scaleL","scaleH","theoreticalScale","shapeEst","shapeL","shapeH","sigmaStar","topk")
 
-plot(GPestimates$topk,GPestimates$scaleEst, type="l",ylab= "sigma", xlab = "k", 
+GPestimates$eps <- B * GPestimates$topk / n
+
+plot(GPestimates$eps,GPestimates$scaleEst, type="l",ylab= "sigma", xlab = "epsilon", 
      ylim = c(0,10), main="GP scale parameter")
-lines(GPestimates$topk,GPestimates$scaleH, type="l", lty =2)
-lines(GPestimates$topk,GPestimates$scaleL, type="l", lty =2)
-lines(GPestimates$topk,GPestimates$theoreticalScale, type="l", lty =3)
+lines(GPestimates$eps,GPestimates$scaleH, type="l", lty =2)
+lines(GPestimates$eps,GPestimates$scaleL, type="l", lty =2)
+lines(GPestimates$eps,GPestimates$theoreticalScale, type="l", lty =3,col="red")
 
-plot(GPestimates$topk,GPestimates$shapeEst, type="l",ylab= "xi", xlab = "k", 
-     ylim = c(0,1), main="GP shape parameter")
-lines(GPestimates$topk,GPestimates$shapeH, type="l", lty =2)
-lines(GPestimates$topk,GPestimates$shapeL, type="l", lty =2)
-abline(h = 0.3, lty = 3)
+plot(GPestimates$eps,GPestimates$shapeEst, type="l",ylab= "xi", xlab = "epsilon", ylim = c(0,1), main="GP shape parameter")
+lines(GPestimates$eps,GPestimates$shapeH, type="l", lty =2)
+lines(GPestimates$eps,GPestimates$shapeL, type="l", lty =2)
+abline(h = xi, lty = 3, col="red")
+
+plot(GPestimates$eps,GPestimates$sigmaStar,type="l",ylab= "sigma*", xlab = "epsilon", ylim = c(0,3), main="GP scale parameter")
+lines(GPestimates$eps,GPestimates$sigmaStar+(GPestimates$scaleH-GPestimates$scaleEst), type="l", lty =2)
+lines(GPestimates$eps,GPestimates$sigmaStar-(GPestimates$scaleEst-GPestimates$scaleL), type="l", lty =2)
+abline(h = 1, lty = 3, col="red")

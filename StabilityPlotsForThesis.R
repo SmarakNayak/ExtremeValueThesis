@@ -11,8 +11,7 @@ sigma = (cos(alpha * pi / 2))^(1 / alpha)
 # norming sequence
 b.n=n^(-1/alpha)
 # times of events:
-TT = cumsum(rstable(n = n, alpha = alpha, beta = 1, 
-                    gamma = sigma, delta = 0, pm = 1)) * b.n
+TT = cumsum(rstable(n = n, alpha = alpha, beta = 1, gamma = sigma, delta = 0, pm = 1)) * b.n
 # magnitudes of events (distribution irrelevant)
 xi=0.3
 sigmaGEV=1

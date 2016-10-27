@@ -10,3 +10,6 @@ stabilityPlots_files
 Anderson-approach_cache
 Anderson-approach_files
 *.html
+stabilityPlots.md
+simulateML.md
+simulateML.pdf
