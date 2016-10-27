@@ -10,17 +10,18 @@ require(stabledist)
 require(fExtremes)
 require(plyr)
 # number of observations 
-n = 2^{16} 
+n = 100000
 # tail parameter of waiting times
-beta = 0.8
+beta = 0.85
 # scale parameter of waiting times
 delta = n^(1/beta)
 # shape parameter of GEV distribution
-xi = 0.7
+xi = 0.3
 # times of events:
-TT = cumsum(rstable(n,beta, 1, gamma=1, delta=0, pm=1)) / delta
+TT = cumsum(rstable(n,beta, 1, gamma=1, delta=0, pm=1))
 # magnitudes of events (distribution irrelevant)
-JJ = rgev(n, xi = xi, mu = 0, beta = 1) / n^(xi) # don't know scaling!
+JJ = rgev(n, xi = xi, mu = 0, beta = 1) # don't know scaling!
+JJ <- sapply(JJ, function(x) max(x, 0))
 # consider the cutoff at the top epsMax values:
 epsMax <- 0.10
 # this cutoff translates to this many magnitudes:
@@ -35,7 +36,7 @@ assume i.i.d. magnitudes, drawn from a Generalized Extreme Value Distribution
 with shape parameter $\xi = `r xi`$: 
 
 ```{r CTRM-plot, echo = F}
-plot(TT,JJ, type = "h", xlim = c(0,1), ylim = c(-0.1,1), main = "CTRM process", xlab = "time", ylab = "magnitude")
+plot(TT,JJ, type = "h", main = "CTRM process", xlab = "time", ylab = "magnitude")
 # lines(TT, cummax(JJ), col = 2)
 ```
 
@@ -51,14 +52,16 @@ X_\ell = M(N(T_\ell)) - \ell.
 \end{align*}
 
 ```{r exceedances, echo=F, fig.cap="Exceedance times (blue circles) and Exceedance sizes (red lines)."}
-plot(TT,JJ, type = "h", xlim = c(0,1), ylim = c(-0.1,1), main = "Exceedances", xlab = "time", ylab = "magnitude", col = "gray")
+plot(TT,JJ, type = "h", main = "Exceedances", xlab = "time", ylab = "magnitude", col = "gray")
 # Choose threshold ell so that there are k exceedances:
 k = 10
 ell <- (JJ[idxJ[k]] + JJ[idxJ[k+1]])/2
 abline(h = ell, lty = 2)
-lines(TT[idxJ[1:k]], JJ[idxJ[1:k]], type = "h", col = 2)
 lines(TT[idxJ[1:k]], rep(ell,k), type = "h", col = "gray")
-points(TT[idxJ[1:k]], rep(0,k), col = 4)
+points(TT[idxJ[1:k]], rep(0,k), col = 4, lwd = 4)
+for(i in 1:10){
+  lines(rep(TT[idxJ][i],2), c(JJ[idxJ][k], JJ[idxJ][i]), col = 2, lwd = 4) 
+}
 ```
 
 ### Probability distribution of Exceedance Times
