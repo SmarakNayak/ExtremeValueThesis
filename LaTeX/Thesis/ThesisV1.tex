@@ -37,6 +37,7 @@
 		columns=flexible,
 		breaklines=true
 		}
+\usepackage{tikz}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %  The following are some simple LaTeX macros to give some
@@ -591,7 +592,47 @@ the empty set is set to $x_0$, the left end-point of the support of the distribu
 of $J_k$.\\
 \end{definition}
 
-It is clear that the sample paths of $N(t)$ and $V(t)$ are right-continuous
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+	\draw[ultra thick][<->] (0,6)--(0,0)--(10,0);
+	\draw[thick][cyan] (1,0)--(1,1);
+	\draw[thick][cyan] (2.5,0)--(2.5,2.5);
+	\draw[thick][cyan] (3.5,0)--(3.5,2);
+	\draw[thick][cyan] (4.5,0)--(4.5,4);
+	\draw[thick][cyan] (5.5,0)--(5.5,3);
+	\draw[thick][cyan] (6.5,0)--(6.5,1);
+	\draw[thick][cyan] (7,0)--(7,4.5);
+	\draw[thick][cyan] (8.5,0)--(8.5,2);
+	\draw[thick][cyan] (9,0)--(9,2.5);
+	\node [above left] at (0,6) {$x$};
+	\node [below right] at (10,0) {$t$};
+	\node [left] at (1,0.5) {$J_1$};
+	\node [below] at (0.5,0) {$W_1$};
+	\node [left] at (2.5,1.75) {$J_2$};
+	\node [below] at (1.75,0) {$W_2$};
+	\node [left] at (3.5,1.5) {$J_3$};
+	\node [below] at (3,0) {$W_3$};
+	\node [left] at (4.5,3.5) {$J_4$};
+	\node [below] at (4,0) {$W_4$};
+	\node [left] at (5.5,2.5) {$J_5$};
+	\node [below] at (5,0) {$W_5$};
+	\node [left] at (6.5,0.5) {$J_6$};
+	\node [below] at (6,0) {$W_6$};
+	\node [left] at (7,4.25) {$J_7$};
+	\node [below] at (6.75,0) {$W_7$};
+	\node [left] at (8.5,1.5) {$J_8$};
+	\node [below] at (7.75,0) {$W_8$};
+	\node [left] at (9,2.25) {$J_9$};
+	\node [below] at (8.75,0) {$W_9$};
+	\draw[thick][red](0,0)--(1,0)--(1,1)--(2.5,1)--(2.5,2.5)--(4.5,2.5)--(4.5,4)--(7,4)--(7,4.5)--(9,4.5);
+\end{tikzpicture}
+\caption{An example CTRM process.}
+\label{fig:ctrm}
+\end{figure}
+
+
+It is clear from Figure~\ref{fig:ctrm} that the sample paths of $N(t)$ and $V(t)$ are right-continuous
 with left-hand limits. 
 If $W_k$ is interpreted as the time \emph{leading up} to the event with magnitude
 $J_k$, then $V(t)$ is the largest magnitude observed until time $t$.
@@ -687,13 +728,21 @@ Let $\{U_i\}_{1\leq i \leq n}$ be i.i.d. U(0,1) random variables. Write the part
 then successive partial sums form a \textbf{random walk} with $S_n$ being the position after n steps.
 \\
 \end{definition}
-\noindent The general method of achieving a continuous limit of a discrete function is to consider a continuous analogue of the sum $S_n$ as $n\to\infty$ and then rescaling to ensure the continuous analogue remains finite. We can then appeal to the Classical Central Limit Theorem for real-valued random variables: % discrete is not the right word here
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=1]{Figures/RandomWalk}
+\caption{\cite{Whitt2010} Realisations of the centred random walk $\{S_k-k/2:k\geq0\}$ with steps uniformly distributed on the interval $[0,1]$.}
+\label{fig:RandomWalk}
+\end{figure}
+
+\noindent From Figure~\ref{fig:RandomWalk} it is evident that for large values of $n$ the partial sums $S_n$ start to look continuous. One way of achieving a continuous limit of a discrete function is to consider a continuous analogue of the sum $S_n$ as $n\to\infty$ and then rescaling to ensure the continuous analogue remains finite. We can then appeal to the Classical Central Limit Theorem for real-valued random variables: % discrete is not the right word here
 \begin{align}\label{eq:clt}
 \frac{S_n-n\mu}{\sqrt{n\sigma^2}}\overset{d}{\longrightarrow}Z\sim N(0,1)\textrm{ as $n\to\infty$}
 \end{align}
 
 \noindent where $\mu:=\E[U_k]=1/2$ and $\sigma^2:=\Var(U_k)=1/12.$
-The random walk only accepts integer arguments so in order to extend this discrete limit to a continuous limit we first consider two different continuous time representations of a discrete time random walk. One obvious way of forming a process from the random walk is to perform linear interpolation between each discrete point. Thus, we can consider
+The random walk only accepts integer arguments so in order to extend this central limit theorem to a functional central limit theorem we need to first consider two different continuous time representations of a discrete time random walk. One obvious way of forming a process from the random walk is to perform linear interpolation between each discrete point. Thus, we can consider
 \begin{align}
 	\tilde{S}(t):=(t-\lfloor t \rfloor)U_{\lfloor t \rfloor +1} + S_{\lfloor t \rfloor}\quad\textrm{for all } t\geq0,
 \end{align}
@@ -708,12 +757,12 @@ or more simply, we can consider the step function
 \begin{align}\label{fun:scaleStep}
 	S_{\lfloor ct \rfloor}=U_1+\cdots+U_{\lfloor ct \rfloor}  \quad\textrm{for all } t\geq0.
 \end{align}
-Whereas in \ref{fun:step} a step can only occur at the end of every time period, the inclusion of $c$ in \ref{fun:scaleStep} allows us to adjust how often steps occur. For example, if we multiply $c$ by 60, then steps that were occurring every minute now occur every second. Clearly as $c$ approaches infinity steps start to occur continuously. Now that we have a continuous analogue of the discrete random walk we wish to find the limiting process. Following \ref{eq:clt} we would expect that the following functional central limit theorem holds
+Whereas in \ref{fun:step} a step can only occur at the end of every time period, the inclusion of $c$ in \ref{fun:scaleStep} allows us to adjust how often steps occur. For example, if we multiply $c$ by 60, then steps that were occurring every minute now occur every second. Clearly as $c$ approaches infinity steps start to occur continuously. Now that we have a continuous analogue of the discrete random walk we wish to find the limiting process. Following from (\ref{eq:clt}) the following functional central limit theorem holds
 \begin{align}\label{eq:BMconv}
 	\frac{S_{\lfloor ct\rfloor}-\lfloor ct \rfloor \mu}{\sqrt{c\sigma^2}}\overset{d}{\longrightarrow}B_t\sim N(0,t)\textrm{ as $c\to\infty$},
 \end{align}
 
-\noindent where $B_t$ is standard Brownian Motion. An easy way to check that the above weak convergence is correct is to consider the Fourier transforms of both sides.\\
+\noindent where $B_t$ is standard Brownian Motion. Another way to check that the above weak convergence is correct is to consider the Fourier transforms of both sides.\\
 \begin{definition}
 	Let $Y:\Omega\to E$ be a random variable with probability density function $f_Y(x)$. Then the \textbf{Fourier Transform}  of $f_Y(x)$ is
 	\[
@@ -763,13 +812,13 @@ We now refer to the L\'{e}vy Continuity Theorem to prove the weak convergence ou
 % You have basically reproven the Central Limit Theorem. The proof of result
 % (3.2.5) is a one-liner following from (3.2.1): 
 
-\begin{align*}
-\frac{S_{\lfloor ct \rfloor} - \lfloor ct \rfloor\mu}{\sqrt{c \sigma^2}}
-= \frac{\sqrt{\lfloor ct \rfloor}}{\sqrt{\lfloor ct \rfloor}}
-\frac{S_{\lfloor ct \rfloor} - \lfloor ct \rfloor\mu}{\sqrt{c \sigma^2}}
-\to \sqrt t B_1 \stackrel{d}{=} B_t
-\end{align*}
-by (3.2.1). 
+%\begin{align*}
+%\frac{S_{\lfloor ct \rfloor} - \lfloor ct \rfloor\mu}{\sqrt{c \sigma^2}}
+%= \frac{\sqrt{\lfloor ct \rfloor}}{\sqrt{\lfloor ct \rfloor}}
+%\frac{S_{\lfloor ct \rfloor} - \lfloor ct \rfloor\mu}{\sqrt{c \sigma^2}}
+%\to \sqrt t B_1 \stackrel{d}{=} B_t
+%\end{align*}
+%by (3.2.1). 
 
 % I would leave out the proof of the central limit theorem. 
 
@@ -1568,7 +1617,7 @@ Finally, in Chapter~\ref{inference}, we developed the statistical methodology fo
 
 Intuitively, there is a causal dependence between the inter-arrival waiting times and the size of the events. However this dependence makes the analysis of the problem very complex. In this thesis, we made the simplifying assumption that the waiting times are independent of the event magnitudes. A future direction that could be taken is to develop a more general approach by relaxing the independence assumption. 
 
-Finally, we tested our method against simulated, synthetic data. The robustness of our method can only be fully established after its performance against real data is carefully studied. Potential datasets that have already been shown to be heavy-tailed can be found in \cite{Karsai2012}, \cite{Resnick1995} and \cite{Mainardi2000}. Although the performance of our method against synthetic data lends us some confidence that it will do well against real data, it is difficult to state in advance how our method will perform.
+Finally, we tested our method against simulated, synthetic data. The robustness of our method can only be fully established after its performance against real data is carefully studied. Potential datasets that have already been shown to be heavy-tailed can be found in \cite{Karsai2012}, \cite{Resnick1995} and \cite{Mainardi2000}. Although the performance of our method against synthetic data lends us some confidence that it will do well against real data, it is difficult to state in advance how our method will perform. 
 
 \begin{appendices}
 \chapter{Confidence Intervals}
@@ -1837,11 +1886,9 @@ ml.par.est.delta = function (T, a, F.l) {
 #Point and interval estimates of  nu and mu. 
 # ml.par.est(dat, a=0.05)
 \end{lstlisting}
-\section{extractDurations.R}
+\section{ExtractDurations.R}
 \begin{lstlisting}
-####################
-#extractDurations.R#
-####################
+###extractDurations.R###
 # extracts (preceding) durations of the m largest exceedances
 Tell <- function(TT,idxJ,m){
   m=ceiling(m)
