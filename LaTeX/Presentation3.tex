@@ -1,5 +1,5 @@
 \documentclass{beamer}
-\usetheme{Madrid}
+\usetheme{Singapore}
 \setbeamercovered{transparent}
 
 \usepackage{ dsfont }
@@ -34,7 +34,7 @@
  
  
 %Information to be included in the title page:
-\title{Modelling Extremes of Bursty Events}
+\title{Inference on Heavy-Tailed\\ Max-Renewal Processes}
 %\subtitle{}
 \author{Smarak Nayak}
 \date{October 28, 2016}
@@ -228,13 +228,14 @@ and a limit theorem for our partial maxima-process,
 \end{frame}
 
 \begin{frame}{Scaling Limit of CTRM}
-\begin{theorem}
+(Meerschaert and Stoev 2007)
+
 Let $(W_i,J_i)$ be a sequence of i.i.d $\mathbb{R}^+\times\mathbb{R}$ random vectors such that the limits in equations (\ref{a}),(\ref{b}) and (\ref{c}) hold. Then,
         \[
             \frac{M(N(ct))-d(\tilde{b}(c))}{a(\tilde{b}(c))} \cd A(E(t)), \quad c\to\infty,
         \]
 where $A(E(t))$ is a subordination of the extremal process $A(t)$ by the inverse stable subordinator process $E(t)$.\\
-\end{theorem}
+
 \end{frame}
 
 \section{Distribution of Extremes}
@@ -245,7 +246,7 @@ where $A(E(t))$ is a subordination of the extremal process $A(t)$ by the inverse
         \centering
         \vspace{-0.5cm}
         \hspace{-0cm}
-        \includegraphics[scale=0.3]{Exceedances.png}
+        \includegraphics[scale=0.6]{Thesis/Figures/Exceedances.pdf}
         %\caption{Caption}
         %\label{fig:my_label}
     \end{figure}
