@@ -11,7 +11,7 @@
 %  things automatically
 %
  
-\documentclass[honours,12pt]{unswthesis}
+\documentclass[honours,12pt,twoside, openright]{unswthesis}
 \linespread{1.3}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -65,8 +65,8 @@
 \newcommand{\ZZ}{\mathcal{Z}}
 
 %Peter's commands
-\newcommand{\ex}{\mathbf {E}}
-\newcommand{\pr}{\mathbf {P}}
+\newcommand{\ex}{\mathbb {E}}
+\newcommand{\pr}{\mathbb {P}}
 \newcommand{\Rd}{\mathbb R^d}
 \newcommand{\Rp}{\mathbb R^+}
 \newcommand{\spctim}{\mathbb R^{d+1}}
@@ -84,6 +84,7 @@
 \newcommand{\cd}{\overset{d}{\longrightarrow}}
 \newcommand{\D}{\mathbb{D}}
 \newcommand{\ppartial}[2]{\dfrac{\partial {#1}}{\partial {#2} }}
+\newcommand{\cdj}{\overset{d}{\underset{J_1}{\longrightarrow}}}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -248,21 +249,15 @@ Signed: \rule{7cm}{0.25pt} \hfill Date: \rule{4cm}{0.25pt} \newline
 
 \prefacesection{Acknowledgements}
 
-{\bigskip}By far the greatest thanks must go to my supervisor for
-the guidance, care and support they provided. 
+{\bigskip}My greatest gratitude goes to my supervisor Dr. Peter Straka for providing me with the opportunity to work on this project. His guidance and assistance throughout the year was truly invaluable, and made working on this thesis a rather enjoyable experience.
 
-{\bigskip\noindent}Thanks 
-must also go to Emily, Michelle, John and Alex who helped by
-proof-reading the document in the final stages of preparation.
+{\bigskip\noindent}I also thank my family for instilling a love for maths in me from a young age. Without their direction I may have become an engineer.
 
-{\bigskip\noindent}Although
-I have not lived with them for a number of years, my family also deserve
-many thanks for their encouragement.
+{\bigskip\noindent}Lastly I thank my friends and fellow honours students for their companionship throughout the year.
 
-{\bigskip\noindent} Thanks go to Robert Taggart for allowing his thesis
-style to be shamelessly copied.
 
-{\bigskip\bigskip\bigskip\noindent} Fred Flintstone, 2 November 2015.
+
+{\bigskip\bigskip\bigskip\noindent}Smarak Nayak, 28 October 2016.
 
 \afterpage{\blankpage}
 
@@ -368,21 +363,8 @@ Let $(\Omega,\FF)$ be a measurable space. A \textbf{probability measure} $\PP$ i
 Let $\mu$ be a measure defined on the measurable space $(\Omega,\FF)$. We call the triplet $(\Omega,\FF,\mu)$ a \textbf{measure space}. In particular, if $\PP$ is a probability measure then we call $(\Omega,\FF,\PP)$ a \textbf{probability space}.\\
 \end{definition}
 
-{\noindent}A particular example of a probability measure that we will use later on is the Dirac measure.\\
-\begin{definition} Let $(\Omega, \FF)$ be some measurable space. A \textbf{Dirac measure} $\delta_x$ is a measure defined on a given point $x\in \Omega$ and a set $A\in \FF$ 
-\[
-\delta_x(A) = 
-\begin{cases}
-0, &x\notin A;\\
-1, &x\in A.
-\end{cases}
-\]
-\end{definition}
-{\noindent}A useful result of Dirac measures is the identity
-\[
-\int f(y)\delta_x(dy) = f(x).
-\]
-The Dirac measure extends the concept of indicator functions to sets. Another example of a measure is the Lebesgue measure, which is the standard measure on the Euclidean space $\R^d$. The rigorous definition of a Lebesgue measure is fairly analytical and is omitted. The Lebesgue measure is essentially an extension of the standard notions of length, area and volume to $d$-dimensional Euclidean spaces.\\
+
+A particular example of a measure is the Lebesgue measure, which is the standard measure on the Euclidean space $\R^d$. The rigorous definition of a Lebesgue measure is fairly analytical and is omitted. The Lebesgue measure is essentially an extension of the standard notions of length, area and volume to $d$-dimensional Euclidean spaces.\\
 
 
 \begin{definition}
@@ -560,10 +542,10 @@ where $\bar{X}_n=(\sum^n_{i=1}X_i)/n$.\\
 In this case we can see that the classical central limit theorem is a specific central limit theorem with the translation scaling constant $m=\mu$ and the space scaling sequence is $\{b_n=\sigma\sqrt{n}:n\geq1 \}$. It is hence obvious that the translation scaling constant and the space scaling sequence adjust for the drift and deviation of the partial sums to ensure convergence. We will look at the functional extension of the classical central limit theorem closely in Section \ref{s:background}.
 
 \chapter{Scaling Limit Theorems}\label{ScalingLimits}
-The aim of this chapter is to present a stochastic process limit of a heavy tailed CTRM process. We will first rigorously define a heavy tailed CTRM and then provide an analysis of some well known scaling limit theorems, eventually arriving at the stochastic process limit for a bursty CTRM process. We then use results for the stochastic process limit found in the literature (see \cite{MeerschaertStoev08}) to determine the distribution of a bursty CTRM.
+The aim of this chapter is to present a stochastic process limit of a bursty CTRM process. To do so, we must define a bursty CTRM process and then provide an analysis of some well known scaling limit theorems, eventually arriving at the stochastic process limit for a bursty CTRM process. We then use results for the stochastic process limit found in the literature \cite{MeerschaertStoev08} to determine the distribution of a bursty CTRM.
 
 \section{Problem Formulation}
-The Continuous Time Random \emph{Walk} (CTRW) has been a highly successful 
+The Continuous Time Random Walk (CTRW) has been a highly successful 
 model for anomalous diffusion in the past two decades 
 \cite{Metzler2000,HLS2010b}, likely due to its tractable and flexible scaling
 properties. The stochastic process we study in this thesis is conceptually very close
@@ -648,15 +630,15 @@ Finally, the model is called \emph{coupled} when $W_k$ and $J_k$ are not indepen
 In this thesis we focus on the uncoupled case,  
 for which it can be shown that the processes $V(t)$ and
 $\tilde V(t)$ have the same limiting distributions at large times
-\cite{Hees2015}, and hence we focus on the CTRM $V(t)$. When drawing inference on $V(t)$ it is natural to be concerned with both the timing and magnitude of extreme events. By definition extreme events are those of large magnitude and therefore must exceed a threshold level $\ell$. Thus we seek the distribution of the following quantities.\\
+\cite{Heesa}, and hence we focus on the CTRM $V(t)$. When drawing inference on $V(t)$ it is natural to be concerned with both the timing and magnitude of extreme events. By definition extreme events are those of large magnitude and therefore must exceed a threshold level $\ell$. Thus we seek the distribution of the following quantities.\\
 \begin{definition}
 Let $V(t)$ be an uncoupled CTRM whose magnitudes $J_k$ are supported on the interval
-$[x_0, x_F]$.  Then the exceedance time of level $\ell \in [x_0,x_F]$ is
+$[x_0, x_F]$.  Then the \textbf{exceedance duration} of level $\ell \in [x_0,x_F]$ is
 the random variable
 \begin{align*}
 T_\ell = \inf\{t: V(t) > \ell\}
 \end{align*}
-and the exceedance is 
+and the \textbf{exceedance} is 
 \begin{align*}
 X_\ell = V(T_\ell) - \ell.
 \end{align*}
@@ -671,42 +653,42 @@ $T_\ell$ are independent. Moreover,
 &= \frac{\overline F_J(\ell + x)}{\overline F_J(\ell)}, \quad x > 0,
 \\
 \pr[T_\ell > t]
-&= \overline F_J(\ell) \sum_{n=1}^\infty \int_0^\infty \overline F_W(t-t') \pr[L_{n-1} \le \ell]
+&= \overline F_J(\ell) \sum_{n=1}^\infty \int_0^\infty \overline F_W(t-t') \pr[M_{n-1} \le \ell]
 \pr[S_{n-1} \in dt'], \quad t > 0
 \end{align*}
-where $L_n = \bigvee_{k=1}^n J_k$, $L_0 = x_0$, and $S_n = \sum_{k=1}^n W_k$,
+where $M_n = \bigvee_{k=1}^n J_k$, $M_0 = x_0$, and $S_n = \sum_{k=1}^n W_k$,
 $S_0 = 0$.
 \end{lemma}
 
 \begin{proof}
-Let $\tau_\ell = \min\{k: J_k > x\}$. Then \textcolor{red}{rigorize this}
+Let $\tau_\ell = \min\{k: J_k > x\}$. Then
 \begin{align*}
 T_\ell > t, X_\ell > x 
 &\Longleftrightarrow
-S_{\tau_\ell} > t, L_{\tau_\ell} > \ell + x
+S_{\tau_\ell} > t, M_{\tau_\ell} > \ell + x
 \Longleftrightarrow
-\exists n: L_{n-1} \le \ell, J_n > \ell + x, S_n > t
+\exists n: M_{n-1} \le \ell, J_n > \ell + x, S_n > t
 \\
 &\Longleftrightarrow
-\exists n: L_{n-1} \le \ell, J_n > \ell + x, W_n > t - S_{n-1}
+\exists n: M_{n-1} \le \ell, J_n > \ell + x, W_n > t - S_{n-1}
 \end{align*}
 and such $n$ must be unique, since $x > 0$.
 Thus 
 \begin{align*}
 &\pr[T_\ell > t, X_\ell > x]
-= \sum_{n=1}^\infty \pr[J_n > \ell + x, W_n > t - S_{n-1}, L_{n-1} \le \ell]
+= \sum_{n=1}^\infty \pr[J_n > \ell + x, W_n > t - S_{n-1}, M_{n-1} \le \ell]
 \\
-&= \sum_{n=1}^\infty \int_0^\ell \int_0^\infty \pr[J_n > \ell + x, W_n > t - t' | L_{n-1} = m', 
-S_{n-1} = t'] \pr[L_{n-1} \in dm', S_{n-1} \in dt']
+&= \sum_{n=1}^\infty \int_0^\ell \int_0^\infty \pr[J_n > \ell + x, W_n > t - t' | M_{n-1} = m', 
+S_{n-1} = t'] \pr[M_{n-1} \in dm', S_{n-1} \in dt']
 \\
 &= \sum_{n=1}^\infty \int_0^\infty \overline F_J(\ell + x) \overline F_W(t - t')
-\pr[L_{n-1} \le \ell] \pr[S_{n-1} \in dt']
+\pr[M_{n-1} \le \ell] \pr[S_{n-1} \in dt']
 \end{align*}
 since the sequences $J_k$ and $W_k$ are i.i.d.\ and independent of each other.
 Letting $t \downarrow 0$, we see
 \begin{align*}
 &\pr[X_\ell > x] 
-= \sum_{n=1}^\infty \overline F_J(\ell+x) \pr[L_{n-1} \le \ell] 
+= \sum_{n=1}^\infty \overline F_J(\ell+x) \pr[M_{n-1} \le \ell] 
 = \overline F_J(\ell+x) \sum_{n=1}^\infty F_J(\ell)^{n-1}
 \\
 &= \frac{\overline F_J(\ell + x)}{\overline F_J(\ell)},
@@ -757,7 +739,7 @@ or more simply, we can consider the step function
 \begin{align}\label{fun:scaleStep}
 	S_{\lfloor ct \rfloor}=U_1+\cdots+U_{\lfloor ct \rfloor}  \quad\textrm{for all } t\geq0.
 \end{align}
-Whereas in \ref{fun:step} a step can only occur at the end of every time period, the inclusion of $c$ in \ref{fun:scaleStep} allows us to adjust how often steps occur. For example, if we multiply $c$ by 60, then steps that were occurring every minute now occur every second. Clearly as $c$ approaches infinity steps start to occur continuously. Now that we have a continuous analogue of the discrete random walk we wish to find the limiting process. Following from (\ref{eq:clt}) the following functional central limit theorem holds
+Whereas in (\ref{fun:step}) a step can only occur at the end of every time period, the inclusion of $c$ in (\ref{fun:scaleStep}) allows us to adjust how often steps occur. For example, if we multiply $c$ by 60, then steps that were occurring every minute now occur every second. Clearly as $c$ approaches infinity steps start to occur continuously. Now that we have a continuous analogue of the discrete random walk we wish to find the limiting process. Following from (\ref{eq:clt}) the following functional central limit theorem holds
 \begin{align}\label{eq:BMconv}
 	\frac{S_{\lfloor ct\rfloor}-\lfloor ct \rfloor \mu}{\sqrt{c\sigma^2}}\overset{d}{\longrightarrow}B_t\sim N(0,t)\textrm{ as $c\to\infty$},
 \end{align}
@@ -782,7 +764,7 @@ Suppose $Y\sim Y_k=U_k-\mu$ then
 \begin{align}
 \hat{f}_{Y}(s)=1-\frac{s^2}{2}\sigma^2+o(s^2),
 \end{align}
-\noindent since $\E[Y]=0$, and $\E[Y^2]=\Var(Y)+\E[Y]^2=\sigma^2$. We now have the necessary tools to calculate the Fourier transform of the rescaled $S_{\lfloor ct\rfloor}$ defined in \ref{eq:BMconv}. Using the fact that the Fourier transform of a sum is simply the product of the individual Fourier transforms we then have
+\noindent since $\E[Y]=0$, and $\E[Y^2]=\Var(Y)+\E[Y]^2=\sigma^2$. We now have the necessary tools to calculate the Fourier transform of the rescaled $S_{\lfloor ct\rfloor}$ defined in (\ref{eq:BMconv}). Using the fact that the Fourier transform of a sum is simply the product of the individual Fourier transforms we then have
 
 \begin{align}
 	\E\left[\exp\left( -is\frac{S_{\lfloor ct\rfloor}-\lfloor ct \rfloor \mu}{\sqrt{c\sigma^2}}    \right)\right]
@@ -802,12 +784,12 @@ Suppose $Y\sim Y_k=U_k-\mu$ then
 \end{align}
 \noindent since $\lfloor ct\rfloor/c\to t$ as $c\to\infty.$
 
-We now refer to the L\'{e}vy Continuity Theorem to prove the weak convergence outlined in \ref{eq:BMconv}.\\
+We now refer to the L\'{e}vy Continuity Theorem to prove the weak convergence outlined in (\ref{eq:BMconv}).\\
 
 \begin{definition}\cite{thebook}\label{def:levyContinuity}
 	\textbf{L\'{e}vy Continuity Theorem}. If $X_n,X$ are random variables on $\R$, then $X_n\overset{d}{\longrightarrow}X$ implies that $\hat{f}_{X_n}(s)\to\hat{f}_X(s)$ for each $s\in \R$, uniformly on compact subsets. Conversely, if $X_n$ is a sequence of random variables such that $\hat{f}_{X_n}(s)\to\hat{f}_X(s)$ for each $s\in \R$, and the limit is continuous at $s=0$, then $\hat{f}_X(s)$ is the Fourier transform of some random variable $X$, and $X_n\overset{d}{\longrightarrow}X$.\\
 \end{definition}
-\noindent This theorem essentially states that $X_n\overset{d}{\longrightarrow}X$ if and only if $\hat{f}_{X_n}(s)\to\hat{f}_X(s)$. We previously showed that the limit of the Fourier transform of the rescaled $S_{\lfloor ct\rfloor}$ is $e^{-ts^2/2}$ which is also the Fourier transform of a $N(0,t)$ random variable. Thus we must have the result outlined in \ref{eq:BMconv}.
+\noindent This theorem essentially states that $X_n\overset{d}{\longrightarrow}X$ if and only if $\hat{f}_{X_n}(s)\to\hat{f}_X(s)$. We previously showed that the limit of the Fourier transform of the rescaled $S_{\lfloor ct\rfloor}$ is $e^{-ts^2/2}$ which is also the Fourier transform of a $N(0,t)$ random variable. Thus we must have the result outlined in (\ref{eq:BMconv}).
 
 % You have basically reproven the Central Limit Theorem. The proof of result
 % (3.2.5) is a one-liner following from (3.2.1): 
@@ -828,7 +810,7 @@ Now that we have shown how one can derive Brownian Motion as a stochastic proces
 \section{Stable Distributions}
 In order for our inter-arrival waiting times $W_k$ to be modelled correctly they should be heavy tailed and completely right skewed so as to model bursty data.
 % what bursty assumption?
-Stable distributions are an extensive class of probability distributions that allow for both skew and heavy tails and are thus a perfect distribution to describe our waiting times with. As we will find out later in this section they also have many useful properties. The class was first defined by Paul L\'{e}vy in the early 20th century but was under utilised due to the lack of closed formulas for densities and distribution functions for all but a few stable distributions (Gaussian, Cauchy and L\'{e}vy). However its use has increased since advances in computing methods \textcolor{red}{expand} now allow for the computation of stable densities, distribution functions and quantiles.\\
+Stable distributions are an extensive class of probability distributions that allow for both skew and heavy tails and are thus a perfect distribution to describe our waiting times with. As we will find out later in this section they also have many useful properties. The class was first defined by Paul L\'{e}vy in the early 20th century but was under utilised due to the lack of closed formulas for densities and distribution functions for all but a few stable distributions (Gaussian, Cauchy and L\'{e}vy). However its use has increased since advances in computing methods now allow for the computation of stable densities, distribution functions and quantiles.\\
 \begin{definition}\cite{Nolan2015}
 A random variable X is \textbf{sum-stable} if for $X_1$ and $X_2$ independent copies of X and any positive constants a and b we have
 \[
@@ -901,7 +883,7 @@ where $a_n=\sqrt{n}\sigma/\mu$ and $b_n=\sigma\sqrt{n}.$\\
 \]
 \end{theorem}
 
-\noindent The Generalised Central Limit Theorem implies that the only possible non-trivial limit of the normalised sum of our waiting times is a stable distribution. If a limit exists we can then extend this limit to stochastic process convergence as in \ref{s:background}. The theorem also naturally leads to the following definition.\\
+\noindent The Generalised Central Limit Theorem implies that the only possible non-trivial limit of the normalised sum of our waiting times is a stable distribution. If a limit exists we can then extend this limit to stochastic process convergence as in Section \ref{s:background}. The theorem also naturally leads to the following definition.\\
 
 \begin{definition}\cite{Nolan2015}\label{def:DOA}
 	A random variable X is in the \textbf{domain of attraction} of Z if there exists constants $a_n>0,b_n\in\R$ with
@@ -943,14 +925,14 @@ Now we can state the extended limit theorem which provides us with a useful crit
 			\lim_{x\to\infty}\frac{\PP[X>x]}{\PP[|X|>x]}=p\quad\textrm{for some }0\leq p\leq1.
 	\end{align}
 \end{theorem}
-\noindent Thus the Extended Central Limit Theorem in conjunction with Definition \ref{def:DOA} tells us that the normalized sum of random variables with an infinite mean will converge in distribution to a nondegenerate random variable as long as the condition outlined in \ref{eq:tailCondition} holds and the tail is regularly varying.
+\noindent Thus the Extended Central Limit Theorem in conjunction with Definition \ref{def:DOA} tells us that the normalized sum of random variables with an infinite mean will converge in distribution to a nondegenerate random variable as long as the condition outlined in (\ref{eq:tailCondition}) holds and the tail is regularly varying.
 
-As our waiting times $W_k$ are strictly greater than zero, they are completely right skewed and condition \ref{eq:tailCondition} always holds. So if we assume a heavy-tailed distribution for the waiting times such that the tail function 
+As our waiting times $W_k$ are strictly greater than zero, they are completely right skewed and condition (\ref{eq:tailCondition}) always holds. So if we assume a heavy-tailed distribution for the waiting times such that the tail function 
 $\overline F_W := 1 - F_W$ of the CDF of $W$ is regularly varying, i.e.
 \begin{align}
 t \mapsto \overline F_W(x) \in RV(-\alpha), \quad \alpha \in (0,1)
 \end{align}
-meaning that \cite{seneta,thebook},\ref{def:RV}
+meaning that by Definition~\ref{def:RV}
 \begin{align*}
 \lim_{x \to \infty}\frac{\overline F_W(\lambda x)}{\overline F_W(x)}
 = \lambda^{-\alpha}, \quad \lambda > 0.
@@ -985,7 +967,7 @@ for all $t>0$, where
 writing $Z(t):=Z_t$.
 \end{theorem} 
 \begin{proof}
-From \cite[Th~3.39]{MeerschaertSikorskii2012} and \ref{eq:paretoConv} we have $n^{-1/\alpha}(W_1 + \ldots + W_n) \overset{d}{\longrightarrow} Y$ as $n \to \infty$, and the limit $Y$ has characteristic function $\phi_Y(s)$ defined in \ref{eq:Ycharacteristic}. Let $\phi_{W_n}(s)=\E[\exp(n^{-1/\alpha}W_1)]$ be the characteristic function of a scaled waiting time. By L\'{e}vy's Continuity Theorem (\ref{def:levyContinuity}) we have that $\phi_{W_n}(s)^n\to \phi_Y(s)$. The properties of a characteristic function then tell us that the characteristic function of the scaled partial sum $n^{-1/\alpha}\sum\limits^\Floor{nt}_{j=1} W_j$ is
+From \cite[Th~3.39]{MeerschaertSikorskii2012} and (\ref{eq:paretoConv}) we have $n^{-1/\alpha}(W_1 + \ldots + W_n) \overset{d}{\longrightarrow} Y$ as $n \to \infty$, and the limit $Y$ has characteristic function $\phi_Y(s)$ defined in (\ref{eq:Ycharacteristic}). Let $\phi_{W_n}(s)=\E[\exp(n^{-1/\alpha}W_1)]$ be the characteristic function of a scaled waiting time. By L\'{e}vy's Continuity Theorem (\ref{def:levyContinuity}) we have that $\phi_{W_n}(s)^n\to \phi_Y(s)$. The properties of a characteristic function then tell us that the characteristic function of the scaled partial sum $n^{-1/\alpha}\sum\limits^\Floor{nt}_{j=1} W_j$ is
 \[
 	\phi_{W_n}(s)^\Floor{nt}=\left(\phi_{W_n}(s)^n\right)^\frac{\Floor{nt}}{n}\to\phi_Y(s)^t,\quad n \to\infty,
 \]
@@ -1009,9 +991,9 @@ Since the increments are required to be non-negative, one needs $\alpha \in (0,1
 \end{align}
 where $D\sim S(\alpha,1,\sigma,0)$. Then there is convergence in distribution for the associated normalised partial sum process
 \begin{align}
-\frac{S_\Floor{ct} - a(c)t}{b(c)} \cd D(t), \quad c \to \infty,
+\frac{S_\Floor{ct} - a(c)t}{b(c)} \cdj D(t), \quad c \to \infty,
 \end{align}
-in the Skorokhod space $\D$ with respect to the $J_1$ metric, where $D(t)$ is an 
+where the $\cdj$ symbol means convergence in the Skorokhod space $\D$ with respect to the $J_1$ metric. $D(t)$ is an 
 $\alpha$-stable L\'evy process and $S_\Floor{ct}=W_1 + \ldots + W_\Floor{ct}$.
 \end{theorem}
 
@@ -1025,7 +1007,7 @@ in which case $D(t)$ is a subordinator. We can also adjust $b(c)$ such that the 
 
 This theorem in conjunction with the extended central limit theorem \ref{th:ECLT} thus ensures that we have an $\alpha$-stable subordinator as the stochastic process limit of the waiting times as long as $W_k$ are strictly positive and regularly varying with index $-\alpha$.
 
-Now that we have a stochastic limit process for the sum of the waiting times we can investigate the limiting behaviour of the renewal process in equation \ref{eq:renewal-process}. Recall that the renewal process is the process which counts the amount of waiting times that have occurred up until time $t$. If $W_k$ obeys the central limit theorem outlined in Equation~\ref{eq:sclt} then the scaling limit of the renewal process is then \cite{limitCTRW}
+Now that we have a stochastic limit process for the sum of the waiting times we can investigate the limiting behaviour of the renewal process in equation (\ref{eq:renewal-process}). Recall that the renewal process is the process which counts the amount of waiting times that have occurred up until time $t$. If $W_k$ obeys the central limit theorem outlined in Equation~(\ref{eq:sclt}) then the scaling limit of the renewal process is then \cite{limitCTRW}
 \begin{align}
 \tilde b(c)^{-1}N(ct) \cd E(t), \quad c \to \infty
 \end{align}
@@ -1117,7 +1099,7 @@ where $a_n$ is a sequence of positive constants and $d_n\in\R$. These constants 
 			\]
 \noindent for scale parameters $a>0$, location parameter $b$, and in the case of families II and III, shape parameter $\alpha>0$.\\
 \end{theorem}
-The Fisher-Tippet-Gnendenko Theorem was first introduced by Fisher and Tippet \cite{FisherTippet} and was extended by Gnedenko \cite{Gnedenko}. It implies that the only possible non-trivial limit of the normalised partial maxima of our event magnitudes is either a Gumbel, Fr\'{e}chet or Weibull distribution. Despite the fact that this theorem is expressed in terms of the distribution functions rather than random variable one can see how it is an analogue of the classical central limit theorem in a max sense as opposed to a sum sense.
+The Fisher-Tippet-Gnendenko Theorem was first introduced by Fisher and Tippet \cite{FisherTippett1928} and was extended by Gnedenko \cite{Gnedenko1943}. It implies that the only possible non-trivial limit of the normalised partial maxima of our event magnitudes is either a Gumbel, Fr\'{e}chet or Weibull distribution. Despite the fact that this theorem is expressed in terms of the distribution functions rather than random variable one can see how it is an analogue of the classical central limit theorem in a max sense as opposed to a sum sense.
 
 It turns out that all three distributions can be expressed in terms of a single parameterisation. This parameterisation is known as the generalized extreme value (GEV) family of distributions. It is thus more convenient to express the above central limit theorem in terms of the GEV family of distributions.\\
 
@@ -1156,7 +1138,7 @@ A distribution G(x) is said to be \textbf{max-stable} if for every $n\in\N$ ther
 	\[
 		\left(J_1, \max(J_1,J_2), \ldots, \max(J_1,J_2,\ldots,J_d) \right),
 	\]
-	where $0\leq t_1<t_2<\ldots<t_d$, and $\PP(J_i<x)=\PP(X(J_i-J_{i-1})$ for $i=1,2,\ldots,d.$\\
+	where $0\leq t_1<t_2<\ldots<t_d$, and $\PP(J_i<x)=\PP(X(t_i-t_{i-1})<x)$ for $i=1,2,\ldots,d.$\\
 \end{definition}
 \noindent In 1964 Lamperti \cite{Lamperti1964} was able to show that the same conditions that are required for a partial maxima to be nondegenerate can be used to show that the partial maxima-process will converge to an extremal process.\\
 \begin{theorem}\cite[Th~3.2]{Lamperti1964}\label{th:extclt} (see also \cite[Th~2]{Resnick1974})
@@ -1182,24 +1164,24 @@ where $\{A(t)\}_{t\geq0}$ is an extremal process generated by G.\\
 \section{Scaling Limit of CTRM}
 In the previous two sections we outlined the necessary conditions for our waiting times $W_k$ to be in the domain of attraction of a sum-stable random variable and our event magnitudes $J_k$ to be in the domain of attraction of a max-stable (GEV) random variable. We also discussed how the same conditions then allowed for the partial sum-process $S_{\Floor{ct}}$ and partial max-process $M_{\Floor{ct}}$ (both normalised appropriately) to converge to a stable subordinator and extremal process respectively. More precisely if our waiting times $W_k$ have tail function $\overline F_W \in RV(-\alpha)$ for $\alpha\in(0,1),$ and if our event magnitudes $J_k$ are i.i.d. and drawn from a continuous probability distribution $F(x)$ in the max-domain of attraction of $G(x)$, then we have a limit theorem for our partial sum-process,
 \begin{align}\label{eq:partialSumLimit}
-	b(c)^{-1}S_\Floor{ct} \cd D(t), \quad c \to \infty,
+	b(c)^{-1}S_\Floor{ct} \cdj D(t), \quad c \to \infty,
 \end{align}
 a limit theorem for our renewal process,
 \begin{align}\label{eq:renewalLimit}
-	N(ct) / \tilde b(c) \cd E(t), \quad c \to \infty,
+	N(ct) / \tilde b(c) \cdj E(t), \quad c \to \infty,
 \end{align}
 and a limit theorem for our partial maxima-process,
 \begin{align}\label{eq:partialMaximaLimit}
-	\frac{M_\Floor{ct}-d(c)}{a(c)} \cd A(t), \quad c \to \infty.
+	\frac{M_\Floor{ct}-d(c)}{a(c)} \cdj A(t), \quad c \to \infty.
 \end{align}
 Recall that $b(c)\in RV(1/\alpha)$ could be chosen such that $D(t)$ was a unit stable subordinator with Laplace transform $\E[e^{-\lambda D(t)}] = e^{-t \lambda^\alpha}$ (\ref{eq:unitStable}), $\tilde b(c) \in RV(\alpha)$ was the asymptotic inverse of $b(c)$ (\ref{eq:tildeb}), $E(t) = \inf\{r: D(r) > t\}$ is an inverse stable subordinator (\ref{eq:invStable}), and $A(t)$ is the extremal process generated by $G(x)$ (\ref{th:extclt}).
 
 Now that we have summarised all the limit theorems presented so far we are in a position to outline the functional limit theorem for the CTRM process that Meerschaert and Stoev were able to prove in 2008.
 
 \begin{theorem}\label{th:AEt} \cite{MeerschaertStoev08}
-Let $(W_i,J_i)$ be a sequence of i.i.d $\mathbb{R}^+\times\mathbb{R}$ random vectors such that the limits in equations \ref{eq:partialSumLimit},\ref{eq:renewalLimit} and \ref{eq:partialMaximaLimit} hold. Then,
+Let $(W_i,J_i)$ be a sequence of i.i.d $\mathbb{R}^+\times\mathbb{R}$ random vectors such that the limits in equations (\ref{eq:partialSumLimit}),(\ref{eq:renewalLimit}) and (\ref{eq:partialMaximaLimit}) hold. Then,
         \[
-            \frac{M(N(ct))-d(\tilde{b}(c))}{a(\tilde{b}(c))} \cd A(E(t)), \quad c\to\infty,
+            \frac{M(N(ct))-d(\tilde{b}(c))}{a(\tilde{b}(c))} \cdj A(E(t)), \quad c\to\infty,
         \]
 where $A(E(t))$ is a subordination of the extremal process $A(t)$ by the inverse stable subordinator process $E(t)$.\\
 \end{theorem}
@@ -1218,7 +1200,7 @@ Let $J_1,J_2,...$ be a sequence of independent random variables with common dist
 \[
 	M_n=\bigvee_{i=1}^n J_i.
 \]
-Denote an arbitrary term in the $J_i$ sequence as J, and suppose that $F(x)$ satisfies \ref{th:extclt}, so that for large $n$,
+Denote an arbitrary term in the $J_i$ sequence as J, and suppose that $F(x)$ satisfies Theorem~\ref{th:extclt}, so that for large $n$,
 \[
 	\PP(M_n\leq z)\approx G(z),
 \]
@@ -1248,7 +1230,7 @@ But for large values of $z$, we have the following Taylor series expansion
 \[
 	\log F(z)\approx -(1-F(z)).
 \]
-Substituting into \ref{eq:GPproof} gives
+Substituting into (\ref{eq:GPproof}) gives
 \[
 	1-F(\ell) \approx \frac{1}{n}\left[1+\xi\left(\frac{\ell-\mu}{\sigma}\right)\right]^{-1/\xi}
 \]
@@ -1267,7 +1249,7 @@ where $\tilde\sigma=\sigma+\xi(\ell-\mu)$.
 \end{proof}
 
 \begin{definition}
-The family of distributions defined by Equation \ref{eq:GPfamily} is called the \textbf{Generalised Pareto family}. If a random variable $X$ is Generalised Pareto we write $X\sim GP(\xi,\sigma)$.\\
+The family of distributions defined by Equation (\ref{eq:GPfamily}) is called the \textbf{Generalised Pareto family}. If a random variable $X$ is Generalised Pareto we write $X\sim GP(\xi,\sigma)$.\\
 \end{definition}
 \noindent As $V(T_\ell)$ is the size of the first event magnitude larger than $\ell$, we have that
 \begin{align*}
@@ -1300,7 +1282,7 @@ If a random variable $Y$ has a distribution function $F_\alpha(x)$ then it is cl
 	F_{\alpha,\delta}(x)=1-\frac{E_\alpha(-x^\alpha)}{\delta},\quad x\geq0.
 \end{align}
 \begin{definition}\label{def:MLlaplace}
-	If a random variable $Y$ has a distribution function $F_{\alpha,\delta}(x)$ as in \ref{eq:MLdistribution} then it is a \textbf{Mittag-Leffler} random variable and has Laplace transform
+	If a random variable $Y$ has a distribution function $F_{\alpha,\delta}(x)$ as in (\ref{eq:MLdistribution}) then it is a \textbf{Mittag-Leffler} random variable and has Laplace transform
 	\[
 		\E[e^{-\lambda Y}]=\frac{1}{1+(\delta\lambda)^\alpha},
 	\]
@@ -1313,7 +1295,7 @@ If a random variable $Y$ has a distribution function $F_\alpha(x)$ then it is cl
 %An Overview of Generalized Gamma Mittag–Leffler Model and Its Applications 
 
 \section{Distribution of Exceedance Durations}
-Note that in the last section we did not make use of the final limit theorem presented in \ref{th:AEt} to derive the distribution of our exceedances. We will, however, use it to derive the distribution of our exceedance durations. In the same paper that Meerschaert and Stoev proved the limit theorem for a CTRM process they managed to derive a subsequent result for durations.
+Note that in the last section we did not make use of the final limit theorem presented in Theorem~\ref{th:AEt} to derive the distribution of our exceedances. We will, however, use it to derive the distribution of our exceedance durations. In the same paper that Meerschaert and Stoev proved the limit theorem for a CTRM process they managed to derive a subsequent result for durations.
 \begin{proposition}\cite{MeerschaertStoev08}\label{prop:extremalDuration}
 Let $a>0$ and let 
 \begin{align}
@@ -1323,7 +1305,7 @@ where $A(E(t))$ is the subordinated extremal process defined in Theorem \ref{th:
 \begin{align}
 	\xi_a \overset{d}{=} (-\log F_A(a))^{-1/\alpha}X^{1/\alpha}D(1)
 \end{align}
-where $D(1)$ is the stable subordinator defined in \ref{eq:unitStable}, evaluated at time 1, and where X is an Exponential random variable with mean one, independent of $D(t)$.
+where $D(1)$ is the stable subordinator defined in (\ref{eq:unitStable}), evaluated at time 1, and where X is an Exponential random variable with mean one, independent of $D(t)$.
 \end{proposition}
 The random variable $\xi_a$ is the duration the process $A(E(t))$ spends below the threshold $a$. It can also be interpreted as the first hitting time of threshold $a$ for the process. It is thus clear that a relationship between this random variable and the exceedance duration
 \[
@@ -1353,11 +1335,11 @@ by the tower property. Noting that the inner conditional expectation is just the
 \end{align*}
 where $\mathcal{L}_X(\lambda)=(1+\lambda)^{-1}$ is the Laplace of an Exponential with mean one and $Y\sim ML(\alpha,1)$ by comparison with Definition \ref{def:MLlaplace}.
 \end{proof}
-\noindent Applying this lemma to \ref{prop:extremalDuration} we get
+\noindent Applying this lemma to Proposition \ref{prop:extremalDuration} we get
 \[
 	\xi_a \overset{d}{=} (-\log F_A(a))^{-1/\alpha}Y
 \]
-where $T\sim ML(\alpha,1)$. Furthermore we can use \ref{eq:MLscale} to arrive at
+where $T\sim ML(\alpha,1)$. Furthermore we can use (\ref{eq:MLscale}) to arrive at
 \begin{align}\label{eq:extremalDurationFinal}
  	\xi_a \sim ML\left(\alpha,(-\log F_A(a))^{-1/\alpha}\right).
 \end{align}
@@ -1380,7 +1362,7 @@ the proof; the proof itself explains the nature of the approximation.
 \begin{proof}
 From Theorem \ref{th:AEt} we have
 \[
-	\frac{V(ct)-d(\tilde{b}(c))}{a(\tilde{b}(c))} \cd A(E(t)), \quad c\to\infty.
+	\frac{V(ct)-d(\tilde{b}(c))}{a(\tilde{b}(c))} \cdj A(E(t)), \quad c\to\infty.
 \]
 For large $c$ and $t$ comparable to $c$, we may make the following approximation
 \[
@@ -1392,7 +1374,7 @@ to get
 \begin{align}\label{eq:VtApprox}
 	V(t) \approx a(n) A(E(t/b(n))) + d(n). 
 \end{align}
-Since $T_\ell=\inf\{t: V(t) > \ell\}=\sup\{t: V(t) \leq \ell\}$, after suppressing $\omega$ in our notation, we have that $\{T_\ell>t\}=\{V(t) \leq \ell\}$. It then follows from \ref{eq:VtApprox} that 
+Since $T_\ell=\inf\{t: V(t) > \ell\}=\sup\{t: V(t) \leq \ell\}$, after suppressing $\omega$ in our notation, we have that $\{T_\ell>t\}=\{V(t) \leq \ell\}$. It then follows from (\ref{eq:VtApprox}) that 
 \[
 	\{V(t) \leq \ell\} \stackrel{\approx}{\Longleftrightarrow} \left\{A(E(t/b(n))) \leq \frac{\ell - d(n)}{a(n)}\right\}.
 \]
@@ -1400,11 +1382,11 @@ Now define  $\ell^* := \frac{\ell - d(n)}{a(n)}$, we then get
 \begin{align}\label{eq:durationProofFinalLine}
 \left\{A(E(t/b(n))) \leq \frac{\ell - d(n)}{a(n)}\right\}=\left\{\xi_{\ell^*} > t/b(n)\right\}=\left\{b(n)\xi_{\ell^*} > t\right\},
 \end{align}
-as $\xi_{\ell^*}$ is the first hitting time of threshold level $\ell^*$ for $A(E(t))$. Equation \ref{eq:durationProofFinalLine} then implies that
+as $\xi_{\ell^*}$ is the first hitting time of threshold level $\ell^*$ for $A(E(t))$. Equation (\ref{eq:durationProofFinalLine}) then implies that
 \[
 	\PP(T_\ell>t)\approx\PP(b(n)\xi_{\ell^*} > t).
 \]
-Noting from \ref{eq:extremalDurationFinal} that $\xi_{\ell^*} \sim ML\left(\alpha,(-\log F_A({\ell^*}))^{-1/\alpha}\right)$ we then refer to \ref{eq:MLscale} to get
+Noting from (\ref{eq:extremalDurationFinal}) that $\xi_{\ell^*} \sim ML\left(\alpha,(-\log F_A({\ell^*}))^{-1/\alpha}\right)$ we then refer to (\ref{eq:MLscale}) to get
 \[
 	T_\ell\overset{a}{\sim}ML\left(\alpha, b(n)(-\log F_A(\ell^*))^{-1/\alpha}\right),
 \]
@@ -1456,7 +1438,7 @@ Recall that all three limit theorems required for Theorem \ref{th:AEt} are only 
 It then follows that picking a GP estimator that doesn't estimate $\ell$ has the added benefit in that it will enable the concurrent analysis of statistics which describe the fit of both estimated distributions with respect to threshold choice. This will then allow us to choose a threshold level $\ell$ that is valid for the exceedances as well as their durations. Mackay et. al. \cite{Mackay2011} provided a comprehensive overview of all such GP estimators. They concluded that a hybrid between likelihood and moment estimators, the likelihood-moment estimator, introduced by Zhang in 2007 \cite{Zhang2007} was the best overall estimator. The likelihood-moment estimator had the lowest bias and variance over the widest range of scenarios, and was only beaten in speed by the NEW estimator \cite{Zhang2009} for large sample sizes. We therefore use the likelihood-moment estimator to estimate the GP parameters.
 
 \section{Threshold Choice}
-Selecting a threshold is a balance between bias and variance. Too low a threshold will likely violate the asymptotic basis of our model, leading to bias; while too high a threshold will lead to a small sample size and high variance. Standard methodology for similar problems is to pick the lowest threshold such that the limit theorems still provide reasonable approximations. We will use a similar approach to select a threshold. 
+Selecting a threshold is a balance between bias and variance. Too low a threshold will likely violate the asymptotic basis of our model, leading to bias; while too high a threshold will lead to a small sample size and high variance. Standard methodology for similar problems consists of picking the lowest threshold such that the limit theorems still provide reasonable approximations. We will use a similar approach to select a threshold. 
 
 Suppose there exists a threshold $\ell_0$ with corresponding tail quantile $\epsilon_0$ above which the exceedances are GP and the durations are ML. We have shown in (\ref{eq:GPdist}) that
 \begin{align*}
@@ -1470,7 +1452,7 @@ Notice that the GP shape parameter $\xi$ and the ML tail parameter $\alpha$ are 
 \begin{align}\label{eq:sigmaStar}
 	\sigma^{*}:=\tilde \sigma -\xi\ell= \sigma-\xi\mu.
 \end{align}  
-It is evident from \ref{th:GP} that the three GEV parameters $\xi,\sigma,$ and $\mu$ are independent of $\ell$. The ML scale parameter $\delta=b(n)(-\log F_A(\ell^*))^{-1/\alpha}$ is also dependent on $\ell$, so we consider
+It is evident from Theorem~\ref{th:GP} that the three GEV parameters $\xi,\sigma,$ and $\mu$ are independent of $\ell$. The ML scale parameter $\delta=b(n)(-\log F_A(\ell^*))^{-1/\alpha}$ is also dependent on $\ell$, so we consider
 \begin{align}\label{eq:deltaStar}
 	\delta^{*}:=\delta(-\log F_A(\ell^*))^{1/\alpha}=b(n)
 \end{align}  
@@ -1500,7 +1482,7 @@ We wish to generate inter-arrival waiting times $W_k$ with the Laplace transform
 $$\mathcal L_W(\lambda) = \E [e^{-\lambda W}] = e^{-\lambda^\alpha}$$ 
 where $\alpha \in (0,1)$. 
 The package R stabledist with option pm=1 runs with the parametrisation
-as in Samorodnitsky \& Taqqu: (see Definition \ref{def:stableChar} for the full definition)
+as in Samorodnitsky \& Taqqu: (see Definition \ref{def:stableChar})
 \begin{align*}
 \phi_X (\theta) = \E[ e^{i\theta X}] = \exp \left\lbrace -\sigma^\alpha |\theta|^\alpha \left(1 - i\beta({\rm sign} \theta) \tan \frac{\alpha \pi}{2}\right) + i \mu \theta \right\rbrace.
 \end{align*}
@@ -1516,7 +1498,7 @@ e^{-(-i\theta)^\alpha}
 &= \exp\left(-\theta^\alpha \cos\frac{\alpha\pi}{2}\left(1 - i \tan \frac{\alpha\pi}{2}\right)\right)\\
 &=  \phi_X(\theta), \quad \theta > 0
 \end{align*}
-whenever $\sigma^\alpha = \cos\frac{\alpha\pi}{2}, \beta = 1, \mu = 0$. Thus we generate $W\sim S(\alpha,1,(\cos\frac{\alpha\pi}{2})^{1/\alpha},0)$ in order to get unit stable random variables. From \ref{eq:asymptoticPareto} we know that any stable law with stability parameter $\alpha$ has tails that are asymptotically equivalent to Pareto tails also with parameter $\alpha$. Thus $W\in RV(-\alpha)$, which implies that both the limit theorems (\ref{eq:partialSumLimit}) and (\ref{eq:renewalLimit}) hold. Moreover, recall from (\ref{eq:unitStable}) that we can pick $b(n)$ such that the stable subordinator $D(t)$ has Laplace transform $\E[e^{-\lambda D(t)}] = e^{-t \lambda^\alpha}$. Now in order for that to hold we need 
+whenever $\sigma^\alpha = \cos\frac{\alpha\pi}{2}, \beta = 1, \mu = 0$. Thus we generate $W\sim S(\alpha,1,(\cos\frac{\alpha\pi}{2})^{1/\alpha},0)$ in order to get unit stable random variables. From (\ref{eq:asymptoticPareto}) we know that any stable law with stability parameter $\alpha$ has tails that are asymptotically equivalent to Pareto tails also with parameter $\alpha$. Thus $W\in RV(-\alpha)$, which implies that both the limit theorems (\ref{eq:partialSumLimit}) and (\ref{eq:renewalLimit}) hold. Moreover, recall from (\ref{eq:unitStable}) that we can pick $b(n)$ such that the stable subordinator $D(t)$ has Laplace transform $\E[e^{-\lambda D(t)}] = e^{-t \lambda^\alpha}$. Now in order for that to hold we need 
 \[
 	\frac{W_1 + \ldots + W_n}{b(n)} \overset{d}{\longrightarrow} D, \quad n \to \infty,
 \]
@@ -1617,7 +1599,7 @@ Finally, in Chapter~\ref{inference}, we developed the statistical methodology fo
 
 Intuitively, there is a causal dependence between the inter-arrival waiting times and the size of the events. However this dependence makes the analysis of the problem very complex. In this thesis, we made the simplifying assumption that the waiting times are independent of the event magnitudes. A future direction that could be taken is to develop a more general approach by relaxing the independence assumption. 
 
-Finally, we tested our method against simulated, synthetic data. The robustness of our method can only be fully established after its performance against real data is carefully studied. Potential datasets that have already been shown to be heavy-tailed can be found in \cite{Karsai2012}, \cite{Resnick1995} and \cite{Mainardi2000}. Although the performance of our method against synthetic data lends us some confidence that it will do well against real data, it is difficult to state in advance how our method will perform. 
+Finally, we tested our method against simulated, synthetic data. The robustness of our method can only be fully established after its performance against real data is carefully studied. Potential datasets that have already been shown to be heavy-tailed can be found in \cite{Karsai2012}, \cite{Resnick1995} and \cite{Mainardi2000}. Although the performance of our method against synthetic data lends us some confidence that it will do well against real data, it is difficult to predict how our method will perform. We hope that, if nothing else, this model forms a solid foundation for future research.
 
 \begin{appendices}
 \chapter{Confidence Intervals}
