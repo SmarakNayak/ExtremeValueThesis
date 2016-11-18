@@ -1,7 +1,9 @@
+require(stabledist)
+require(fExtremes)
+require(plyr)
 # assume Mittag-Leffler waiting times
 shape <- 0.99
 scale <- 1
-require(stabledist)
 n = 50000
 # generate stables: 
 y <- rstable(n = n, alpha = shape, beta = 1, 
