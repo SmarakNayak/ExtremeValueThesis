@@ -4,6 +4,7 @@ Vipaka <- read.csv("Data/Vipaka.csv")
 Vipaka <- Vipaka[-(1:27), ]
 require(parsedate)
 require(POT)
+require(plyr)
 parse_iso_8601(Vipaka$time) -> Vipaka$time
 n=dim(Vipaka)[1]
 plot(Vipaka$time, Vipaka$mag, type='h', ylim=c(0,9))
@@ -86,4 +87,3 @@ plot(GPestimates$k,GPestimates$scaleEst, type="l",ylab= "sigma", xlab = "k",
      ylim = c(0,2), main="GP scale")
 lines(GPestimates$k,GPestimates$scaleH, type="l", lty =2)
 lines(GPestimates$k,GPestimates$scaleL, type="l", lty =2)
-
